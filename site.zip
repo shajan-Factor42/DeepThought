@@ -1,0 +1,48 @@
+name: Deploy site from site.zip
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unpack site.zip
+        run: |
+          mkdir -p _site
+          unzip -o site.zip -d _site
+          # if the zip contained a single top-level folder (e.g. dist/), flatten it
+          if [ ! -f _site/index.html ]; then
+            inner=$(find _site -maxdepth 2 -name index.html -print -quit)
+            if [ -n "$inner" ]; then
+              dir=$(dirname "$inner")
+              shopt -s dotglob
+              mv "$dir"/* _site/
+            fi
+          fi
+          touch _site/.nojekyll
+          ls -1 _site | head -20
+          echo "file count: $(find _site -type f | wc -l)"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
