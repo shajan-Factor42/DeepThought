@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact | DeepThought</title>
-<meta name="description" content="Talk to us about digital marketing for your business.">
+<meta name="description" content="Tell us what you are running and we will tell you what it should cost.">
 <link rel="canonical" href="https://deepthought.marketing/contact.html">
 <meta property="og:title" content="Contact | DeepThought">
-<meta property="og:description" content="Talk to us about digital marketing for your business.">
+<meta property="og:description" content="Tell us what you are running and we will tell you what it should cost.">
 <meta property="og:type" content="website">
 <meta name="robots" content="index,follow">
 
@@ -25,105 +25,156 @@
 <script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
 <style>
   html, body { margin: 0; min-height: 100%; }
-  body {
-    font-family: var(--font-body); color: var(--text-heading);
-    background: var(--f42-bg);
-  }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
   a { color: var(--f42-primary-blue); }
   a:hover { color: var(--f42-deep-blue); }
+  input, select, textarea { font-family: var(--font-body); }
 </style>
 </helmet>
 
 <dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
 
-<section style="max-width:1200px; margin:0 auto; padding:72px 40px 88px; display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start">
-  <div>
-    <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">Contact</div>
-    <h1 style="font-family:var(--font-display); font-size:48px; font-weight:800; letter-spacing:-0.035em; line-height:1.06; margin:18px 0 0">Talk to a person</h1>
-    <p style="font-size:18px; line-height:1.65; color:var(--text-body); margin:20px 0 40px">Sales questions, support, partnerships, or press. Pick the right door and you'll get an answer within one business day.</p>
-    <div style="display:flex; flex-direction:column; gap:16px">
-      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="24px" hint-size="100%,120px">
-        <div style="font-family:var(--font-display); font-size:16.5px; font-weight:700">Sales</div>
-        <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 10px">Pricing, product fit, multi-location rollouts.</p>
-        <a href="book-a-demo.html" style="font-size:14.5px; font-weight:600">Book a demo →</a>
-      </x-import>
-      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="24px" hint-size="100%,120px">
-        <div style="font-family:var(--font-display); font-size:16.5px; font-weight:700">Customer support</div>
-        <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 10px">Already a customer? Your named expert is the fastest route — or use the form.</p>
-        <span style="font-size:14.5px; color:var(--text-muted)">support@deepthoughtmarketing.com</span>
-      </x-import>
-      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="24px" hint-size="100%,120px">
-        <div style="font-family:var(--font-display); font-size:16.5px; font-weight:700">Partnerships &amp; agencies</div>
-        <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 10px">White-label execution, referrals, and integrations.</p>
-        <a href="solutions-agencies.html" style="font-size:14.5px; font-weight:600">Agency program →</a>
-      </x-import>
-      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="24px" hint-size="100%,110px">
-        <div style="font-family:var(--font-display); font-size:16.5px; font-weight:700">Press &amp; careers</div>
-        <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 0">press@deepthoughtmarketing.com · careers@deepthoughtmarketing.com</p>
-      </x-import>
-    </div>
-  </div>
+<section style="max-width:1000px; margin:0 auto; padding:80px 40px 56px">
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">Contact</div>
+  <h1 style="font-family:var(--font-display); font-size:50px; font-weight:800; letter-spacing:-0.035em; line-height:1.06; margin:18px 0 0; max-width:720px; text-wrap:pretty">Tell us what you're running and we'll tell you what it should cost</h1>
+  <p style="font-size:18px; line-height:1.65; color:var(--text-body); margin:20px 0 0; max-width:620px; text-wrap:pretty">We work with businesses nationwide. Send a message and someone will reply within one business day — no phone tree, no sales sequence.</p>
+</section>
 
-  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="36px" hint-size="100%,540px">
-    <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
-      <div>
-        <h2 style="font-family:var(--font-display); font-size:24px; font-weight:700; letter-spacing:-0.02em; margin:0 0 24px">Send us a message</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
-          <div>
-            <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Name</div>
-            <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" placeholder="Jordan Reyes" hint-size="100%,44px"></x-import>
-          </div>
-          <div>
-            <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Email</div>
-            <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" placeholder="you@business.com" hint-size="100%,44px"></x-import>
-          </div>
+<section style="max-width:1000px; margin:0 auto; padding:0 40px 96px; display:grid; grid-template-columns:1fr 300px; gap:44px; align-items:start">
+  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="36px" hint-size="100%,720px">
+    <form action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="afa90fc4-141b-45da-a8cb-7c4adcd1951d">
+      <input type="hidden" name="subject" value="New contact message — deepthought.marketing">
+      <input type="hidden" name="from_name" value="Shajan at Deep Thought Marketing">
+      <input type="hidden" name="redirect" value="https://deepthought.marketing/thank-you.html">
+      <input type="hidden" name="page" value="Contact page">
+      <input type="hidden" name="gclid" value="">
+      <input type="hidden" name="submitted_at" value="">
+      <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
+
+      <h2 style="font-family:var(--font-display); font-size:24px; font-weight:700; letter-spacing:-0.02em; margin:0 0 24px">Send us a message</h2>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
+        <div>
+          <label for="c-name" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Name <span style="color:var(--f42-primary-blue)">*</span></label>
+          <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" id="c-name" name="name" required="{{ true }}" autoComplete="name" placeholder="Jordan Reyes" hint-size="100%,44px"></x-import>
         </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Business name</div>
-          <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" placeholder="Northside Dental" hint-size="100%,44px"></x-import>
+        <div>
+          <label for="c-email" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Email <span style="color:var(--f42-primary-blue)">*</span></label>
+          <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" id="c-email" name="email" type="email" required="{{ true }}" autoComplete="email" placeholder="you@business.com" hint-size="100%,44px"></x-import>
         </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">What's this about?</div>
-          <div style="display:flex; gap:8px; flex-wrap:wrap">
-            <span style="padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); font-size:14px; cursor:pointer" style-hover="border-color:var(--border-hover)">Sales</span>
-            <span style="padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); font-size:14px; cursor:pointer" style-hover="border-color:var(--border-hover)">Support</span>
-            <span style="padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); font-size:14px; cursor:pointer" style-hover="border-color:var(--border-hover)">Partnerships</span>
-            <span style="padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); font-size:14px; cursor:pointer" style-hover="border-color:var(--border-hover)">Press</span>
-            <span style="padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); font-size:14px; cursor:pointer" style-hover="border-color:var(--border-hover)">Careers</span>
-          </div>
-        </div>
-        <div style="margin-bottom:24px">
-          <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Message</div>
-          <textarea placeholder="Tell us what you need." style="width:100%; box-sizing:border-box; min-height:120px; resize:vertical; padding:12px 14px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--f42-white); font-family:var(--font-body); font-size:15px; color:var(--text-heading); outline:none"></textarea>
-        </div>
-        <x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="lg" dc-props="{{ fullWidth }}" onClick="{{ submit }}" hint-size="100%,52px">Send message</x-import>
       </div>
-    </sc-if>
-    <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
-      <div style="padding:60px 20px; text-align:center">
-        <div style="width:56px; height:56px; margin:0 auto; border-radius:9999px; background:var(--f42-gradient-blue); display:flex; align-items:center; justify-content:center; color:#fff; font-size:26px; line-height:1">✓</div>
-        <h2 style="font-family:var(--font-display); font-size:26px; font-weight:800; letter-spacing:-0.025em; margin:22px 0 0">Message sent</h2>
-        <p style="font-size:16px; line-height:1.6; color:var(--text-body); margin:14px auto 26px; max-width:320px">One of us will reply within a business day.</p>
-        <a href="index.html" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="subtle" size="md" hint-size="150px,44px">Back to home</x-import></a>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
+        <div>
+          <label for="c-phone" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Phone <span style="color:var(--f42-primary-blue)">*</span></label>
+          <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" id="c-phone" name="phone" type="tel" required="{{ true }}" autoComplete="tel" placeholder="(404) 555-0142" hint-size="100%,44px"></x-import>
+        </div>
+        <div>
+          <label for="c-business" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Business name</label>
+          <x-import component-from-global-scope="Factor42DesignSystem_376e18.Input" id="c-business" name="business_name" autoComplete="organization" placeholder="Northside Dental" hint-size="100%,44px"></x-import>
+        </div>
       </div>
-    </sc-if>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
+        <div>
+          <label for="c-topic" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">What's this about?</label>
+          <select id="c-topic" name="topic" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--f42-white); font-size:15px; color:var(--text-heading); outline:none">
+            <option value="Sales">Sales</option>
+            <option value="Support">Support</option>
+            <option value="Partnerships">Partnerships</option>
+            <option value="Press">Press</option>
+            <option value="Careers">Careers</option>
+          </select>
+        </div>
+        <div>
+          <label for="c-spend" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Current monthly ad spend</label>
+          <select id="c-spend" name="monthly_ad_spend" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--f42-white); font-size:15px; color:var(--text-heading); outline:none">
+            <option value="">Select one</option>
+            <option value="Not running ads yet">Not running ads yet</option>
+            <option value="Under $1k">Under $1k</option>
+            <option value="$1k–$5k">$1k–$5k</option>
+            <option value="$5k–$25k">$5k–$25k</option>
+            <option value="$25k+">$25k+</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom:16px">
+        <label for="c-heard" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">How did you hear about us?</label>
+        <select id="c-heard" name="how_did_you_hear" style="width:100%; box-sizing:border-box; height:44px; padding:0 12px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--f42-white); font-size:15px; color:var(--text-heading); outline:none">
+          <option value="">Select one</option>
+          <option value="Google search">Google search</option>
+          <option value="Referral">Referral</option>
+          <option value="Social media">Social media</option>
+          <option value="Saw an ad">Saw an ad</option>
+          <option value="Event or conference">Event or conference</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:20px">
+        <div style="font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:10px">Which services interest you?</div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:9px 20px">
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Paid search" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Paid search</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Paid social" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Paid social</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Connected TV / OTT" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Connected TV / OTT</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Programmatic display" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Programmatic display</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Streaming audio" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Streaming audio</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="DOOH" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">DOOH</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Email" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Email</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="SEO" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">SEO</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Web development" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Web development</label>
+          <label style="display:flex; align-items:center; gap:9px; font-size:14.5px; color:var(--text-body)"><input type="checkbox" name="services" value="Not sure — need advice" style="accent-color:var(--f42-primary-blue); width:16px; height:16px">Not sure — need advice</label>
+        </div>
+      </div>
+
+      <div style="margin-bottom:24px">
+        <label for="c-message" style="display:block; font-size:13px; font-weight:600; color:var(--text-body); margin-bottom:7px">Message</label>
+        <textarea id="c-message" name="message" placeholder="Tell us what you need." style="width:100%; box-sizing:border-box; min-height:120px; resize:vertical; padding:12px 14px; border-radius:10px; border:1px solid var(--border-subtle); background:var(--f42-white); font-size:15px; color:var(--text-heading); outline:none"></textarea>
+      </div>
+
+      <button type="submit" style="width:100%; height:52px; border:0; cursor:pointer; border-radius:12px; background:var(--f42-gradient-blue); color:#fff; font-family:var(--font-display); font-size:16px; font-weight:700; letter-spacing:-0.01em; box-shadow:0 0 30px rgba(0,102,255,0.20)">Send message</button>
+      <p style="font-size:13px; color:var(--text-muted); margin:14px 0 0; text-align:center">We reply within one business day. No sales sequence, no shared data.</p>
+    </form>
   </x-import>
+
+  <div style="display:flex; flex-direction:column; gap:20px">
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="26px" hint-size="100%,180px">
+      <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em">Prefer email?</div>
+      <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:10px 0 0">Write to us directly and we'll route it to the right person.</p>
+      <a href="mailto:shajan@factor42media.com" style="display:inline-block; font-size:14.5px; font-weight:600; margin-top:12px; word-break:break-all">shajan@factor42media.com</a>
+    </x-import>
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="26px" hint-size="100%,200px">
+      <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em">Ready to see it?</div>
+      <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:10px 0 16px">Skip the back and forth — book a 20-minute walkthrough on your own market.</p>
+      <a href="book-a-demo.html" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="md" dc-props="{{ fullWidth }}" hint-size="100%,44px">Book a demo</x-import></a>
+    </x-import>
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="26px" hint-size="100%,160px">
+      <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em">Where we work</div>
+      <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:10px 0 0">Nationwide, with county-level coverage pages for Georgia and Florida.</p>
+      <a href="serving-local-business.html" style="display:inline-block; font-size:14.5px; font-weight:600; margin-top:12px">See coverage →</a>
+    </x-import>
+  </div>
 </section>
 
 <dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
 </x-dc>
 <script type="text/x-dc" data-dc-script>
 class Component extends DCLogic {
-  state = { sent: false };
+  componentDidMount() {
+    const q = new URLSearchParams(location.search);
+    const g = document.querySelector('input[name="gclid"]');
+    if (g) g.value = q.get('gclid') || q.get('wbraid') || '';
+    const t = document.querySelector('input[name="submitted_at"]');
+    if (t) t.value = new Date().toISOString();
+  }
   renderVals() {
-    return {
-      sent: this.state.sent,
-      notSent: !this.state.sent,
-      fullWidth: { style: { width: '100%' } },
-      submit: () => this.setState({ sent: true })
-    };
+    return { fullWidth: { style: { width: '100%' } } };
   }
 }
+
 </script>
 </body>
 </html>
