@@ -1,0 +1,31 @@
+/* Factor42 — Spacing, radius & layout tokens */
+:root {
+  /* ── Spacing scale (4px base) ──────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ── Corner radius ─────────────────────────────── */
+  --radius-input:  10px;
+  --radius-button: 12px;
+  --radius-card:   20px;
+  --radius-card-lg:24px;
+  --radius-pill:   9999px;
+  --radius-icon:   20px;  /* icon mark rounded square */
+
+  /* ── Grid background texture ───────────────────── */
+  --grid-size: 40px; /* @kind spacing */
+  --grid-line: rgba(0,102,255,0.06); /* @kind color */
+
+  /* ── Container ─────────────────────────────────── */
+  --container-max: 1200px; /* @kind spacing */
+}

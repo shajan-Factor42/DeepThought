@@ -1,0 +1,22 @@
+/* Factor42 — Elevation, blur & motion tokens */
+:root {
+  /* ── Shadows ───────────────────────────────────── */
+  --shadow-sm:   0 1px 2px rgba(10,15,30,0.06);
+  --shadow-md:   0 4px 16px rgba(10,15,30,0.08);
+  --shadow-lg:   0 12px 32px rgba(10,15,30,0.10);
+  --shadow-glow: 0 0 30px rgba(0,102,255,0.20);   /* brand glow */
+  --shadow-button: 0 6px 20px rgba(0,102,255,0.28);
+
+  /* ── Glass / blur ──────────────────────────────── */
+  --glass-bg:     rgba(255,255,255,0.88); /* @kind color */
+  --glass-blur:   blur(12px); /* @kind other */
+  --glass-border: 1px solid rgba(0,102,255,0.12); /* @kind other */
+
+  /* ── Motion ────────────────────────────────────── */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in-out:cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --dur-fast:   140ms; /* @kind other */
+  --dur-base:   220ms; /* @kind other */
+  --dur-slow:   360ms; /* @kind other */
+  --transition-base: all var(--dur-base) var(--ease-out); /* @kind other */
+}

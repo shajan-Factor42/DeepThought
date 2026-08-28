@@ -1,0 +1,46 @@
+/* Factor42 — Color tokens */
+:root {
+  /* ── Brand palette ─────────────────────────────── */
+  --f42-primary-blue: #0066FF;   /* Buttons, links, accents, active states */
+  --f42-deep-blue:    #0052CC;   /* Logo, gradient start, dark accents */
+  --f42-cyan:         #00B4D8;   /* Gradient end, highlights */
+  --f42-navy:         #0A0F1E;   /* Body text, headings */
+
+  /* ── Neutrals / slate ──────────────────────────── */
+  --f42-slate-700: #334155;      /* Secondary body text */
+  --f42-slate-500: #64748b;      /* Subtext, captions */
+  --f42-slate-400: #94a3b8;      /* Placeholders, muted text */
+  --f42-slate-300: #cbd5e1;      /* Hairlines, disabled fills */
+  --f42-slate-200: #e2e8f0;      /* Dividers on light surfaces */
+  --f42-bg:        #F0F4FF;      /* Page background (light blue-white) */
+  --f42-white:     #ffffff;
+
+  /* ── Brand gradients ───────────────────────────── */
+  --f42-gradient-brand:  linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-blue:   linear-gradient(135deg, #0066FF 0%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-icon:   linear-gradient(135deg, #0052CC 0%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-button: linear-gradient(135deg, #0066FF 0%, #0052CC 100%); /* @kind color */
+
+  /* ── Tints (rgba-derived) ──────────────────────── */
+  --f42-blue-a06: rgba(0,102,255,0.06);  /* grid lines, faint fills */
+  --f42-blue-a12: rgba(0,102,255,0.12);  /* card borders at rest */
+  --f42-blue-a20: rgba(0,102,255,0.20);  /* glow shadow tint */
+  --f42-blue-a30: rgba(0,102,255,0.30);  /* card borders on hover */
+
+  /* ── Semantic aliases ──────────────────────────── */
+  --color-bg:            var(--f42-bg);
+  --color-surface:       var(--f42-white);
+  --color-surface-glass: rgba(255,255,255,0.88);
+  --text-heading:        var(--f42-navy);
+  --text-body:           var(--f42-slate-700);
+  --text-muted:          var(--f42-slate-500);
+  --text-placeholder:    var(--f42-slate-400);
+  --text-on-brand:       var(--f42-white);
+  --color-accent:        var(--f42-primary-blue);
+  --color-accent-strong: var(--f42-deep-blue);
+  --color-accent-cyan:   var(--f42-cyan);
+  --color-link:          var(--f42-primary-blue);
+  --border-subtle:       var(--f42-blue-a12);
+  --border-hover:        var(--f42-blue-a30);
+  --border-divider:      var(--f42-slate-200);
+}
