@@ -1,0 +1,95 @@
+/* DeepThought — global mobile/tablet adaptation layer.
+   Pages are authored with inline styles, so these overrides target inline
+   style substrings and use !important to win. Desktop rendering is untouched. */
+
+html { -webkit-text-size-adjust: 100%; }
+
+@media (max-width: 1024px) {
+  body { overflow-x: hidden; }
+  img, svg, video, canvas, iframe, image-slot { max-width: 100%; }
+}
+
+/* ---------- Tablet and below ---------- */
+@media (max-width: 900px) {
+  /* container gutters */
+  section[style] { padding-left: 24px !important; padding-right: 24px !important; }
+  section[style] [style*="max-width"] { padding-left: 0 !important; padding-right: 0 !important; }
+  footer[style] > [style*="max-width"] { padding-left: 24px !important; padding-right: 24px !important; }
+
+  /* grids collapse */
+  [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+  [style*="repeat(3"], [style*="repeat(4"], [style*="repeat(5"], [style*="repeat(6"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  [style*="grid-template-rows"] { grid-template-rows: auto !important; }
+
+  /* rows of buttons / chips / cards wrap instead of overflowing */
+  div[style*="display: flex"][style*="gap"], div[style*="display:flex"][style*="gap"],
+  span[style*="display: flex"][style*="gap"], span[style*="display:flex"][style*="gap"] { flex-wrap: wrap !important; }
+
+  /* sticky sidebars stop sticking once stacked (header keeps its own sticky) */
+  div[style*="position: sticky"], div[style*="position:sticky"],
+  aside[style*="position: sticky"], aside[style*="position:sticky"] { position: static !important; top: auto !important; }
+
+  /* nothing may force a min width wider than the viewport */
+  [style*="min-width"] { min-width: 0 !important; }
+
+  /* oversized block padding */
+  [style*="padding: 64px"], [style*="padding:64px"],
+  [style*="padding: 56px"], [style*="padding:56px"],
+  [style*="padding: 48px"], [style*="padding:48px"] { padding: 32px 24px !important; }
+  [style*="gap: 64px"], [style*="gap:64px"], [style*="gap: 56px"], [style*="gap:56px"] { gap: 32px !important; }
+  /* display type at tablet widths */
+  h1[style] { font-size: clamp(34px, 5.4vw, 44px) !important; line-height: 1.1 !important; }
+  h2[style] { font-size: clamp(25px, 3.6vw, 30px) !important; }
+
+}
+
+/* ---------- Phones ---------- */
+@media (max-width: 620px) {
+  section[style] { padding-left: 20px !important; padding-right: 20px !important; }
+  [style*="grid-template-columns"] { grid-template-columns: minmax(0, 1fr) !important; }
+  footer[style] > [style*="max-width"] { padding-left: 20px !important; padding-right: 20px !important; }
+
+  /* display type */
+  h1[style] { font-size: clamp(29px, 8vw, 38px) !important; line-height: 1.1 !important; }
+  h2[style] { font-size: clamp(22px, 6vw, 28px) !important; line-height: 1.2 !important; }
+  h3[style] { font-size: 18px !important; }
+  p[style] { font-size: 16px !important; }
+
+  /* large inline type set on non-heading elements */
+  [style*="font-size: 72px"], [style*="font-size:72px"],
+  [style*="font-size: 64px"], [style*="font-size:64px"],
+  [style*="font-size: 60px"], [style*="font-size:60px"],
+  [style*="font-size: 56px"], [style*="font-size:56px"],
+  [style*="font-size: 52px"], [style*="font-size:52px"],
+  [style*="font-size: 48px"], [style*="font-size:48px"],
+  [style*="font-size: 44px"], [style*="font-size:44px"],
+  [style*="font-size: 42px"], [style*="font-size:42px"],
+  [style*="font-size: 40px"], [style*="font-size:40px"] { font-size: 31px !important; }
+  [style*="font-size: 38px"], [style*="font-size:38px"],
+  [style*="font-size: 36px"], [style*="font-size:36px"],
+  [style*="font-size: 34px"], [style*="font-size:34px"],
+  [style*="font-size: 32px"], [style*="font-size:32px"] { font-size: 26px !important; }
+  [style*="font-size: 30px"], [style*="font-size:30px"],
+  [style*="font-size: 28px"], [style*="font-size:28px"],
+  [style*="font-size: 26px"], [style*="font-size:26px"] { font-size: 23px !important; }
+  [style*="font-size: 20px"], [style*="font-size:20px"],
+  [style*="font-size: 19px"], [style*="font-size:19px"] { font-size: 17px !important; }
+
+  /* vertical rhythm */
+  [style*="padding: 88px"], [style*="padding:88px"],
+  [style*="padding: 96px"], [style*="padding:96px"],
+  [style*="padding: 80px"], [style*="padding:80px"],
+  [style*="padding: 72px"], [style*="padding:72px"] { padding: 44px 20px !important; }
+  section[style*="padding: 88px"], section[style*="padding: 80px"],
+  section[style*="padding: 96px"], section[style*="padding: 72px"] { padding-top: 52px !important; padding-bottom: 52px !important; }
+
+  /* avatar / medallion blocks shrink */
+  [style*="width: 88px"][style*="height: 88px"] { width: 64px !important; height: 64px !important; font-size: 21px !important; }
+
+  /* tap targets */
+  a[style], button[style] { -webkit-tap-highlight-color: rgba(0,102,255,0.12); }
+  input[style], select[style], textarea[style] { font-size: 16px !important; }
+  [style*="border-radius: 28px"], [style*="border-radius:28px"] { border-radius: 20px !important; }
+}
