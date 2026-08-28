@@ -80,6 +80,7 @@ an hour after DNS propagates).
   title, meta description, canonical URL and Service schema (JSON-LD)
 - `county.html` — the shared county template the 226 pages are built from
 - `us-map.html` — clickable US map (embedded on `serving-local-business.html`)
+- `thank-you.html` — post-submission page (noindex)
 - `sitemap.xml`, `robots.txt`, `.nojekyll`, `CNAME`
 - `_ds/` — design system (tokens, styles, components). **Do not rename**; `.nojekyll`
   is what keeps GitHub from ignoring it
@@ -94,11 +95,33 @@ an hour after DNS propagates).
 3. **Analytics** — paste your GA4 or Plausible snippet into each page's `<head>`
    (or ask me to add it everywhere in one pass)
 
+## Forms — how they work now
+
+Both forms POST to **Web3Forms** (access key `afa90fc4-…`), which emails every submission to
+**shajan@factor42media.com** and then redirects the visitor to `thank-you.html`.
+
+- **contact.html** — name, email, phone (all required), business, topic, ad spend,
+  how they heard, services checkboxes, message
+- **book-a-demo.html** — first/last name, email, phone (all required), business, website,
+  locations, ad spend, how they heard, services, the promotion to build
+- **Hidden fields on both:** which page it came from, Google Ads `gclid`, submission timestamp
+- **Spam:** invisible `botcheck` honeypot — no captcha, no friction
+- **thank-you.html** — `noindex`, "what happens next," links to the rate card and case studies.
+  Use this URL as your conversion goal in GA4 later.
+
+**Two things to switch on in your Web3Forms dashboard** (web3forms.com, log in with
+shajan@factor42media.com):
+
+1. **Auto-reply** — the sender name is already set to "Shajan at Deep Thought Marketing" in
+   the form. Turn on the auto-responder and paste your confirmation text there. On the free
+   plan this may be limited; if so, the submission email still arrives normally.
+2. **Verify the destination email** if Web3Forms prompts you, or delivery may go to spam.
+
+**Test it before you announce anything:** load `https://deepthought.marketing/contact.html`,
+submit a real message, confirm it lands in your inbox and that you end up on the thank-you page.
+
 ## Still outstanding
 
-- **Forms don't send.** `contact.html` and `book-a-demo.html` show a submitted state but
-  post nothing. GitHub Pages can't process forms — use Formspree, Basin, or your CRM's
-  endpoint.
 - **County page text renders via JavaScript.** Google executes JS and will index it, but
   text present in the HTML source is stronger. The head tags, canonical and schema *are*
   in the source on all 226 pages.
