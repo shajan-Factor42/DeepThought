@@ -6,6 +6,7 @@
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/fonts.css">
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/colors.css">
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/styles.css">
+<link rel="stylesheet" href="responsive.css">
 <script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
 <style>
@@ -32,13 +33,14 @@
 </div>
 <div id="legend">
   <span class="key"><span class="swatch" style="background:#0066FF"></span>Counties live — click to browse</span>
-  <span class="key"><span class="swatch" style="background:#c7d6f5"></span>Nationwide coverage — click any state to talk to us</span>
+  <span class="key"><span class="swatch" style="background:#c7d6f5"></span>Nationwide — click any state for its market page</span>
 </div>
 <script>
 const LIVE = {
-  'Georgia': { href: 'georgia-counties.html', label: 'Georgia — 159 counties' },
-  'Florida': { href: 'florida-counties.html', label: 'Florida — 67 counties' }
+  'Georgia': { href: 'georgia-counties.html', label: 'Georgia — 159 county pages' },
+  'Florida': { href: 'florida-counties.html', label: 'Florida — 67 county pages' }
 };
+const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-');
 
 const svg = d3.select('#map');
 const tip = d3.select('#tip');
@@ -61,7 +63,7 @@ d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((top
         d3.select(this).attr('fill', live ? '#0052CC' : '#c7d6f5');
         const c = path.centroid(d);
         const box = document.getElementById('map').getBoundingClientRect();
-        tip.text(live ? live.label : d.properties.name + ' — we run campaigns here')
+        tip.text(live ? live.label : d.properties.name + ' — see the market')
            .style('left', (c[0] / 960 * box.width) + 'px')
            .style('top', (c[1] / 600 * box.height) + 'px')
            .style('opacity', 1);
@@ -72,7 +74,7 @@ d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((top
       })
       .on('click', (event, d) => {
         const live = LIVE[d.properties.name];
-        const url = live ? live.href : 'contact.html';
+        const url = live ? live.href : 'state.html?state=' + slugify(d.properties.name);
         if (window.parent && window.parent !== window) window.parent.location.href = url;
         else window.location.href = url;
       });

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Marketing in All 50 States | DeepThought</title>
+<meta name="description" content="Paid search, social, connected TV and display run nationwide. Pick your state to see how its market works.">
+<link rel="canonical" href="https://deepthought.marketing/us-states.html">
+<meta property="og:title" content="Digital Marketing in All 50 States | DeepThought">
+<meta property="og:description" content="Paid search, social, connected TV and display run nationwide. Pick your state to see how its market works.">
+<meta property="og:type" content="website">
+<meta name="robots" content="index,follow">
+
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/colors.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/typography.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/effects.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/styles.css">
+<link rel="stylesheet" href="responsive.css">
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:1100px; margin:0 auto; padding:80px 40px 40px">
+  <div style="font-size:13.5px; color:var(--text-muted)"><a href="index.html">Home</a> · <a href="serving-local-business.html">Serving local business</a> · <span>States</span></div>
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); margin-top:28px">Service area</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; max-width:860px; text-wrap:pretty">Digital marketing in all 50 states</h1>
+  <p style="font-size:18.5px; line-height:1.65; color:var(--text-body); margin:22px 0 0; max-width:700px; text-wrap:pretty">Paid search, paid social, connected TV, display and streaming audio — run nationwide from one operations layer. Pick your state to see how the market works there.</p>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 40px">
+  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="20px" hint-size="100%,72px">
+    <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center">
+      <span style="font-size:11.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-right:8px">Jump to</span>
+      <sc-for list="{{ letters }}" as="l" hint-placeholder-count="20">
+        <a href="{{ l.href }}" style="text-decoration:none; font-size:13.5px; font-weight:700; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.7)">{{ l.label }}</a>
+      </sc-for>
+    </div>
+  </x-import>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 64px">
+  <sc-for list="{{ regions }}" as="r" hint-placeholder-count="10">
+    <div style="margin-bottom:48px">
+      <div style="display:flex; align-items:baseline; gap:14px; padding-bottom:14px; border-bottom:1px solid var(--border-subtle)">
+        <h2 style="font-family:var(--font-display); font-size:26px; font-weight:800; letter-spacing:-0.03em; margin:0">{{ r.label }}</h2>
+        <span style="font-size:13.5px; color:var(--text-muted)">{{ r.count }} states</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:10px 24px; margin-top:20px">
+        <sc-for list="{{ r.states }}" as="s" hint-placeholder-count="6">
+          <a href="{{ s.href }}" id="{{ s.anchor }}" style="text-decoration:none; font-size:15px; line-height:1.5; padding:6px 0">{{ s.label }}<span style="color:var(--text-muted); font-size:13px"> · {{ s.note }}</span></a>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 64px">
+  <h2 style="font-family:var(--font-display); font-size:26px; font-weight:800; letter-spacing:-0.03em; margin:0 0 8px">County-level coverage</h2>
+  <p style="font-size:15.5px; color:var(--text-body); margin:0 0 24px; max-width:640px">Two states have a page for every county today, with more added as we go deeper by market.</p>
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px">
+    <a href="georgia-counties.html" style="text-decoration:none; color:inherit">
+      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="28px" interactive="{{ true }}" hint-size="100%,150px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:20px">
+          <div>
+            <h3 style="font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:-0.02em; margin:0">Georgia</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 12px">All 159 counties, metro Atlanta to the coast.</p>
+            <span style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue)">Browse counties →</span>
+          </div>
+          <div style="font-family:var(--font-display); font-size:44px; font-weight:800; letter-spacing:-0.04em; background:var(--f42-gradient-blue); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; flex:none">159</div>
+        </div>
+      </x-import>
+    </a>
+    <a href="florida-counties.html" style="text-decoration:none; color:inherit">
+      <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="28px" interactive="{{ true }}" hint-size="100%,150px">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:20px">
+          <div>
+            <h3 style="font-family:var(--font-display); font-size:20px; font-weight:700; letter-spacing:-0.02em; margin:0">Florida</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 12px">All 67 counties, Panhandle to the Keys.</p>
+            <span style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue)">Browse counties →</span>
+          </div>
+          <div style="font-family:var(--font-display); font-size:44px; font-weight:800; letter-spacing:-0.04em; background:var(--f42-gradient-blue); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; flex:none">67</div>
+        </div>
+      </x-import>
+    </a>
+  </div>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 96px">
+  <div style="border-radius:28px; background:var(--f42-gradient-blue); padding:56px; text-align:center; box-shadow:0 20px 50px rgba(0,102,255,0.22)">
+    <h2 style="font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.03em; color:#fff; margin:0">Tell us where you operate</h2>
+    <p style="font-size:17px; color:rgba(255,255,255,0.82); margin:16px auto 28px; max-width:520px">We'll show you what the market looks like there and what it costs to win it.</p>
+    <a href="book-a-demo.html" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="secondary" size="lg" dc-props="{{ whiteBtn }}" hint-size="150px,52px">Book a demo</x-import></a>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { regions: [], letters: [] };
+
+  componentDidMount() {
+    import('./states.js').then((data) => {
+      const order = ['southeast', 'midatlantic', 'northeast', 'midwest', 'plains', 'south', 'southwest', 'mountain', 'pacific', 'noncontiguous'];
+      const seen = {};
+      const regions = order.map((key) => {
+        const states = data.STATES.filter((s) => s.region === key).map((s) => {
+          const first = s.name[0].toUpperCase();
+          const anchor = seen[first] ? '' : (seen[first] = true, 'state-' + first);
+          return {
+            label: s.name,
+            note: s.countyDirectory ? s.countyCount + ' county pages' : s.metros[0],
+            href: 'digital-marketing-' + s.slug + '.html',
+            anchor
+          };
+        });
+        return { key, label: data.US_REGIONS[key], count: states.length, states };
+      }).filter((r) => r.count > 0);
+      const present = {};
+      data.STATES.forEach((s) => { present[s.name[0].toUpperCase()] = true; });
+      const letters = Object.keys(present).sort().map((l) => ({ label: l, href: '#state-' + l }));
+      document.title = 'Digital Marketing in All 50 States | DeepThought';
+      this.setState({ regions, letters });
+    });
+  }
+
+  renderVals() {
+    return {
+      regions: this.state.regions,
+      letters: this.state.letters,
+      whiteBtn: { style: { background: '#fff', color: 'var(--f42-deep-blue)' } }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

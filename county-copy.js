@@ -152,37 +152,38 @@ export const UNIQUE = {
 };
 
 export function build(c) {
-  const cities = c.cities.length ? [c.seat].concat(c.cities) : [c.seat];
+  const seat = c.seat || (c.name + " County");
+  const cities = c.cities.length ? [seat].concat(c.cities) : [seat];
   const cityList = list(cities);
   const ind = list(c.industries.slice(0, 4));
   const first = c.industries[0];
-  const bigMetro = c.state === 'FL' ? 'Miami or Tampa' : 'metro Atlanta';
+  const bigMetro = c.state === 'FL' ? 'Miami or Tampa' : 'the largest metro in the state';
   return {
     lede: `Looking for digital marketing in ${c.name} County? Businesses across ${cityList} and the surrounding communities of ${c.regionLabel} compete for a customer base that searches locally and buys locally. Digital marketing in ${c.name} County is less about volume than precision — the search market here is smaller than ${bigMetro}, which means every wasted click is a larger share of your budget, and every well-placed one is worth more. DeepThought is the digital marketing agency alternative built for exactly that: full execution, published pricing, no retainer.`,
     sections: [
       { h: `What paid media looks like in ${c.name} County`,
-        p: [`${c.seat} anchors the county's search demand, but the customers you can profitably serve rarely stop at the city limits. The right geo target is your drive time, not your county line — and in a market this size, the difference between those two decides whether the account is profitable.`,
+        p: [`${seat} anchors local search demand, but the customers you can profitably serve rarely stop at the city limits. The right geo target is your drive time, not your county line — and in a market this size, the difference between those two decides whether the account is profitable.`,
             `Search volume in ${c.name} County is finite. Once you hold impression share on your core commercial terms, more budget in search buys progressively worse traffic. That is the point at which most local accounts should be expanding into paid social, connected TV or streaming audio rather than raising bids.`,
             `DeepThought watches for that ceiling and moves budget across channels when search saturates, so you are not paying escalating prices for the same clicks.`] },
       { h: `Industries we work with in ${c.name} County`,
         p: [`${ind.charAt(0).toUpperCase() + ind.slice(1)} make up the bulk of the local advertising market. ${first.charAt(0).toUpperCase() + first.slice(1)} businesses in particular tend to have high job values and long consideration windows, which makes retargeting and connected TV pay off in a way they do not for lower-ticket categories.`,
-            `Campaigns are built per industry, not per package. A ${first} operator and a healthcare practice in ${c.seat} need different keywords, different creative and different budgets, and pricing follows the products they actually run.`] },
+            `Campaigns are built per industry, not per package. A ${first} operator and a healthcare practice in ${seat} need different keywords, different creative and different budgets, and pricing follows the products they actually run.`] },
       { h: `Why ${c.name} County businesses choose DeepThought over an agency`,
         p: [`Smaller markets are underserved by traditional agencies. Retainers are priced for metro budgets, response times are slow, and account attention goes to the largest client on the roster. Businesses in ${c.name} County usually end up paying agency rates for junior-level attention.`,
             `DeepThought inverts that. You describe the promotion, and the campaign is built, published and managed continuously — creative, audiences, bids and channel mix — with a named marketing expert available for strategy. Pricing is per product, published on our rate card, and roughly half what a comparable agency retainer costs.`,
             `You keep your own ad accounts, your own creative and your own data. There is no annual contract to leave.`] },
       { h: `Searching for a digital marketing agency near you in ${c.name} County?`,
         p: [`“Digital marketing near me” is one of the most common searches local owners run, and it usually leads to the same three options: a local digital marketing agency with a retainer, a freelancer with a tool stack, or doing it yourself between jobs. Each has the same failure mode — execution stops when attention moves elsewhere.`,
-            `DeepThought is a fourth option. You get the execution a digital marketing agency provides — campaign builds, creative, bid management, reporting — running continuously through the platform, with a named marketing expert for strategy. Being physically down the road from ${c.seat} matters less than whether your campaigns were touched this week.`,
+            `DeepThought is a fourth option. You get the execution a digital marketing agency provides — campaign builds, creative, bid management, reporting — running continuously through the platform, with a named marketing expert for strategy. Being physically down the road from ${seat} matters less than whether your campaigns were touched this week.`,
             `If you are comparing digital marketing agencies in ${c.name} County right now, the two questions worth asking either way are: how fast can a new promotion go live, and is the fee a published rate or a percentage that grows as you scale?`] },
-      { h: `Getting found locally in ${c.seat}`,
+      { h: `Getting found locally in ${seat}`,
         p: [`Local search visibility compounds. A complete, active Google Business Profile makes paid clicks cheaper and organic visibility stronger, and in a county this size it is often the single highest-return item on the list. We check it before scaling any budget.`,
-            `Reviews, service-area accuracy, hours, photos and category selection all feed the local pack, and the local pack sits above the organic results for nearly every commercial search in ${c.seat}. A business that is invisible there is paying a premium in the paid auction to make up for it.`,
+            `Reviews, service-area accuracy, hours, photos and category selection all feed the local pack, and the local pack sits above the organic results for nearly every commercial search in ${seat}. A business that is invisible there is paying a premium in the paid auction to make up for it.`,
             `From there, the sequence is straightforward: capture existing demand with search, build new demand with social and streaming, and measure both against booked revenue rather than clicks.`] },
       { h: `Channel by channel: what each one does in this market`,
         p: [`Paid search and local service ads capture people who are already looking. This is the highest-intent traffic you can buy in ${c.name} County and it should be funded first, but it is capped by how many people search in a given month.`,
             `Paid social — Meta, TikTok, and LinkedIn for B2B — reaches the far larger group of local customers who need what you sell but have not started searching. It is also where creative testing happens fastest and most cheaply.`,
-            `Connected TV and OTT put you on the streaming services ${c.seat} households actually watch, at a fraction of local broadcast cost and with real targeting. Programmatic display and retargeting keep you in front of people who visited and did not convert. Streaming audio reaches commuters and job sites where screens are not an option.`,
+            `Connected TV and OTT put you on the streaming services ${seat} households actually watch, at a fraction of local broadcast cost and with real targeting. Programmatic display and retargeting keep you in front of people who visited and did not convert. Streaming audio reaches commuters and job sites where screens are not an option.`,
             `The mix matters more than any single channel. A digital marketing agency that only sells you what it is good at will build the wrong mix; DeepThought allocates across all of them and moves budget toward whatever is producing booked revenue this month.`] },
       { h: `How we measure results`,
         p: [`Clicks and impressions are inputs. The number that decides whether the account is working is cost per booked job, booked appointment, or qualified lead — and that number lives in your CRM or phone system, not in the ad platform.`,
@@ -193,14 +194,14 @@ export function build(c) {
             `We build a spend calendar around your demand curve, pull budget forward into the weeks that convert, and hold it back in the weeks that do not. Because campaigns publish in under a minute, a promotion decided on Monday morning is live Monday morning — which is the whole reason seasonal businesses in ${c.regionLabel} switch to us in the first place.`] }
     ],
     faq: [
-      { q: `Is there a digital marketing agency near me in ${c.name} County?`, a: `We serve ${c.seat} and all of ${c.name} County remotely, with a named marketing expert assigned to your account. For local businesses, what matters is response time and execution speed rather than a physical office — campaigns publish in under a minute and are managed continuously.` },
+      { q: `Is there a digital marketing agency near me in ${c.name} County?`, a: `We serve ${seat} and all of ${c.name} County remotely, with a named marketing expert assigned to your account. For local businesses, what matters is response time and execution speed rather than a physical office — campaigns publish in under a minute and are managed continuously.` },
       { q: `How much does digital marketing cost in ${c.name} County?`, a: `Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media spend goes to the platforms at cost, in your own accounts. Most single-location businesses in this market start with search plus one awareness channel.` },
-      { q: `Do you only work with businesses in ${c.seat}?`, a: `No. We build the geo target around the area you can profitably serve, which usually includes neighboring counties.` },
+      { q: `Do you only work with businesses in ${seat}?`, a: `No. We build the geo target around the area you can profitably serve, which usually includes neighboring counties.` },
       { q: `How long before we see results?`, a: `Search campaigns produce measurable results within the first two to four weeks. Awareness channels like connected TV take longer to show up in booked revenue and are measured on assisted conversions and lift, not last-click.` },
       { q: `Can we start with one channel?`, a: `Yes. Each product is priced on its own, so you can run search only and add channels when the numbers justify it.` },
       { q: `How are you different from a traditional digital marketing agency?`, a: `Speed and price. Agencies brief, produce and review before anything publishes; our platform builds and launches the campaign in under a minute and manages it continuously, with a named marketing expert for strategy. Management runs about half a comparable agency retainer, published on our rate card rather than quoted per client.` },
       { q: `Do we keep our own ad accounts and data?`, a: `Yes. Campaigns run in your Google, Meta and other platform accounts. Creative, audiences, conversion history and reporting stay with you if you ever leave, and there is no annual contract.` },
-      { q: `Do you help with our Google Business Profile and local SEO?`, a: `Profile setup and hygiene are part of onboarding, because paid performance in ${c.seat} depends on it. Deeper SEO and web development are quoted as packages.` },
+      { q: `Do you help with our Google Business Profile and local SEO?`, a: `Profile setup and hygiene are part of onboarding, because paid performance in ${seat} depends on it. Deeper SEO and web development are quoted as packages.` },
       { q: `What size business do you work with in ${c.name} County?`, a: `Single-location service businesses through multi-location operators and franchise systems. Multi-location accounts get per-location campaigns, budgets and reporting rolled into one view.` }
     ]
   };

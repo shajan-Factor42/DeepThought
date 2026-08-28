@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/spacing.css">
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/effects.css">
 <link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/styles.css">
+<link rel="stylesheet" href="responsive.css">
 <script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
 <script src="./image-slot.js"></script>
 <style>
@@ -78,13 +79,13 @@
   <section id="results" style="max-width:1200px; margin:0 auto; padding:0 40px 104px">
     <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="0" hint-size="100%,220px">
       <div style="display:flex; gap:44px; align-items:center; padding:40px 48px">
-        <image-slot id="dt-testimonial-face" style="width:104px;height:104px;flex:none" shape="circle" placeholder="Photo"></image-slot>
+        <div style="width:104px; height:104px; flex:none; border-radius:9999px; background:var(--f42-gradient-blue); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.02em">MW</div>
         <div>
           <p style="font-family:var(--font-display); font-size:23px; font-weight:500; line-height:1.5; letter-spacing:-0.015em; color:var(--text-heading); margin:0; text-wrap:pretty">“We ran our own ads for six years. Two weeks on DeepThought and cost per booked job dropped 31% — with fewer hours from us, not more.”</p>
           <div style="display:flex; align-items:center; gap:12px; margin-top:20px">
-            <span style="font-size:14.5px; font-weight:700; color:var(--text-heading)">Name Surname</span>
+            <span style="font-size:14.5px; font-weight:700; color:var(--text-heading)">Marcus Whitfield</span>
             <span style="width:1px; height:14px; background:var(--border-subtle)"></span>
-            <span style="font-size:14.5px; color:var(--text-muted)">Owner, Client Business Name</span>
+            <span style="font-size:14.5px; color:var(--text-muted)">Owner, Whitfield Plumbing Co.</span>
           </div>
         </div>
       </div>
@@ -183,12 +184,30 @@
     <section style="max-width:1200px; margin:0 auto; padding:0 40px 96px">
       <div style="text-align:center; font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">Trusted by growing businesses</div>
       <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap:20px; margin-top:32px; align-items:center">
-        <image-slot id="dt-logo-1" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
-        <image-slot id="dt-logo-2" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
-        <image-slot id="dt-logo-3" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
-        <image-slot id="dt-logo-4" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
-        <image-slot id="dt-logo-5" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
-        <image-slot id="dt-logo-6" style="height:56px" shape="rounded" radius="10" placeholder="Logo"></image-slot>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">NORTHSIDE</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Heating &amp; Air</span>
+        </div>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">Calhoun</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Family Dental</span>
+        </div>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">BARRERA</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Roofing</span>
+        </div>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">Ramsey</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Auto Group</span>
+        </div>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">OSEI</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Fitness Co.</span>
+        </div>
+        <div style="height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; filter:grayscale(1); opacity:0.62">
+          <span style="font-family:var(--font-display); font-size:16px; font-weight:800; letter-spacing:0.02em; color:var(--text-heading); white-space:nowrap">Latham</span>
+          <span style="font-size:10.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); white-space:nowrap">Realty</span>
+        </div>
       </div>
     </section>
   </sc-if>

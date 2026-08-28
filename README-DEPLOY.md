@@ -75,9 +75,11 @@ an hour after DNS propagates).
   `serving-local-business.html`, `case-studies.html`, `blog.html`, `faq.html`,
   `about.html`, `book-a-demo.html`, `contact.html`
 - `georgia-counties.html`, `florida-counties.html` — county directories
-- **226 static county pages** — `digital-marketing-fulton-county-ga.html`,
-  `digital-marketing-orange-county-fl.html`, … one file per county, each with its own
-  title, meta description, canonical URL and Service schema (JSON-LD)
+- **3,141 static county pages** — `digital-marketing-fulton-county-ga.html`,
+  `digital-marketing-travis-county-tx.html`, `digital-marketing-orleans-parish-la.html`, …
+  one file per county / parish / borough in all 50 states, each with its own title, meta
+  description, canonical URL and Service schema. County names come from US Census
+  geometry, so they are accurate (JSON-LD)
 - `county.html` — the shared county template the 226 pages are built from
 - `us-map.html` — clickable US map (embedded on `serving-local-business.html`)
 - `thank-you.html` — post-submission page (noindex)
@@ -98,7 +100,7 @@ an hour after DNS propagates).
 ## Forms — how they work now
 
 Both forms POST to **Web3Forms** (access key `afa90fc4-…`), which emails every submission to
-**shajan@factor42media.com** and then redirects the visitor to `thank-you.html`.
+**your inbox** (the address configured on the Web3Forms access key) and then redirects the visitor to `thank-you.html`.
 
 - **contact.html** — name, email, phone (all required), business, topic, ad spend,
   how they heard, services checkboxes, message
@@ -109,12 +111,11 @@ Both forms POST to **Web3Forms** (access key `afa90fc4-…`), which emails every
 - **thank-you.html** — `noindex`, "what happens next," links to the rate card and case studies.
   Use this URL as your conversion goal in GA4 later.
 
-**Two things to switch on in your Web3Forms dashboard** (web3forms.com, log in with
-shajan@factor42media.com):
+**Two things to switch on in your Web3Forms dashboard** (web3forms.com):
 
-1. **Auto-reply** — the sender name is already set to "Shajan at Deep Thought Marketing" in
-   the form. Turn on the auto-responder and paste your confirmation text there. On the free
-   plan this may be limited; if so, the submission email still arrives normally.
+1. **Auto-reply is a Web3Forms Pro feature** — not enabled. The site does not promise a
+   confirmation email; the thank-you page is the confirmation. Options if you want one later:
+   upgrade Web3Forms, or reply manually from a saved Gmail template (fastest, free).
 2. **Verify the destination email** if Web3Forms prompts you, or delivery may go to spam.
 
 **Test it before you announce anything:** load `https://deepthought.marketing/contact.html`,
@@ -125,8 +126,13 @@ submit a real message, confirm it lands in your inbox and that you end up on the
 - **County page text renders via JavaScript.** Google executes JS and will index it, but
   text present in the HTML source is stronger. The head tags, canonical and schema *are*
   in the source on all 226 pages.
-- **Only 6 counties have unique copy** (Fulton, Cobb, Gwinnett, DeKalb, Chatham, Muscogee).
-  The other 220 share a parameterized body — the duplicate-content risk on county pages.
+- **Only 6 counties have unique copy** (Fulton, Cobb, Gwinnett, DeKalb, Chatham, Muscogee),
+  plus hand-written state copy for Georgia and Florida. The other ~3,135 county pages and
+  48 state pages share a parameterized body — this is the duplicate-content risk, and it is
+  now spread across 3,000+ URLs. Consider submitting the sitemap in stages and writing
+  unique copy for the markets you actually sell in first.
+- **Upload note:** the site is now ~3,300 files. Browser drag-and-drop will struggle; use
+  git (`git add . && git commit && git push`) or GitHub Desktop instead.
 - **Placeholder content:** case study metrics and names, blog posts, client logo wall,
   real customer photos. County testimonials and the county stats band are invented
   placeholders — replace before you rely on them.
