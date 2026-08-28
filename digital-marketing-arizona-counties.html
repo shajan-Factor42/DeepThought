@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Digital Marketing in Every Arizona County | DeepThought</title>
+<meta name="description" content="County-level digital marketing across all 15 counties of Arizona. Paid search, social, connected TV and display for local businesses from Phoenix outward.">
+<link rel="canonical" href="https://deepthought.marketing/digital-marketing-arizona-counties.html">
+<meta property="og:title" content="Digital Marketing in Every Arizona County | DeepThought">
+<meta property="og:description" content="County-level digital marketing across all 15 counties of Arizona. Paid search, social, connected TV and display for local businesses from Phoenix outward.">
+<meta property="og:type" content="website">
+<meta name="robots" content="index,follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","serviceType":"Digital marketing","provider":{"@type":"Organization","name":"DeepThought Marketing","url":"https://deepthought.marketing"},"areaServed":{"@type":"State","name":"Arizona"},"name":"Digital Marketing in Every Arizona County | DeepThought","description":"County-level digital marketing across all 15 counties of Arizona. Paid search, social, connected TV and display for local businesses from Phoenix outward.","url":"https://deepthought.marketing/digital-marketing-arizona-counties.html"}</script>
+<script>window.__STATE = "arizona";</script>
+
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/colors.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/typography.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/spacing.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/effects.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/styles.css">
+<link rel="stylesheet" href="responsive.css">
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:1100px; margin:0 auto; padding:80px 40px 40px">
+  <div style="font-size:13.5px; color:var(--text-muted)"><a href="index.html">Home</a> · <a href="serving-local-business.html">Serving local business</a> · <a href="{{ stateHref }}">{{ stateName }}</a> · <span>Counties</span></div>
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted); margin-top:28px">{{ stateName }} · county coverage</div>
+  <h1 style="font-family:var(--font-display); font-size:50px; font-weight:800; letter-spacing:-0.035em; line-height:1.06; margin:18px 0 0; max-width:860px; text-wrap:pretty">Digital marketing in every {{ stateName }} county</h1>
+  <p style="font-size:18.5px; line-height:1.65; color:var(--text-body); margin:22px 0 0; max-width:700px; text-wrap:pretty">Paid search, paid social, connected TV, display and streaming audio for businesses across all {{ countyLine }} of {{ stateName }}. Pick your county to see how that market works.</p>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 40px">
+  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="20px" hint-size="100%,72px">
+    <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center">
+      <span style="font-size:11.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted); margin-right:8px">Jump to</span>
+      <sc-for list="{{ letters }}" as="l" hint-placeholder-count="20">
+        <a href="{{ l.href }}" style="text-decoration:none; font-size:13.5px; font-weight:700; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center; border-radius:8px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.7)">{{ l.label }}</a>
+      </sc-for>
+    </div>
+  </x-import>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 64px">
+  <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:10px 24px">
+    <sc-for list="{{ counties }}" as="c" hint-placeholder-count="24">
+      <a href="{{ c.href }}" id="{{ c.anchor }}" style="text-decoration:none; font-size:15px; line-height:1.5; padding:6px 0">{{ c.label }}</a>
+    </sc-for>
+  </div>
+  <p style="font-size:13.5px; color:var(--text-muted); margin:28px 0 0">{{ statusLine }}</p>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:0 40px 64px">
+  <a href="{{ stateHref }}" style="text-decoration:none; color:inherit">
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="32px" interactive="{{ true }}" hint-size="100%,140px">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:32px">
+        <div>
+          <h2 style="font-family:var(--font-display); font-size:24px; font-weight:700; letter-spacing:-0.025em; margin:0">How the {{ stateName }} market works</h2>
+          <p style="font-size:15.5px; line-height:1.6; color:var(--text-body); margin:10px 0 0">Metros that set your click prices, industries advertising there, and the channel mix we run.</p>
+        </div>
+        <span style="font-size:15px; font-weight:600; color:var(--f42-primary-blue); white-space:nowrap">Back to {{ stateName }} →</span>
+      </div>
+    </x-import>
+  </a>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 96px">
+  <div style="border-radius:28px; background:var(--f42-gradient-blue); padding:56px; text-align:center; box-shadow:0 20px 50px rgba(0,102,255,0.22)">
+    <h2 style="font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.03em; color:#fff; margin:0">Ready to grow in {{ stateName }}?</h2>
+    <p style="font-size:17px; color:rgba(255,255,255,0.82); margin:16px auto 28px; max-width:520px">Tell us which county you serve and we'll show you what the market costs.</p>
+    <a href="book-a-demo.html" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="secondary" size="lg" dc-props="{{ whiteBtn }}" hint-size="150px,52px">Book a demo</x-import></a>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { st: null, counties: [], letters: [], status: 'Loading county list…' };
+
+  componentDidMount() {
+    import('./states.js').then((data) => {
+      const slug = window.__STATE || new URLSearchParams(location.search).get('state') || 'georgia';
+      const st = data.byslug(slug);
+      document.title = 'Digital Marketing in Every ' + st.name + ' County | DeepThought';
+      this.setState({ st });
+      if (st.ab === 'GA' || st.ab === 'FL') {
+        import('./counties.js').then((cd) => {
+          const list = st.ab === 'GA' ? cd.COUNTIES : cd.FL_COUNTIES;
+          this.apply(st, list.map((c) => ({
+            name: c.name,
+            href: 'county.html?county=' + c.slug
+          })));
+        });
+        return;
+      }
+      fetch('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/counties-10m.json')
+        .then((r) => r.json())
+        .then((topo) => {
+          const feats = topojson.feature(topo, topo.objects.counties).features
+            .filter((f) => String(f.id).slice(0, 2) === st.fips)
+            .map((f) => ({
+              name: f.properties.name,
+              href: 'digital-marketing-' + f.properties.name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') + '-' + (st.ab === 'LA' ? 'parish' : st.ab === 'AK' ? 'borough' : 'county') + '-' + st.ab.toLowerCase() + '.html'
+            }))
+            .sort((a, b) => a.name.localeCompare(b.name));
+          this.apply(st, feats);
+        })
+        .catch(() => this.setState({ status: 'County list unavailable — reload the page to try again.' }));
+    });
+  }
+
+  apply(st, list) {
+    const seen = {};
+    const counties = list.map((c) => {
+      const first = c.name[0].toUpperCase();
+      const anchor = seen[first] ? '' : (seen[first] = true, 'c-' + first);
+      return { label: c.name + ' County', href: c.href, anchor };
+    });
+    const letters = Object.keys(seen).sort().map((l) => ({ label: l, href: '#c-' + l }));
+    const deep = st.ab === 'GA' || st.ab === 'FL';
+    this.setState({
+      counties,
+      letters,
+      status: counties.length + ' counties in ' + st.name + '. ' + (deep
+        ? 'Each has a full market page.'
+        : 'County pages are generated from the state market profile; deeper local pages are being written market by market.')
+    });
+  }
+
+  renderVals() {
+    const st = this.state.st;
+    return {
+      stateName: st ? st.name : '',
+      stateHref: st ? 'digital-marketing-' + st.slug + '.html' : '#',
+      countyLine: st ? st.countyCount + ' ' + st.countyNoun : 'counties',
+      counties: this.state.counties,
+      letters: this.state.letters,
+      statusLine: this.state.status,
+      whiteBtn: { style: { background: '#fff', color: 'var(--f42-deep-blue)' } }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

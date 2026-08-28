@@ -10,7 +10,7 @@
 <meta property="og:description" content="Digital marketing in Appling County, Georgia. Paid search, social, connected TV and display for businesses in Baxley — a digital marketing agency alternative with published pricing and campaigns live in 60 seconds.">
 <meta property="og:type" content="website">
 <meta name="robots" content="index,follow">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","serviceType":"Digital marketing","provider":{"@type":"Organization","name":"DeepThought Marketing","url":"https://deepthought.marketing","email":"shajan@factor42media.com"},"areaServed":{"@type":"AdministrativeArea","name":"Appling County, Georgia"},"name":"Digital Marketing in Appling County, Georgia","description":"Digital marketing in Appling County, Georgia. Paid search, social, connected TV and display for businesses in Baxley — a digital marketing agency alternative with published pricing and campaigns live in 60 seconds.","url":"https://deepthought.marketing/digital-marketing-appling-county-ga.html"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Service","serviceType":"Digital marketing","provider":{"@type":"Organization","name":"DeepThought Marketing","url":"https://deepthought.marketing"},"areaServed":{"@type":"AdministrativeArea","name":"Appling County, Georgia"},"name":"Digital Marketing in Appling County, Georgia","description":"Digital marketing in Appling County, Georgia. Paid search, social, connected TV and display for businesses in Baxley — a digital marketing agency alternative with published pricing and campaigns live in 60 seconds.","url":"https://deepthought.marketing/digital-marketing-appling-county-ga.html"}</script>
 <script>window.__COUNTY = "appling";</script>
 
 <script src="./support.js"></script>
@@ -170,13 +170,36 @@ class Component extends DCLogic {
   state = { county: null, copy: null, nearby: [] };
 
   componentDidMount() {
-    Promise.all([import('./counties.js'), import('./county-copy.js')]).then(([data, copy]) => {
+    Promise.all([import('./counties.js'), import('./county-copy.js')]).then(async ([data, copy]) => {
       const slug = (window.__COUNTY || new URLSearchParams(location.search).get('county') || 'fulton');
-      const county = data.byslug(slug);
+      const q = new URLSearchParams(location.search);
+      const stAb = window.__COUNTY_STATE || q.get('state');
+      const rawName = window.__COUNTY_NAME || q.get('name');
+      let county;
+      if (stAb && rawName) {
+        const sd = await import('./states.js');
+        const st = sd.byab(stAb);
+        if (st) {
+          county = {
+            slug: st.ab.toLowerCase() + '-' + rawName.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+            name: rawName,
+            seat: '',
+            state: st.ab,
+            stateName: st.name,
+            region: st.region,
+            regionLabel: st.regionLabel,
+            cities: st.metros.slice(0, 2),
+            industries: st.industries,
+            generated: true,
+            stateSlug: st.slug
+          };
+        }
+      }
+      if (!county) county = data.byslug(slug);
       const pool = data.ALL_COUNTIES.filter((c) => c.state === county.state);
-      let nearby = pool.filter((c) => c.region === county.region && c.slug !== county.slug);
-      if (nearby.length < 6) nearby = nearby.concat(pool.filter((c) => c.region !== county.region && c.slug !== county.slug).slice(0, 6 - nearby.length));
-      nearby = nearby.slice(0, 10).map((c) => ({ label: c.name + ' County', href: 'digital-marketing-' + c.slug.replace('fl-', '') + '-county-' + c.state.toLowerCase() + '.html' }));
+      let nearby = county.generated ? [] : pool.filter((c) => c.region === county.region && c.slug !== county.slug);
+      if (!county.generated && nearby.length < 6) nearby = nearby.concat(pool.filter((c) => c.region !== county.region && c.slug !== county.slug).slice(0, 6 - nearby.length));
+      nearby = nearby.slice(0, 10).map((c) => ({ label: c.name + ' County', href: 'county.html?county=' + c.slug }));
       document.title = 'Digital Marketing in ' + county.name + ' County, ' + county.state + ' | Digital Marketing Agency | DeepThought';
       let meta = document.querySelector('meta[name="description"]');
       if (!meta) { meta = document.createElement('meta'); meta.setAttribute('name', 'description'); document.head.appendChild(meta); }
@@ -263,8 +286,8 @@ class Component extends DCLogic {
       tQuote: t.tQuote || '',
       countyName: c ? c.name : 'Fulton',
       stateName: c ? (c.stateName || 'Georgia') : 'Georgia',
-      directoryHref: c && c.state === 'FL' ? 'florida-counties.html' : 'georgia-counties.html',
-      directoryLabel: c && c.state === 'FL' ? 'Browse all 67 Florida counties →' : 'Browse all 159 Georgia counties →',
+      directoryHref: c && c.generated ? 'digital-marketing-' + c.stateSlug + '-counties.html' : (c && c.state === 'FL' ? 'florida-counties.html' : 'georgia-counties.html'),
+      directoryLabel: c ? 'Browse all ' + (c.stateName || 'Georgia') + ' counties →' : '',
       seat: c ? c.seat : 'Atlanta',
       regionLabel: c ? c.regionLabel : 'Metro Atlanta',
       citiesLine: c ? [c.seat].concat(c.cities).slice(0, 3).join(', ') : 'Atlanta',
