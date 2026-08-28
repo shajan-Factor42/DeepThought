@@ -32,7 +32,7 @@
 </div>
 <div id="legend">
   <span class="key"><span class="swatch" style="background:#0066FF"></span>Counties live — click to browse</span>
-  <span class="key"><span class="swatch" style="background:#c7d6f5"></span>Served on request</span>
+  <span class="key"><span class="swatch" style="background:#c7d6f5"></span>Nationwide coverage — click any state to talk to us</span>
 </div>
 <script>
 const LIVE = {
@@ -52,7 +52,7 @@ d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((top
     .data(states.features)
     .join('path')
       .attr('d', path)
-      .attr('class', (d) => 'state' + (LIVE[d.properties.name] ? ' live' : ''))
+      .attr('class', 'state live')
       .attr('fill', (d) => LIVE[d.properties.name] ? '#0066FF' : '#dbe5f8')
       .attr('stroke', '#F0F4FF')
       .attr('stroke-width', 1)
@@ -61,7 +61,7 @@ d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((top
         d3.select(this).attr('fill', live ? '#0052CC' : '#c7d6f5');
         const c = path.centroid(d);
         const box = document.getElementById('map').getBoundingClientRect();
-        tip.text(live ? live.label : d.properties.name + ' — served on request')
+        tip.text(live ? live.label : d.properties.name + ' — we run campaigns here')
            .style('left', (c[0] / 960 * box.width) + 'px')
            .style('top', (c[1] / 600 * box.height) + 'px')
            .style('opacity', 1);
