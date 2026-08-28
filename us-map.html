@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Coverage map</title>
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/tokens/colors.css">
+<link rel="stylesheet" href="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/styles.css">
+<script src="https://unpkg.com/d3@7.9.0/dist/d3.min.js" integrity="sha384-CjloA8y00+1SDAUkjs099PVfnY2KmDC2BZnws9kh8D/lX1s46w6EPhpXdqMfjK6i" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/topojson-client@3.1.0/dist/topojson-client.min.js" integrity="sha384-Ukv1p/xTma6P4/2bY5KzWBw+ydSpXmhCMtyciIQVDJ1RmOxtCYNMF1uXT9T63H67" crossorigin="anonymous"></script>
+<style>
+  html, body { margin: 0; background: transparent; font-family: var(--font-body); color: var(--text-heading); }
+  #wrap { position: relative; width: 100%; }
+  svg { width: 100%; height: auto; display: block; }
+  path.state { cursor: default; transition: fill 180ms cubic-bezier(0.16,1,0.3,1); }
+  path.state.live { cursor: pointer; }
+  #tip {
+    position: absolute; pointer-events: none; opacity: 0;
+    background: #0A0F1E; color: #fff; font-size: 12.5px; font-weight: 600;
+    padding: 6px 10px; border-radius: 8px; white-space: nowrap;
+    transform: translate(-50%, -140%); transition: opacity 140ms ease;
+  }
+  #legend { display: flex; gap: 20px; align-items: center; padding: 14px 4px 0; font-size: 13px; color: var(--text-muted); }
+  .key { display: inline-flex; align-items: center; gap: 8px; }
+  .swatch { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <svg id="map" viewBox="0 0 960 600" role="img" aria-label="United States coverage map"></svg>
+  <div id="tip"></div>
+</div>
+<div id="legend">
+  <span class="key"><span class="swatch" style="background:#0066FF"></span>Counties live — click to browse</span>
+  <span class="key"><span class="swatch" style="background:#c7d6f5"></span>Served on request</span>
+</div>
+<script>
+const LIVE = {
+  'Georgia': { href: 'georgia-counties.html', label: 'Georgia — 159 counties' },
+  'Florida': { href: 'florida-counties.html', label: 'Florida — 67 counties' }
+};
+
+const svg = d3.select('#map');
+const tip = d3.select('#tip');
+
+d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3.0.1/states-10m.json').then((topology) => {
+  const states = topojson.feature(topology, topology.objects.states);
+  const projection = d3.geoAlbersUsa().fitSize([960, 580], states);
+  const path = d3.geoPath(projection);
+
+  svg.append('g').selectAll('path')
+    .data(states.features)
+    .join('path')
+      .attr('d', path)
+      .attr('class', (d) => 'state' + (LIVE[d.properties.name] ? ' live' : ''))
+      .attr('fill', (d) => LIVE[d.properties.name] ? '#0066FF' : '#dbe5f8')
+      .attr('stroke', '#F0F4FF')
+      .attr('stroke-width', 1)
+      .on('mouseenter', function (event, d) {
+        const live = LIVE[d.properties.name];
+        d3.select(this).attr('fill', live ? '#0052CC' : '#c7d6f5');
+        const c = path.centroid(d);
+        const box = document.getElementById('map').getBoundingClientRect();
+        tip.text(live ? live.label : d.properties.name + ' — served on request')
+           .style('left', (c[0] / 960 * box.width) + 'px')
+           .style('top', (c[1] / 600 * box.height) + 'px')
+           .style('opacity', 1);
+      })
+      .on('mouseleave', function (event, d) {
+        d3.select(this).attr('fill', LIVE[d.properties.name] ? '#0066FF' : '#dbe5f8');
+        tip.style('opacity', 0);
+      })
+      .on('click', (event, d) => {
+        const live = LIVE[d.properties.name];
+        const url = live ? live.href : 'contact.html';
+        if (window.parent && window.parent !== window) window.parent.location.href = url;
+        else window.location.href = url;
+      });
+});
+</script>
+</body>
+</html>
