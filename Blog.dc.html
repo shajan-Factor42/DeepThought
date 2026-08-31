@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="analytics.js"></script>
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:1200px; margin:0 auto; padding:80px 40px 32px">
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">Deep Thought Research</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; max-width:760px; text-wrap:pretty">What running paid media for local business actually costs</h1>
+  <p style="font-size:19px; line-height:1.65; color:var(--text-body); margin:20px 0 0; max-width:660px; text-wrap:pretty">Benchmarks, pricing teardowns, and operating playbooks from the team that runs campaigns across every channel. No product pitches in the body copy.</p>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 36px">
+  <div style="display:flex; gap:10px; flex-wrap:wrap">
+    <sc-for list="{{ cats }}" as="c" hint-placeholder-count="7">
+      <button type="button" onClick="{{ c.pick }}" style="cursor:pointer; font-family:var(--font-body); font-size:13.5px; font-weight:600; padding:8px 16px; border-radius:9999px; border:1px solid {{ c.border }}; background:{{ c.bg }}; color:{{ c.color }}">{{ c.label }}</button>
+    </sc-for>
+  </div>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 48px">
+  <a href="{{ feat.href }}" style="text-decoration:none; color:inherit">
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="0" interactive="{{ true }}" hint-size="100%,340px">
+      <div style="display:grid; grid-template-columns:1.15fr 1fr">
+        <div style="padding:44px 46px">
+          <div style="display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-muted); flex-wrap:wrap"><span style="font-weight:600; color:var(--f42-primary-blue)">Featured · {{ feat.cat }}</span><span>·</span><span>{{ feat.read }} read</span><span>·</span><span>{{ feat.date }}</span></div>
+          <h2 style="font-family:var(--font-display); font-size:32px; font-weight:800; letter-spacing:-0.03em; line-height:1.15; margin:16px 0 0; text-wrap:pretty">{{ feat.title }}</h2>
+          <p style="font-size:16.5px; line-height:1.65; color:var(--text-body); margin:16px 0 24px; text-wrap:pretty">{{ feat.dek }}</p>
+          <span style="font-size:15px; font-weight:600; color:var(--f42-primary-blue)">Read the post →</span>
+        </div>
+        <div style="display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px; padding:44px 46px; background:var(--f42-gradient-blue)">
+          <div style="font-family:var(--font-display); font-size:56px; font-weight:800; letter-spacing:-0.04em; color:#fff; line-height:1">{{ feat.stat }}</div>
+          <div style="font-size:15px; line-height:1.45; color:rgba(255,255,255,0.86); max-width:220px">{{ feat.statLabel }}</div>
+        </div>
+      </div>
+    </x-import>
+  </a>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 24px">
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px">
+    <sc-for list="{{ posts }}" as="p" hint-placeholder-count="9">
+      <a href="{{ p.href }}" style="text-decoration:none; color:inherit">
+        <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="0" interactive="{{ true }}" hint-size="100%,290px">
+          <div style="display:flex; align-items:baseline; gap:12px; padding:22px 24px 0">
+            <div style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.03em; line-height:1; background:var(--f42-gradient-blue); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent">{{ p.stat }}</div>
+            <div style="font-size:12.5px; line-height:1.35; color:var(--text-muted)">{{ p.statLabel }}</div>
+          </div>
+          <div style="padding:18px 24px 26px">
+            <div style="font-size:12.5px; color:var(--text-muted)"><span style="font-weight:600; color:var(--f42-primary-blue)">{{ p.cat }}</span> · {{ p.read }}</div>
+            <h3 style="font-family:var(--font-display); font-size:18px; font-weight:700; letter-spacing:-0.02em; margin:10px 0 0; line-height:1.3; text-wrap:pretty">{{ p.title }}</h3>
+            <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:10px 0 0; text-wrap:pretty">{{ p.excerpt }}</p>
+            <div style="font-size:12.5px; color:var(--text-muted); margin-top:14px">{{ p.date }}</div>
+          </div>
+        </x-import>
+      </a>
+    </sc-for>
+  </div>
+  <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+    <p style="font-size:16px; color:var(--text-muted); padding:32px 0">No posts in this topic yet.</p>
+  </sc-if>
+</section>
+
+<section style="max-width:1000px; margin:0 auto; padding:48px 40px 96px">
+  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="40px" hint-size="100%,200px">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:40px; flex-wrap:wrap">
+      <div style="max-width:440px">
+        <h2 style="font-family:var(--font-display); font-size:24px; font-weight:700; letter-spacing:-0.02em; margin:0">One useful email a month</h2>
+        <p style="font-size:15px; line-height:1.6; color:var(--text-body); margin:10px 0 0">Benchmarks, playbooks, and what's changing on the platforms. No product pitches.</p>
+      </div>
+      <form action="https://api.web3forms.com/submit" method="POST" style="display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+        <input type="hidden" name="access_key" value="afa90fc4-141b-45da-a8cb-7c4adcd1951d">
+        <input type="hidden" name="subject" value="New blog newsletter subscriber">
+        <input type="hidden" name="from_name" value="Deep Thought blog">
+        <input type="checkbox" name="botcheck" style="display:none">
+        <input type="email" name="email" required="{{ true }}" placeholder="you@company.com" style="font-family:var(--font-body); font-size:15px; padding:12px 14px; width:260px; border-radius:10px; border:1px solid var(--border-subtle); background:#fff; color:var(--text-heading)">
+        <button type="submit" style="cursor:pointer; font-family:var(--font-body); font-size:15px; font-weight:600; color:#fff; padding:12px 20px; border:0; border-radius:12px; background:var(--f42-gradient-blue); box-shadow:0 10px 24px rgba(0,102,255,0.22)">Subscribe</button>
+      </form>
+    </div>
+  </x-import>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { lib: null, filter: 'All' };
+
+  componentDidMount() {
+    import('./blog-posts.js').then((lib) => this.setState({ lib }));
+  }
+
+  renderVals() {
+    const lib = this.state.lib;
+    if (!lib) return { cats: [], posts: [], feat: {}, empty: false };
+    const f = lib.featured();
+    const all = lib.rest();
+    const sel = this.state.filter;
+    const list = (sel === 'All' ? all : all.filter((p) => p.cat === sel));
+    const catNames = ['All'].concat(Array.from(new Set(lib.POSTS.map((p) => p.cat))));
+    const excerpt = (p) => (p.dek.length > 128 ? p.dek.slice(0, 125).replace(/[\s,;:]+$/, '') + '…' : p.dek);
+    return {
+      cats: catNames.map((c) => ({
+        label: c,
+        pick: () => this.setState({ filter: c }),
+        bg: c === sel ? 'var(--f42-gradient-blue)' : 'rgba(255,255,255,0.7)',
+        color: c === sel ? '#fff' : 'var(--text-body)',
+        border: c === sel ? 'transparent' : 'var(--border-subtle)'
+      })),
+      feat: {
+        title: f.title, dek: f.dek, cat: f.cat, read: f.read, date: f.date,
+        stat: f.stat, statLabel: f.statLabel, href: lib.hrefFor(f.slug)
+      },
+      posts: list.map((p) => ({
+        title: p.title, cat: p.cat, read: p.read, date: p.date,
+        stat: p.stat, statLabel: p.statLabel, excerpt: excerpt(p), href: lib.hrefFor(p.slug)
+      })),
+      empty: list.length === 0
+    };
+  }
+}
+
+</script>
+</body>
+</html>

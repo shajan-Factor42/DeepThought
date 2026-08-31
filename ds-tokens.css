@@ -1,0 +1,149 @@
+/* colors.css */
+/* Factor42 — Color tokens */
+:root {
+  /* ── Brand palette ─────────────────────────────── */
+  --f42-primary-blue: #0066FF;   /* Buttons, links, accents, active states */
+  --f42-deep-blue:    #0052CC;   /* Logo, gradient start, dark accents */
+  --f42-cyan:         #00B4D8;   /* Gradient end, highlights */
+  --f42-navy:         #0A0F1E;   /* Body text, headings */
+
+  /* ── Neutrals / slate ──────────────────────────── */
+  --f42-slate-700: #334155;      /* Secondary body text */
+  --f42-slate-500: #64748b;      /* Subtext, captions */
+  --f42-slate-400: #94a3b8;      /* Placeholders, muted text */
+  --f42-slate-300: #cbd5e1;      /* Hairlines, disabled fills */
+  --f42-slate-200: #e2e8f0;      /* Dividers on light surfaces */
+  --f42-bg:        #F0F4FF;      /* Page background (light blue-white) */
+  --f42-white:     #ffffff;
+
+  /* ── Brand gradients ───────────────────────────── */
+  --f42-gradient-brand:  linear-gradient(135deg, #0052CC 0%, #0066FF 50%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-blue:   linear-gradient(135deg, #0066FF 0%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-icon:   linear-gradient(135deg, #0052CC 0%, #00B4D8 100%); /* @kind color */
+  --f42-gradient-button: linear-gradient(135deg, #0066FF 0%, #0052CC 100%); /* @kind color */
+
+  /* ── Tints (rgba-derived) ──────────────────────── */
+  --f42-blue-a06: rgba(0,102,255,0.06);  /* grid lines, faint fills */
+  --f42-blue-a12: rgba(0,102,255,0.12);  /* card borders at rest */
+  --f42-blue-a20: rgba(0,102,255,0.20);  /* glow shadow tint */
+  --f42-blue-a30: rgba(0,102,255,0.30);  /* card borders on hover */
+
+  /* ── Semantic aliases ──────────────────────────── */
+  --color-bg:            var(--f42-bg);
+  --color-surface:       var(--f42-white);
+  --color-surface-glass: rgba(255,255,255,0.88);
+  --text-heading:        var(--f42-navy);
+  --text-body:           var(--f42-slate-700);
+  --text-muted:          var(--f42-slate-500);
+  --text-placeholder:    var(--f42-slate-400);
+  --text-on-brand:       var(--f42-white);
+  --color-accent:        var(--f42-primary-blue);
+  --color-accent-strong: var(--f42-deep-blue);
+  --color-accent-cyan:   var(--f42-cyan);
+  --color-link:          var(--f42-primary-blue);
+  --border-subtle:       var(--f42-blue-a12);
+  --border-hover:        var(--f42-blue-a30);
+  --border-divider:      var(--f42-slate-200);
+}
+
+/* typography.css */
+/* Factor42 — Typography tokens */
+:root {
+  /* ── Families ──────────────────────────────────── */
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-body:    'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* ── Weights ───────────────────────────────────── */
+  --fw-light:     300; /* @kind font */
+  --fw-regular:   400; /* @kind font */
+  --fw-medium:    500; /* @kind font */
+  --fw-semibold:  600; /* @kind font */
+  --fw-bold:      700; /* @kind font */
+  --fw-extrabold: 800; /* @kind font */
+
+  /* ── Type scale (display = Plus Jakarta) ───────── */
+  --fs-display:  4rem;    /* 64px — hero */
+  --fs-h1:       3rem;    /* 48px */
+  --fs-h2:       2.25rem; /* 36px */
+  --fs-h3:       1.75rem; /* 28px */
+  --fs-h4:       1.375rem;/* 22px */
+  --fs-lg:       1.125rem;/* 18px */
+  --fs-body:     1rem;    /* 16px */
+  --fs-sm:       0.875rem;/* 14px */
+  --fs-xs:       0.75rem; /* 12px */
+
+  /* ── Line heights ──────────────────────────────── */
+  --lh-tight:   1.1;  /* @kind font */
+  --lh-snug:    1.25; /* @kind font */
+  --lh-normal:  1.5;  /* @kind font */
+  --lh-relaxed: 1.65; /* @kind font */
+
+  /* ── Letter spacing ────────────────────────────── */
+  --ls-tight:   -0.02em;  /* @kind font */
+  --ls-normal:  0;        /* @kind font */
+  --ls-wide:    0.08em;   /* @kind font */
+  --ls-tracked: 0.18em;   /* @kind font */
+
+  /* ── Semantic aliases ──────────────────────────── */
+  --text-display-font: var(--font-display);
+  --text-body-font:    var(--font-body);
+  --tagline-weight:    var(--fw-semibold);
+}
+
+/* spacing.css */
+/* Factor42 — Spacing, radius & layout tokens */
+:root {
+  /* ── Spacing scale (4px base) ──────────────────── */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* ── Corner radius ─────────────────────────────── */
+  --radius-input:  10px;
+  --radius-button: 12px;
+  --radius-card:   20px;
+  --radius-card-lg:24px;
+  --radius-pill:   9999px;
+  --radius-icon:   20px;  /* icon mark rounded square */
+
+  /* ── Grid background texture ───────────────────── */
+  --grid-size: 40px; /* @kind spacing */
+  --grid-line: rgba(0,102,255,0.06); /* @kind color */
+
+  /* ── Container ─────────────────────────────────── */
+  --container-max: 1200px; /* @kind spacing */
+}
+
+/* effects.css */
+/* Factor42 — Elevation, blur & motion tokens */
+:root {
+  /* ── Shadows ───────────────────────────────────── */
+  --shadow-sm:   0 1px 2px rgba(10,15,30,0.06);
+  --shadow-md:   0 4px 16px rgba(10,15,30,0.08);
+  --shadow-lg:   0 12px 32px rgba(10,15,30,0.10);
+  --shadow-glow: 0 0 30px rgba(0,102,255,0.20);   /* brand glow */
+  --shadow-button: 0 6px 20px rgba(0,102,255,0.28);
+
+  /* ── Glass / blur ──────────────────────────────── */
+  --glass-bg:     rgba(255,255,255,0.88); /* @kind color */
+  --glass-blur:   blur(12px); /* @kind other */
+  --glass-border: 1px solid rgba(0,102,255,0.12); /* @kind other */
+
+  /* ── Motion ────────────────────────────────────── */
+  --ease-out:   cubic-bezier(0.16, 1, 0.3, 1); /* @kind other */
+  --ease-in-out:cubic-bezier(0.65, 0, 0.35, 1); /* @kind other */
+  --dur-fast:   140ms; /* @kind other */
+  --dur-base:   220ms; /* @kind other */
+  --dur-slow:   360ms; /* @kind other */
+  --transition-base: all var(--dur-base) var(--ease-out); /* @kind other */
+}
+

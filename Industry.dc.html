@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="analytics.js"></script>
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:1100px; margin:0 auto; padding:40px 40px 0">
+  <div style="font-size:13.5px; color:var(--text-muted)"><a href="{{ homeHref }}">Home</a> · <a href="{{ hubHref }}">Industries</a> · <span>{{ name }}</span></div>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:36px 40px 64px">
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">{{ eyebrow }}</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; max-width:900px; text-wrap:pretty">Paid Media for {{ name }}</h1>
+  <p style="font-size:19px; line-height:1.65; color:var(--text-body); margin:24px 0 0; max-width:760px; text-wrap:pretty">{{ lede }}</p>
+  <div style="display:flex; gap:14px; margin-top:32px; flex-wrap:wrap">
+    <a href="{{ demoHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="lg" hint-size="200px,52px">Get a plan for your business</x-import></a>
+    <a href="{{ pricingHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="subtle" size="lg" hint-size="140px,52px">See pricing</x-import></a>
+  </div>
+</section>
+
+<section style="background:rgba(255,255,255,0.66); border-top:1px solid var(--border-subtle); border-bottom:1px solid var(--border-subtle); padding:36px 0">
+  <div style="max-width:1100px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:repeat(4, 1fr); gap:32px">
+    <sc-for list="{{ stats }}" as="s" hint-placeholder-count="4">
+      <div>
+        <div style="font-size:11.5px; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--text-muted)">{{ s.label }}</div>
+        <div style="font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px">{{ s.value }}</div>
+        <div style="font-size:13px; color:var(--text-muted); margin-top:4px">{{ s.note }}</div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="max-width:1100px; margin:0 auto; padding:18px 40px 0; font-size:12.5px; color:var(--text-muted)">Illustrative ranges for this category, not audited data. Your numbers depend on market, competition, and close rate.</div>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:72px 40px 0; display:grid; grid-template-columns:1fr 320px; gap:64px; align-items:start">
+  <div>
+    <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="5">
+      <div style="margin-bottom:44px">
+        <h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.03em; line-height:1.15; margin:0 0 18px; text-wrap:pretty">{{ sec.h }}</h2>
+        <sc-for list="{{ sec.p }}" as="para" hint-placeholder-count="3">
+          <p style="font-size:16.5px; line-height:1.75; color:var(--text-body); margin:0 0 16px; text-wrap:pretty">{{ para }}</p>
+        </sc-for>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="position:sticky; top:88px; display:flex; flex-direction:column; gap:20px">
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="26px" hint-size="100%,240px">
+      <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em">Who this covers</div>
+      <ul style="display:flex; flex-direction:column; gap:9px; margin:16px 0 0; padding:0; list-style:none">
+        <sc-for list="{{ trades }}" as="t" hint-placeholder-count="6">
+          <li style="display:flex; gap:10px; font-size:14.5px; line-height:1.5; color:var(--text-body)"><span style="color:var(--f42-primary-blue)">—</span>{{ t }}</li>
+        </sc-for>
+      </ul>
+      <div style="margin-top:20px"><a href="{{ contactHref }}" style="font-size:14.5px; font-weight:600">Not listed? Ask us →</a></div>
+    </x-import>
+    <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="26px" hint-size="100%,200px">
+      <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em">Channels we run</div>
+      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:16px">
+        <sc-for list="{{ channels }}" as="c" hint-placeholder-count="6">
+          <span style="font-size:13px; font-weight:600; padding:6px 12px; border-radius:9999px; border:1px solid var(--border-subtle); background:rgba(0,102,255,0.04); color:var(--text-body)">{{ c }}</span>
+        </sc-for>
+      </div>
+      <div style="margin-top:20px"><a href="{{ productHref }}" style="font-size:14.5px; font-weight:600">See how it works →</a></div>
+    </x-import>
+  </div>
+</section>
+
+<section style="background:rgba(255,255,255,0.66); border-top:1px solid var(--border-subtle); border-bottom:1px solid var(--border-subtle); padding:80px 0">
+  <div style="max-width:900px; margin:0 auto; padding:0 40px">
+    <h2 style="font-family:var(--font-display); font-size:32px; font-weight:800; letter-spacing:-0.03em; margin:0 0 32px; text-wrap:pretty">{{ name }} marketing — questions we get</h2>
+    <div style="display:flex; flex-direction:column; gap:24px">
+      <sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+        <div style="padding-bottom:24px; border-bottom:1px solid var(--border-subtle)">
+          <div style="font-family:var(--font-display); font-size:18px; font-weight:700; letter-spacing:-0.02em; text-wrap:pretty">{{ f.q }}</div>
+          <p style="font-size:15.5px; line-height:1.7; color:var(--text-body); margin:10px 0 0; text-wrap:pretty">{{ f.a }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:72px 40px 0">
+  <h2 style="font-family:var(--font-display); font-size:26px; font-weight:800; letter-spacing:-0.03em; margin:0 0 8px">Other industries we run media for</h2>
+  <p style="font-size:15.5px; color:var(--text-body); margin:0 0 24px">Same execution layer, different mechanics. Twelve categories, every channel.</p>
+  <div style="display:flex; flex-wrap:wrap; gap:10px">
+    <sc-for list="{{ others }}" as="o" hint-placeholder-count="6">
+      <a href="{{ o.href }}" style="text-decoration:none; font-size:14.5px; font-weight:600; padding:9px 16px; border-radius:9999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.7)">{{ o.name }}</a>
+    </sc-for>
+  </div>
+  <div style="margin-top:24px"><a href="{{ hubHref }}" style="font-size:15px; font-weight:600">All industries →</a></div>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:56px 40px 0">
+  <div style="font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted)">Where we run this</div>
+  <p style="font-size:15.5px; line-height:1.7; color:var(--text-body); margin:12px 0 16px">We run {{ name }} campaigns in every county in the country. A few of the markets we work in:</p>
+  <div style="display:flex; flex-wrap:wrap; gap:9px">
+    <sc-for list="{{ counties }}" as="c" hint-placeholder-count="8">
+      <a href="{{ c.href }}" style="text-decoration:none; font-size:13.5px; font-weight:600; padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.7); color:var(--text-body)">{{ c.label }}</a>
+    </sc-for>
+  </div>
+  <div style="margin-top:16px"><a href="{{ statesHref }}" style="font-size:14.5px; font-weight:600">Browse all 50 states →</a></div>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:80px 40px 96px">
+  <div style="border-radius:28px; background:var(--f42-gradient-blue); padding:64px; text-align:center; box-shadow:0 20px 50px rgba(0,102,255,0.22)">
+    <h2 style="font-family:var(--font-display); font-size:36px; font-weight:800; letter-spacing:-0.03em; color:#fff; margin:0; text-wrap:pretty">Ready to run this properly?</h2>
+    <p style="font-size:17.5px; color:rgba(255,255,255,0.82); margin:16px auto 30px; max-width:560px">Tell us what you run today and what you pay for it. We'll show you the difference in one call.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+      <a href="{{ demoHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="secondary" size="lg" dc-props="{{ whiteBtn }}" hint-size="150px,52px">Book a demo</x-import></a>
+      <a href="{{ contactHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="ghost" size="lg" dc-props="{{ ghostBtn }}" hint-size="150px,52px">Contact us</x-import></a>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { ind: null, others: [], counties: [] };
+
+  componentDidMount() {
+    const slug = window.__INDUSTRY || new URLSearchParams(location.search).get('industry') || '';
+    import('./industries.js').then((lib) => {
+      const ind = lib.bySlug(slug);
+      const others = lib.others(ind.slug, 6).map((o) => ({
+        name: o.name,
+        href: window.__STATIC ? 'digital-marketing-for-' + o.slug + '.html' : 'Industry.dc.html?industry=' + o.slug
+      }));
+      if (!window.__INDUSTRY) {
+        document.title = 'Paid Media for ' + ind.name + ' | Deep Thought';
+        let mt = document.querySelector('meta[name="description"]');
+        if (!mt) { mt = document.createElement('meta'); mt.setAttribute('name', 'description'); document.head.appendChild(mt); }
+        mt.setAttribute('content', ind.lede);
+      }
+      this.setState({ ind, others });
+    });
+    import('./county-index.js').then((data) => {
+      let h = 0;
+      for (let i = 0; i < slug.length; i++) h = (h * 33 + slug.charCodeAt(i)) >>> 0;
+      const picks = [], seenSlug = {}, seenState = {};
+      let guard = 0;
+      while (picks.length < 8 && guard++ < 400) {
+        h = (h * 1103515245 + 12345) >>> 0;
+        const s = data.COUNTY_SLUGS[h % data.COUNTY_SLUGS.length];
+        if (!s || seenSlug[s]) continue;
+        const info = data.parse(s);
+        if (seenState[info.state]) continue;
+        seenSlug[s] = 1; seenState[info.state] = 1;
+        picks.push({
+          label: data.label(s),
+          href: window.__STATIC ? data.pageFor(s) : 'County.dc.html?state=' + info.state + '&name=' + encodeURIComponent(info.name)
+        });
+      }
+      this.setState({ counties: picks });
+    }).catch(() => {});
+  }
+
+  page(name) {
+    if (!window.__STATIC) return name + '.dc.html';
+    const map = {
+      'Book a Demo': 'book-a-demo.html', 'Contact': 'contact.html', 'Pricing': 'pricing.html',
+      'DeepThought Landing': 'index.html', 'Product': 'product.html', 'US States': 'us-states.html',
+      'Industries': 'industries.html'
+    };
+    return map[name] || name.toLowerCase().replace(/ /g, '-') + '.html';
+  }
+
+  renderVals() {
+    const i = this.state.ind;
+    return {
+      name: i ? i.name : '',
+      eyebrow: i ? i.eyebrow : '',
+      lede: i ? i.lede : '',
+      stats: i ? i.stats : [],
+      sections: i ? i.sections : [],
+      trades: i ? i.trades : [],
+      faq: i ? i.faq : [],
+      channels: ['Paid search', 'Local service ads', 'Paid social', 'Connected TV', 'Programmatic display', 'Streaming audio', 'Retargeting', 'Digital out-of-home'],
+      others: this.state.others,
+      counties: this.state.counties,
+      homeHref: this.page('DeepThought Landing'),
+      hubHref: this.page('Industries'),
+      demoHref: this.page('Book a Demo'),
+      pricingHref: this.page('Pricing'),
+      contactHref: this.page('Contact'),
+      productHref: this.page('Product'),
+      statesHref: this.page('US States'),
+      whiteBtn: { style: { background: '#fff', color: 'var(--f42-deep-blue)' } },
+      ghostBtn: { style: { color: '#fff', border: '1px solid rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.06)' } }
+    };
+  }
+}
+
+</script>
+</body>
+</html>

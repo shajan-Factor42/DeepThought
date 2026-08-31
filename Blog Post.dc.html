@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="analytics.js"></script>
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:760px; margin:0 auto; padding:40px 40px 0">
+  <div style="font-size:13.5px; color:var(--text-muted)"><a href="{{ homeHref }}">Home</a> · <a href="{{ blogHref }}">Blog</a> · <span>{{ cat }}</span></div>
+</section>
+
+<section style="max-width:760px; margin:0 auto; padding:28px 40px 0">
+  <div style="display:flex; align-items:center; gap:12px; font-size:13px; color:var(--text-muted); flex-wrap:wrap">
+    <span style="font-weight:600; color:var(--f42-primary-blue)">{{ cat }}</span><span>·</span><span>{{ read }} read</span><span>·</span><span>{{ date }}</span>
+  </div>
+  <h1 style="font-family:var(--font-display); font-size:44px; font-weight:800; letter-spacing:-0.035em; line-height:1.08; margin:18px 0 0; text-wrap:pretty">{{ title }}</h1>
+  <p style="font-size:20px; line-height:1.6; color:var(--text-body); margin:20px 0 0; text-wrap:pretty">{{ dek }}</p>
+  <div style="display:flex; align-items:center; gap:14px; margin:28px 0 0; padding:18px 0; border-top:1px solid var(--border-subtle); border-bottom:1px solid var(--border-subtle)">
+    <div style="width:40px; height:40px; flex:none; border-radius:9999px; background:var(--f42-gradient-blue); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-size:13px; font-weight:800; letter-spacing:-0.02em">{{ authorInitials }}</div>
+    <div>
+      <div style="font-size:14.5px; font-weight:600">{{ author }}</div>
+      <div style="font-size:13px; color:var(--text-muted)">{{ authorRole }}, Deep Thought</div>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:760px; margin:0 auto; padding:32px 40px 0">
+  <div style="display:flex; align-items:baseline; gap:16px; padding:24px 28px; border-radius:20px; background:var(--f42-gradient-blue); box-shadow:0 14px 34px rgba(0,102,255,0.20)">
+    <div style="font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.03em; color:#fff; line-height:1">{{ stat }}</div>
+    <div style="font-size:14.5px; line-height:1.45; color:rgba(255,255,255,0.86)">{{ statLabel }}</div>
+  </div>
+</section>
+
+<article style="max-width:760px; margin:0 auto; padding:44px 40px 0">
+  <sc-for list="{{ body }}" as="s" hint-placeholder-count="5">
+    <div style="margin-bottom:40px">
+      <h2 style="font-family:var(--font-display); font-size:26px; font-weight:800; letter-spacing:-0.03em; line-height:1.2; margin:0 0 16px; text-wrap:pretty">{{ s.h }}</h2>
+      <sc-for list="{{ s.p }}" as="para" hint-placeholder-count="2">
+        <p style="font-size:17.5px; line-height:1.78; color:var(--text-body); margin:0 0 18px; text-wrap:pretty">{{ para }}</p>
+      </sc-for>
+    </div>
+  </sc-for>
+</article>
+
+<section style="max-width:760px; margin:0 auto; padding:0 40px 0">
+  <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="glass" padding="30px" hint-size="100%,200px">
+    <div style="font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted)">The short version</div>
+    <ul style="display:flex; flex-direction:column; gap:12px; margin:16px 0 0; padding:0; list-style:none">
+      <sc-for list="{{ takeaways }}" as="t" hint-placeholder-count="3">
+        <li style="display:flex; gap:12px; font-size:16px; line-height:1.6; color:var(--text-body)"><span style="color:var(--f42-primary-blue); font-weight:700">—</span><span>{{ t }}</span></li>
+      </sc-for>
+    </ul>
+  </x-import>
+</section>
+
+<section style="max-width:760px; margin:0 auto; padding:44px 40px 0">
+  <div style="border-radius:24px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.72); padding:34px 36px">
+    <h2 style="font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin:0; text-wrap:pretty">{{ ctaHeading }}</h2>
+    <p style="font-size:16px; line-height:1.65; color:var(--text-body); margin:12px 0 22px; max-width:520px">{{ ctaBody }}</p>
+    <div style="display:flex; gap:12px; flex-wrap:wrap">
+      <a href="{{ ctaHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="md" hint-size="170px,44px">{{ ctaLabel }}</x-import></a>
+      <a href="{{ demoHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="subtle" size="md" hint-size="130px,44px">Book a demo</x-import></a>
+    </div>
+  </div>
+</section>
+
+<section style="max-width:760px; margin:0 auto; padding:44px 40px 0">
+  <div style="font-size:12px; font-weight:600; letter-spacing:0.16em; text-transform:uppercase; color:var(--text-muted)">Where we run this</div>
+  <p style="font-size:15.5px; line-height:1.7; color:var(--text-body); margin:12px 0 16px">We run paid media for businesses in every county in the country. A few of the markets we work in:</p>
+  <div style="display:flex; flex-wrap:wrap; gap:9px">
+    <sc-for list="{{ counties }}" as="c" hint-placeholder-count="8">
+      <a href="{{ c.href }}" style="text-decoration:none; font-size:13.5px; font-weight:600; padding:8px 14px; border-radius:9999px; border:1px solid var(--border-subtle); background:rgba(255,255,255,0.7); color:var(--text-body)">{{ c.label }}</a>
+    </sc-for>
+  </div>
+  <div style="margin-top:16px"><a href="{{ statesHref }}" style="font-size:14.5px; font-weight:600">Browse all 50 states →</a></div>
+</section>
+
+<section style="max-width:1100px; margin:0 auto; padding:72px 40px 96px">
+  <h2 style="font-family:var(--font-display); font-size:22px; font-weight:800; letter-spacing:-0.025em; margin:0 0 24px">Keep reading</h2>
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:22px">
+    <sc-for list="{{ related }}" as="r" hint-placeholder-count="3">
+      <a href="{{ r.href }}" style="text-decoration:none; color:inherit">
+        <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="24px" interactive="{{ true }}" hint-size="100%,180px">
+          <div style="font-size:12.5px; color:var(--text-muted)"><span style="font-weight:600; color:var(--f42-primary-blue)">{{ r.cat }}</span> · {{ r.read }}</div>
+          <div style="font-family:var(--font-display); font-size:17px; font-weight:700; letter-spacing:-0.02em; line-height:1.3; margin:12px 0 0; text-wrap:pretty">{{ r.title }}</div>
+        </x-import>
+      </a>
+    </sc-for>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { post: null, related: [], lib: null, counties: [] };
+
+  componentDidMount() {
+    import('./county-index.js').then((data) => {
+      const slug = window.__POST || new URLSearchParams(location.search).get('post') || '';
+      let h = 0;
+      for (let i = 0; i < slug.length; i++) h = (h * 31 + slug.charCodeAt(i)) >>> 0;
+      const pool = data.COUNTY_SLUGS;
+      const picks = [];
+      const seenSlug = {}, seenState = {};
+      let guard = 0;
+      while (picks.length < 8 && guard++ < 400) {
+        h = (h * 1103515245 + 12345) >>> 0;
+        const s = pool[h % pool.length];
+        if (!s || seenSlug[s]) continue;
+        const info = data.parse(s);
+        // spread across states: at most one county per state in the block
+        if (seenState[info.state]) continue;
+        seenSlug[s] = 1;
+        seenState[info.state] = 1;
+        picks.push({
+          label: data.label(s),
+          href: window.__STATIC ? data.pageFor(s) : 'County.dc.html?state=' + info.state + '&name=' + encodeURIComponent(info.name)
+        });
+      }
+      this.setState({ counties: picks });
+    }).catch(() => {});
+    import('./blog-posts.js').then((lib) => {
+      const slug = window.__POST || new URLSearchParams(location.search).get('post') || lib.POSTS[0].slug;
+      const post = lib.bySlug(slug);
+      const related = lib.related(post.slug, 3).map((r) => ({ title: r.title, cat: r.cat, read: r.read, href: lib.hrefFor(r.slug) }));
+      if (!window.__POST) {
+        document.title = post.title + ' | Deep Thought';
+        let m = document.querySelector('meta[name="description"]');
+        if (!m) { m = document.createElement('meta'); m.setAttribute('name', 'description'); document.head.appendChild(m); }
+        m.setAttribute('content', post.dek);
+      }
+      this.setState({ post, related, lib });
+    });
+  }
+
+  renderVals() {
+    const p = this.state.post;
+    const lib = this.state.lib;
+    const href = (n) => (lib ? lib.pageHref(n) : n + '.dc.html');
+    return {
+      title: p ? p.title : '',
+      dek: p ? p.dek : '',
+      cat: p ? p.cat : '',
+      author: p ? p.author : '',
+      authorRole: p ? p.authorRole : '',
+      authorInitials: p ? p.authorInitials : 'DT',
+      date: p ? p.date : '',
+      read: p ? p.read : '',
+      stat: p ? p.stat : '',
+      statLabel: p ? p.statLabel : '',
+      body: p ? p.body : [],
+      takeaways: p ? p.takeaways : [],
+      related: this.state.related,
+      blogHref: lib ? lib.blogHref() : 'Blog.dc.html',
+      homeHref: href('DeepThought Landing'),
+      demoHref: href('Book a Demo'),
+      pricingHref: href('Pricing'),
+      statesHref: href('US States'),
+      counties: this.state.counties,
+      ctaHeading: p && p.ctaHeading ? p.ctaHeading : 'Want this run for you instead of read about?',
+      ctaBody: p && p.ctaBody ? p.ctaBody : 'Deep Thought runs search, social, streaming TV, and display for local businesses — published pricing, campaigns live in 60 seconds.',
+      ctaLabel: p && p.ctaLabel ? p.ctaLabel : 'See pricing',
+      ctaHref: href(p && p.ctaPage ? p.ctaPage : 'Pricing')
+    };
+  }
+}
+
+</script>
+</body>
+</html>

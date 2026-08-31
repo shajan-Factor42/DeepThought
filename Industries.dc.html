@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<script src="analytics.js"></script>
+<script src="_ds/factor42-design-system-376e18ae-a3d6-4165-a4ab-662f9b74ecac/_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; min-height: 100%; }
+  body { font-family: var(--font-body); color: var(--text-heading); background: var(--f42-bg); }
+  a { color: var(--f42-primary-blue); }
+  a:hover { color: var(--f42-deep-blue); }
+</style>
+</helmet>
+
+<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
+
+<section style="max-width:1200px; margin:0 auto; padding:80px 40px 40px">
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">Industries</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; max-width:820px; text-wrap:pretty">Every channel, run for the way your category actually buys</h1>
+  <p style="font-size:19px; line-height:1.65; color:var(--text-body); margin:20px 0 0; max-width:700px; text-wrap:pretty">An emergency plumbing call and an implant consultation are not the same purchase, so they should not be the same campaign. Twelve categories, each with its own plan.</p>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 96px">
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:24px">
+    <sc-for list="{{ industries }}" as="i" hint-placeholder-count="12">
+      <a href="{{ i.href }}" style="text-decoration:none; color:inherit">
+        <x-import component-from-global-scope="Factor42DesignSystem_376e18.Card" variant="solid" padding="28px" interactive="{{ true }}" hint-size="100%,220px">
+          <div style="font-family:var(--font-display); font-size:20px; font-weight:800; letter-spacing:-0.025em; line-height:1.25; text-wrap:pretty">{{ i.name }}</div>
+          <div style="font-size:13.5px; color:var(--text-muted); margin-top:8px">{{ i.short }}</div>
+          <p style="font-size:14.5px; line-height:1.6; color:var(--text-body); margin:14px 0 0; text-wrap:pretty">{{ i.excerpt }}</p>
+          <div style="display:flex; align-items:baseline; gap:10px; margin-top:18px; padding-top:16px; border-top:1px solid var(--border-subtle)">
+            <div style="font-family:var(--font-display); font-size:20px; font-weight:800; letter-spacing:-0.02em; background:var(--f42-gradient-blue); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent">{{ i.stat }}</div>
+            <div style="font-size:12.5px; color:var(--text-muted)">{{ i.statLabel }}</div>
+          </div>
+          <div style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue); margin-top:16px">See the plan →</div>
+        </x-import>
+      </a>
+    </sc-for>
+  </div>
+  <p style="font-size:12.5px; color:var(--text-muted); margin:20px 0 0">Figures are illustrative ranges for each category, not audited data.</p>
+</section>
+
+<section style="max-width:1200px; margin:0 auto; padding:0 40px 96px">
+  <div style="border-radius:28px; background:var(--f42-gradient-blue); padding:64px; text-align:center; box-shadow:0 20px 50px rgba(0,102,255,0.22)">
+    <h2 style="font-family:var(--font-display); font-size:36px; font-weight:800; letter-spacing:-0.03em; color:#fff; margin:0; text-wrap:pretty">Not seeing your category?</h2>
+    <p style="font-size:17.5px; color:rgba(255,255,255,0.82); margin:16px auto 30px; max-width:540px">We run paid media for most local and service businesses. Tell us what you do and we'll tell you what we'd run.</p>
+    <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap">
+      <a href="{{ contactHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="secondary" size="lg" dc-props="{{ whiteBtn }}" hint-size="150px,52px">Ask us</x-import></a>
+      <a href="{{ pricingHref }}" style="text-decoration:none"><x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="ghost" size="lg" dc-props="{{ ghostBtn }}" hint-size="150px,52px">See pricing</x-import></a>
+    </div>
+  </div>
+</section>
+
+<dc-import name="SiteFooter" hint-size="100%,320px"></dc-import>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { list: [] };
+
+  componentDidMount() {
+    import('./industries.js').then((lib) => {
+      const list = lib.INDUSTRIES.map((i) => ({
+        name: i.name,
+        short: i.short,
+        excerpt: i.lede.length > 150 ? i.lede.slice(0, 147).replace(/[\s,;:]+$/, '') + '…' : i.lede,
+        stat: i.stats[0].value,
+        statLabel: i.stats[0].label.toLowerCase(),
+        href: window.__STATIC ? 'digital-marketing-for-' + i.slug + '.html' : 'Industry.dc.html?industry=' + i.slug
+      }));
+      this.setState({ list });
+    });
+  }
+
+  page(name) {
+    if (!window.__STATIC) return name + '.dc.html';
+    const map = { 'Contact': 'contact.html', 'Pricing': 'pricing.html' };
+    return map[name] || name.toLowerCase().replace(/ /g, '-') + '.html';
+  }
+
+  renderVals() {
+    return {
+      industries: this.state.list,
+      contactHref: this.page('Contact'),
+      pricingHref: this.page('Pricing'),
+      whiteBtn: { style: { background: '#fff', color: 'var(--f42-deep-blue)' } },
+      ghostBtn: { style: { color: '#fff', border: '1px solid rgba(255,255,255,0.28)', background: 'rgba(255,255,255,0.06)' } }
+    };
+  }
+}
+
+</script>
+</body>
+</html>
