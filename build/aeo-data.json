@@ -1,0 +1,79 @@
+{
+  "site": "https://deepthought.marketing",
+  "organization": {
+    "name": "DeepThought",
+    "alternateName": "Deep Thought",
+    "email": "Support@deepthought.marketing",
+    "parentOrganization": "Factor42 Media",
+    "areaServed": "United States",
+    "description": "DeepThought is a paid media execution platform for small and medium businesses. Its AI engine turns a plain-language description of a promotion into a live, managed, multi-channel campaign in under 60 seconds.",
+    "logo": "https://deepthought.marketing/assets/logo.png",
+    "sameAs": []
+  },
+  "pricing": {
+    "currency": "USD",
+    "lowPrice": "350",
+    "highPrice": "750",
+    "url": "https://deepthought.marketing/pricing.html",
+    "summary": "Per-product monthly management pricing, month to month with no contract. Starting Off (paid search, programmatic display, YouTube Performance Max) is 350 USD per month. Full funnel (search, social, video and display run as one plan) is 750 USD per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10 to 20 percent management fee with media billed at cost in your own ad accounts.",
+    "tiers": [
+      {
+        "name": "Starting Off",
+        "price": "350",
+        "description": "Paid search, shopping and local service ads, programmatic display and retargeting, YouTube Performance Max. Unlimited campaign launches, continuous creative and bid optimization, monthly reporting."
+      },
+      {
+        "name": "Full funnel",
+        "price": "750",
+        "description": "Search, social, video and display run as one connected plan. Cross-channel budget reallocation, named marketing expert, CRM and POS revenue attribution, weekly reporting."
+      },
+      {
+        "name": "Multi-Location / Enterprise",
+        "price": null,
+        "description": "For brands and franchise systems running many markets. Per-location campaigns and budgets, brand controls and approval flows, roll-up and per-store reporting, user management by role. Quoted custom."
+      }
+    ]
+  },
+  "featureList": [
+    "Idea to live campaign in under 60 seconds",
+    "30+ channels in one flow: paid search, social, connected TV, display",
+    "AI-generated creative, copy, audiences, and channel mix",
+    "Continuous post-launch optimization and creative rewrites",
+    "Local competitive intelligence and per-location performance",
+    "Integrations for creative storage, CRM, POS and booking systems",
+    "Plain-language reporting on a chosen schedule",
+    "Unlimited campaign launches",
+    "Named marketing expert on every account",
+    "Campaigns run in your own ad accounts with media billed at cost"
+  ],
+  "faq": [
+    {
+      "q": "How fast can I launch a campaign?",
+      "a": "Under 60 seconds from prompt to live. Connect your ad accounts once; after that every campaign is a single description away."
+    },
+    {
+      "q": "What kinds of businesses use DeepThought?",
+      "a": "Small and medium businesses running their own paid media - services, retail, healthcare, home services - from one location to a few dozen."
+    },
+    {
+      "q": "Does Deep Thought manage campaigns after launch?",
+      "a": "Yes. Optimization, budget reallocation, creative refreshes, and reporting continue for as long as the campaign runs. You approve the direction; it does the work."
+    },
+    {
+      "q": "Is there a long-term contract?",
+      "a": "No. Month to month, published pricing, cancel any time. Your ad accounts and creative stay yours."
+    },
+    {
+      "q": "How much does DeepThought cost?",
+      "a": "Pricing is per product, month to month. Starting Off - paid search, programmatic display and YouTube Performance Max - is 350 USD per month. Full funnel, which runs search, social, video and display as one connected plan, is 750 USD per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10 to 20 percent management fee and media is billed at cost in your own ad accounts."
+    },
+    {
+      "q": "Is DeepThought an agency?",
+      "a": "No. DeepThought is a platform that performs the execution work an agency would - creative, targeting, channel mix, optimization, reporting - without a retainer or a briefing cycle. A human expert is available when you want one."
+    }
+  ],
+  "skip": [
+    "thank-you.html",
+    "us-map.html"
+  ]
+}
