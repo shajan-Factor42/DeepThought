@@ -1,0 +1,13 @@
+{
+  "name": "deepthought-site-build",
+  "private": true,
+  "type": "module",
+  "description": "Build tooling for deepthought.marketing. The site itself is static HTML; this package exists only for the AEO prerender step.",
+  "scripts": {
+    "prerender": "node build/prerender.mjs --dir _site --concurrency 8",
+    "prerender:test": "node build/prerender.mjs --dir _site --limit 10 --concurrency 4 --verbose"
+  },
+  "dependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}

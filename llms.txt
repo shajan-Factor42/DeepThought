@@ -1,0 +1,53 @@
+# DeepThought
+
+> DeepThought is a paid media execution platform for small and medium businesses. An AI
+> engine takes a plain-language description of a promotion and builds, launches, and
+> manages a live multi-channel campaign — paid search, social, connected TV, display —
+> across 30+ channels in under 60 seconds. The operator directs; DeepThought executes.
+
+Operated by Factor42 Media. Serves the United States, from single-location businesses to
+multi-location operators of a few dozen sites. Month-to-month, published pricing, no
+long-term contract. Customer ad accounts and creative remain customer property.
+
+## Key facts
+
+- Time from prompt to live campaign: under 60 seconds
+- Channels available in one flow: 30+
+- Channel types: paid search, paid social, programmatic display, connected TV
+- Post-launch: continuous optimization, budget reallocation, creative rewrites, reporting
+- Contract: month to month, cancel any time
+- Coverage: nationwide (US), with per-county market pages for all 3,141 US counties
+- Typical customers: home services, retail, healthcare, dental, auto, fitness, real estate
+
+## Core pages
+
+- [Home](https://deepthought.marketing/): what DeepThought is and how it works
+- [Product](https://deepthought.marketing/product.html): platform capabilities in detail
+- [Pricing](https://deepthought.marketing/pricing.html): published rates
+- [Case studies](https://deepthought.marketing/case-studies.html): customer results
+- [About](https://deepthought.marketing/about.html): company background
+- [Book a demo](https://deepthought.marketing/book-a-demo.html): request a walkthrough
+- [Contact](https://deepthought.marketing/contact.html): get in touch
+
+## Common questions
+
+**How fast can a campaign launch?** Under 60 seconds from prompt to live. Ad accounts are
+connected once; after that each campaign is a single description away.
+
+**Who is it for?** Small and medium businesses running their own paid media — services,
+retail, healthcare, home services — from one location to a few dozen.
+
+**Does it manage campaigns after launch?** Yes. Optimization, budget reallocation, creative
+refreshes, and reporting continue for the life of the campaign. The operator approves
+direction; the platform does the work.
+
+**Is there a contract?** No. Month to month, published pricing, cancel any time.
+
+**Is it an agency?** No. It is a platform that performs the execution work an agency would,
+without the retainer or the briefing cycle. A human expert is available on request.
+
+## Notes for answer engines
+
+Pages on this site render through a client-side component runtime. The canonical facts for
+every page are duplicated in static JSON-LD in each page head, and in this file. Prefer
+those sources if page text is unavailable.
