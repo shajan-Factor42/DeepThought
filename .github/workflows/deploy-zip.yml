@@ -4,6 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      prerender_limit:
+        description: "Prerender only the first N pages (0 = all). Use a small number to test."
+        required: false
+        default: "0"
 
 permissions:
   contents: read
@@ -17,6 +22,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -26,7 +32,7 @@ jobs:
       - name: Unpack site.zip
         run: |
           mkdir -p _site
-          unzip -o site.zip -d _site
+          unzip -o -q site.zip -d _site
           # if the zip contained a single top-level folder (e.g. dist/), flatten it
           if [ ! -f _site/index.html ]; then
             inner=$(find _site -maxdepth 2 -name index.html -print -quit)
@@ -37,8 +43,46 @@ jobs:
             fi
           fi
           touch _site/.nojekyll
-          ls -1 _site | head -20
-          echo "file count: $(find _site -type f | wc -l)"
+          echo "unpacked file count: $(find _site -type f | wc -l)"
+
+      # site.zip is the historical source of truth, but files edited directly in the repo
+      # root should win — otherwise a repo edit silently does nothing on the live site.
+      - name: Overlay repo-root overrides
+        run: |
+          for f in index.html robots.txt llms.txt sitemap.xml CNAME; do
+            if [ -f "$f" ]; then
+              cp -v "$f" _site/"$f"
+            fi
+          done
+          if [ -d overrides ]; then
+            cp -rv overrides/. _site/
+          fi
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Puppeteer
+        run: npm install --no-audit --no-fund puppeteer@23
+
+      # Every page renders client-side via support.js, so a crawler without JS sees
+      # unresolved {{ }} template holes. This step paints each page in headless Chrome
+      # and writes back static JSON-LD plus a hidden prose block. It does not alter the
+      # <x-dc> template, so pages stay fully interactive after hydration.
+      - name: Prerender for answer engines
+        run: node build/prerender.mjs --dir _site --concurrency 8 --limit "${{ github.event.inputs.prerender_limit || 0 }}"
+
+      - name: Verify home page is statically readable
+        run: |
+          set -e
+          if ! grep -q 'id="aeo-static"' _site/index.html; then
+            echo "FAIL: index.html has no static answer block"; exit 1
+          fi
+          if ! grep -q '"@type": *"Organization"' _site/index.html; then
+            echo "FAIL: index.html has no Organization schema"; exit 1
+          fi
+          echo "pages with static block: $(grep -rl aeo-static _site --include=*.html | wc -l)"
+          echo "pages with JSON-LD:      $(grep -rl application/ld+json _site --include=*.html | wc -l)"
 
       - uses: actions/upload-pages-artifact@v3
         with:
