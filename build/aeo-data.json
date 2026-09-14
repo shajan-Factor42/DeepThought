@@ -10,7 +10,15 @@
       "DeepThought Marketing"
     ],
     "email": "Support@deepthought.marketing",
-    "parentOrganization": "Factor42 Media",
+    "telephone": "+1-770-654-2216",
+    "telephoneDisplay": "770-654-2216",
+    "address": {
+      "streetAddress": "1531 Grove Arbor Ct",
+      "addressLocality": "Dacula",
+      "addressRegion": "GA",
+      "postalCode": "30019",
+      "addressCountry": "US"
+    },
     "areaServed": "United States",
     "description": "DeepThought is a paid media execution platform for small and medium businesses. Its AI engine turns a plain-language description of a promotion into a live, managed, multi-channel campaign in under 60 seconds.",
     "logo": "https://deepthought.marketing/assets/logo.png",
@@ -56,6 +64,9 @@
     "Unlimited campaign launches",
     "Named marketing expert on every account",
     "Campaigns run in your own ad accounts with media billed at cost"
+  ],
+  "scrub": [
+    "Rates are Factor42 wholesale rates. "
   ],
   "faq": [
     {

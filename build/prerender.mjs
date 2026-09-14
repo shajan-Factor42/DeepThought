@@ -64,7 +64,6 @@ const orgNode = () => {
     url: SITE + "/",
     email: o.email,
     description: o.description,
-    parentOrganization: { "@type": "Organization", name: o.parentOrganization },
     areaServed: { "@type": "Country", name: o.areaServed },
     contactPoint: [
       { "@type": "ContactPoint", contactType: "customer support", email: o.email, availableLanguage: "en" },
@@ -73,6 +72,15 @@ const orgNode = () => {
   };
   if (o.logo) node.logo = { "@type": "ImageObject", url: o.logo };
   if (o.sameAs && o.sameAs.length) node.sameAs = o.sameAs;
+  if (o.telephone) node.telephone = o.telephone;
+  // Published NAP must match the Google Business Profile exactly — matching is the whole
+  // mechanism, and a near-match corroborates nothing. Single source: aeo-data.json.
+  if (o.address) node.address = Object.assign({ "@type": "PostalAddress" }, o.address);
+  // parentOrganization removed 2026-09-14 by decision (brand separation from Factor42).
+  // Kept conditional so restoring it is a one-line edit to aeo-data.json.
+  if (o.parentOrganization) {
+    node.parentOrganization = { "@type": "Organization", name: o.parentOrganization };
+  }
   return node;
 };
 
