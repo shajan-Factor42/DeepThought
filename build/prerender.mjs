@@ -13,8 +13,15 @@
  *                 SoftwareApplication + FAQPage on the home page and Service on
  *                 county/state pages (county pages already carry their own Service
  *                 schema, which is left alone).
- *   2. A hidden static block — the painted page's headings and paragraphs as real
- *                 prose, visually hidden, so a non-JS crawler has text to extract.
+ *   2. A <noscript> fallback — the painted page's headings and paragraphs as real
+ *                 prose, shown only to clients that do not run JavaScript, so a non-JS
+ *                 crawler has text to extract. This replaced an earlier version that
+ *                 wrote a clip:rect(0 0 0 0) duplicate of the page text into every page.
+ *                 That is the hidden-text pattern Google's spam policy describes: it
+ *                 served content to crawlers and withheld it from visitors. <noscript>
+ *                 does the same job legitimately — nothing is concealed from anyone who
+ *                 can see the page. Any legacy clipped block found in a re-exported
+ *                 site.zip is stripped before the new one is written.
  *
  * The original <x-dc> template is never modified, so the runtime still hydrates and
  * the page stays fully interactive. Pages that already contain #aeo-static or an
@@ -52,6 +59,7 @@ const orgNode = () => {
     "@type": "Organization",
     "@id": SITE + "/#organization",
     name: o.name,
+    legalName: o.legalName,
     alternateName: o.alternateName,
     url: SITE + "/",
     email: o.email,
@@ -190,12 +198,16 @@ const EXTRACT = () => {
 
 const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+// Matches the pre-2026-09 clipped block so a re-exported site.zip cannot reintroduce
+// hidden text. Kept deliberately loose on the inline style, which varied slightly.
+const LEGACY_STATIC = /<div id="aeo-static"[^>]*clip:\s*rect\([^>]*>[\s\S]*?<\/div>\s*/gi;
+
 function staticBlock(blocks) {
   const body = blocks.map(b => "  <" + b.tag + ">" + esc(b.text) + "</" + b.tag + ">").join("\n");
   return [
-    '<div id="aeo-static" style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0">',
+    '<noscript id="aeo-static">',
     body,
-    "</div>"
+    "</noscript>"
   ].join("\n");
 }
 
@@ -206,6 +218,15 @@ async function processFile(page, dir, file, stats) {
   let html = await readFile(path, "utf8");
 
   if (/name=["']robots["'][^>]*noindex/i.test(html)) { stats.skippedNoindex++; return; }
+
+  // Remove any legacy clipped block first, so a page carrying one is rebuilt rather than
+  // skipped as already done.
+  const legacy = html.match(LEGACY_STATIC);
+  if (legacy) {
+    html = html.replace(LEGACY_STATIC, "");
+    stats.legacyRemoved += legacy.length;
+    await writeFile(path, html, "utf8");
+  }
 
   const hasStatic = html.includes('id="aeo-static"');
   const hasOrg = html.includes("/#organization");
@@ -257,7 +278,7 @@ const browser = await puppeteer.launch({
   args: ["--no-sandbox", "--disable-dev-shm-usage", "--allow-file-access-from-files"]
 });
 
-const stats = { written: 0, skippedDone: 0, skippedNoindex: 0, failed: [], empty: [], stillHoles: [] };
+const stats = { written: 0, skippedDone: 0, skippedNoindex: 0, legacyRemoved: 0, failed: [], empty: [], stillHoles: [] };
 const queue = files.slice();
 const t0 = Date.now();
 
@@ -294,6 +315,7 @@ console.log("prerender complete in " + Math.round((Date.now() - t0) / 1000) + "s
 console.log("  written           " + stats.written);
 console.log("  already done      " + stats.skippedDone);
 console.log("  skipped (noindex) " + stats.skippedNoindex);
+console.log("  legacy blocks removed " + stats.legacyRemoved);
 console.log("  no text extracted " + stats.empty.length);
 console.log("  failed            " + stats.failed.length);
 if (stats.stillHoles.length) {

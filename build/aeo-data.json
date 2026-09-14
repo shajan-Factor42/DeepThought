@@ -2,13 +2,24 @@
   "site": "https://deepthought.marketing",
   "organization": {
     "name": "DeepThought",
-    "alternateName": "Deep Thought",
+    "legalName": "Deep Thought Digital Marketing",
+    "alternateName": [
+      "Deep Thought",
+      "Deep Thought Digital Marketing",
+      "Deep Thought Marketing",
+      "DeepThought Marketing"
+    ],
     "email": "Support@deepthought.marketing",
     "parentOrganization": "Factor42 Media",
     "areaServed": "United States",
     "description": "DeepThought is a paid media execution platform for small and medium businesses. Its AI engine turns a plain-language description of a promotion into a live, managed, multi-channel campaign in under 60 seconds.",
     "logo": "https://deepthought.marketing/assets/logo.png",
-    "sameAs": []
+    "sameAs": [
+      "https://www.facebook.com/DeepThoughtDigitalMarketing/",
+      "https://www.instagram.com/deepthoughtmarketing/",
+      "https://nextdoor.com/page/deepthoughtmarketing-dacula-ga",
+      "https://www.google.com/maps/place/?q=place_id:ChIJjz4zyebr9YgR6fb9SILesk4"
+    ]
   },
   "pricing": {
     "currency": "USD",
@@ -53,7 +64,7 @@
     },
     {
       "q": "What kinds of businesses use DeepThought?",
-      "a": "Small and medium businesses running their own paid media - services, retail, healthcare, home services - from one location to a few dozen."
+      "a": "Small and medium businesses running their own paid media — services, retail, healthcare, home services — from one location to a few dozen."
     },
     {
       "q": "Does Deep Thought manage campaigns after launch?",
@@ -65,11 +76,11 @@
     },
     {
       "q": "How much does DeepThought cost?",
-      "a": "Pricing is per product, month to month. Starting Off - paid search, programmatic display and YouTube Performance Max - is 350 USD per month. Full funnel, which runs search, social, video and display as one connected plan, is 750 USD per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10 to 20 percent management fee and media is billed at cost in your own ad accounts."
+      "a": "Pricing is per product, month to month. Starting Off — paid search, programmatic display and YouTube Performance Max — is $350 per month. Full funnel, which runs search, social, video and display as one connected plan, is $750 per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10–20% management fee and media is billed at cost in your own ad accounts."
     },
     {
       "q": "Is DeepThought an agency?",
-      "a": "No. DeepThought is a platform that performs the execution work an agency would - creative, targeting, channel mix, optimization, reporting - without a retainer or a briefing cycle. A human expert is available when you want one."
+      "a": "No. DeepThought is a platform that performs the execution work an agency would — creative, targeting, channel mix, optimization, reporting — without a retainer or a briefing cycle. A human expert is available when you want one."
     }
   ],
   "skip": [
