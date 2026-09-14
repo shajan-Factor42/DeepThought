@@ -45,11 +45,19 @@ jobs:
           touch _site/.nojekyll
           echo "unpacked file count: $(find _site -type f | wc -l)"
 
-      # site.zip is the historical source of truth, but files edited directly in the repo
-      # root should win — otherwise a repo edit silently does nothing on the live site.
+      # site.zip is the source of truth for page content. Repo-root files listed here win,
+      # because a repo edit that silently does nothing on the live site is worse than no
+      # override at all.
+      #
+      # index.html is deliberately NOT in this list. It was added on 2026-09-11 (ee31845)
+      # and took the home page down: the repo-root copy is design-tool SOURCE, linking to
+      # Product.dc.html / Pricing.dc.html / Book a Demo.dc.html and assets/*.webp, while the
+      # zip ships product.html / pricing.html / book-a-demo.html and assets/*.png. The zip
+      # contains zero .webp files, so 12 references broke the moment the overlay went live.
+      # The built index.html from the zip is the one that ships.
       - name: Overlay repo-root overrides
         run: |
-          for f in index.html robots.txt llms.txt sitemap.xml CNAME; do
+          for f in robots.txt llms.txt sitemap.xml CNAME; do
             if [ -f "$f" ]; then
               cp -v "$f" _site/"$f"
             fi
@@ -57,20 +65,58 @@ jobs:
           if [ -d overrides ]; then
             cp -rv overrides/. _site/
           fi
+          if [ -f index.html ]; then
+            echo "note: repo-root index.html exists and is NOT deployed (see comment above)."
+            echo "      the deployed home page comes from site.zip."
+          fi
 
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+
+      # The visible FAQ and the FAQPage JSON-LD both read from build/aeo-data.json, so the
+      # page cannot declare questions it does not show. Runs before prerender so the
+      # <noscript> fallback picks up the full answer text.
+      - name: Sync visible FAQ from aeo-data.json
+        run: node build/faq-sync.mjs --dir _site
+
+      # organization.sameAs claims these profiles are DeepThought. That claim needs the
+      # reciprocal link. The design-system footer is client-rendered, so links placed there
+      # are invisible to non-JS crawlers — this writes real anchors into the HTML instead.
+      - name: Inject social profile links from aeo-data.json
+        run: node build/social-links.mjs --dir _site
+
+      # The Organization schema publishes organization.logo and Google silently discards a
+      # 404 there. The file ships via overrides/assets/, since site.zip is a design-tool
+      # export and the logo is not in it.
+      - name: Verify Organization logo resolves
+        run: |
+          set -e
+          logo=$(node -e "process.stdout.write(require('./build/aeo-data.json').organization.logo || '')")
+          if [ -z "$logo" ]; then echo "no organization.logo set — skipping"; exit 0; fi
+          rel=$(echo "$logo" | sed -E 's#^https?://[^/]+/##')
+          if [ ! -e "_site/$rel" ]; then
+            echo "FAIL: organization.logo points at $logo but _site/$rel does not exist"
+            echo "      add it at overrides/$rel so the overlay step ships it"
+            exit 1
+          fi
+          echo "organization.logo resolves: $rel"
 
       - name: Install Puppeteer
         run: npm install --no-audit --no-fund puppeteer@23
 
       # Every page renders client-side via support.js, so a crawler without JS sees
       # unresolved {{ }} template holes. This step paints each page in headless Chrome
-      # and writes back static JSON-LD plus a hidden prose block. It does not alter the
-      # <x-dc> template, so pages stay fully interactive after hydration.
+      # and writes back static JSON-LD plus a <noscript> prose fallback. It does not alter
+      # the <x-dc> template, so pages stay fully interactive after hydration.
       - name: Prerender for answer engines
         run: node build/prerender.mjs --dir _site --concurrency 8 --limit "${{ github.event.inputs.prerender_limit || 0 }}"
+
+      # County and state pages each declared their own inline Organization inside provider —
+      # thousands of loose entities that happen to share a URL. This folds every one onto
+      # the single canonical @id that prerender just wrote.
+      - name: Normalize brand entity
+        run: node build/brand-normalize.mjs --dir _site
 
       - name: Verify home page is statically readable
         run: |
@@ -83,6 +129,98 @@ jobs:
           fi
           echo "pages with static block: $(grep -rl aeo-static _site --include=*.html | wc -l)"
           echo "pages with JSON-LD:      $(grep -rl application/ld+json _site --include=*.html | wc -l)"
+
+      # This is the gate that would have caught the 2026-09-11 outage on the commit that
+      # caused it. Every local href/src on the home page must point at a file that exists.
+      - name: Verify home page links resolve
+        run: |
+          set -e
+          node - <<'EOF'
+          const { readFileSync, existsSync } = require("node:fs");
+          const { join, normalize } = require("node:path");
+          const html = readFileSync("_site/index.html", "utf8");
+          const refs = new Set();
+          const re = /(?:href|src)\s*=\s*["']([^"']+)["']/gi;
+          let m;
+          while ((m = re.exec(html)) !== null) refs.add(m[1].trim());
+          const skip = /^(https?:)?\/\/|^(mailto|tel|data|javascript|blob):|^#|^\{\{/i;
+          const missing = [];
+          let checked = 0;
+          for (const raw of refs) {
+            if (!raw || skip.test(raw)) continue;
+            let p = raw.split("#")[0].split("?")[0];
+            if (!p) continue;
+            try { p = decodeURIComponent(p); } catch {}
+            p = p.replace(/^\.?\//, "");
+            checked++;
+            if (!existsSync(join("_site", normalize(p)))) missing.push(raw);
+          }
+          console.log("home page local references checked: " + checked);
+          if (missing.length) {
+            console.error("FAIL: " + missing.length + " home page reference(s) do not resolve:");
+            missing.sort().forEach(r => console.error("  " + r));
+            console.error("");
+            console.error("If these look like Product.dc.html or assets/*.webp, a design-tool");
+            console.error("source file has been overlaid over the built index.html. See the");
+            console.error("comment on the overlay step.");
+            process.exit(1);
+          }
+          console.log("all home page references resolve");
+          EOF
+
+      # prerender.mjs used to write a clip:rect(0 0 0 0) duplicate of each page's text —
+      # content served to crawlers and withheld from visitors, which is what Google's spam
+      # policy on hidden text describes. Fails the build if one ever comes back.
+      - name: Verify no hidden crawler-only text
+        run: |
+          set -e
+          hits=$(grep -rlE 'clip:[[:space:]]*rect\(0 0 0 0\)' _site --include=*.html | wc -l)
+          if [ "$hits" -ne 0 ]; then
+            echo "FAIL: $hits page(s) carry a clipped crawler-only text block"
+            grep -rlE 'clip:[[:space:]]*rect\(0 0 0 0\)' _site --include=*.html | head -10
+            exit 1
+          fi
+          echo "no clipped crawler-only blocks"
+
+      # The FAQPage schema declared 6 questions while the page showed 4. Both now render
+      # from aeo-data.json; this fails the build if they ever diverge again.
+      - name: Verify visible FAQ matches FAQPage schema
+        run: |
+          set -e
+          node - <<'EOF'
+          const { readFileSync } = require("node:fs");
+          const html = readFileSync("_site/index.html", "utf8");
+          const start = html.search(/<section\b[^>]*\bid=["']faq["']/i);
+          if (start === -1) { console.error("FAIL: no #faq section on the home page"); process.exit(1); }
+          const section = html.slice(start, html.indexOf("</section>", start));
+          const visible = (section.match(/<details\b/gi) || []).length;
+          let schema = 0;
+          const re = /<script\b[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi;
+          let m;
+          const count = (node) => {
+            if (Array.isArray(node)) return node.reduce((a, n) => a + count(n), 0);
+            if (!node || typeof node !== "object") return 0;
+            let n = 0;
+            const t = [].concat(node["@type"] || []);
+            if (t.includes("FAQPage")) n += [].concat(node.mainEntity || []).filter(q =>
+              [].concat(q["@type"] || []).includes("Question")).length;
+            for (const v of Object.values(node)) if (typeof v === "object") n += count(v);
+            return n;
+          };
+          while ((m = re.exec(html)) !== null) {
+            try { schema += count(JSON.parse(m[1])); } catch {}
+          }
+          console.log("visible FAQ entries: " + visible + " / schema Question nodes: " + schema);
+          if (visible === 0) { console.error("FAIL: no visible FAQ entries"); process.exit(1); }
+          if (visible !== schema) {
+            console.error("FAIL: visible FAQ and FAQPage schema disagree");
+            process.exit(1);
+          }
+          EOF
+
+      # Fails if any page reintroduces an inline organization under a variant spelling.
+      - name: Verify one brand entity
+        run: node build/brand-normalize.mjs --dir _site --check
 
       - uses: actions/upload-pages-artifact@v3
         with:
