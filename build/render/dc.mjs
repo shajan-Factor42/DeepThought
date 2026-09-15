@@ -118,6 +118,16 @@ const COMPONENTS = { Button, Card, Badge, Input };
 
 /** CSS replacing the React hover/press handlers the components used. */
 export const COMPONENT_CSS = `
+/* The design system never set a base font anywhere — not in the token CSS, not in the bundle,
+   not in support.js. Anything without its own font-family, the whole top nav included, fell
+   through to the browser default serif. */
+body{font-family:var(--font-body)}
+
+/* Button was a <button> in the original, which browsers give box-sizing:border-box via the UA
+   stylesheet. It renders as a <span> here, because a <button> inside an <a> is invalid HTML —
+   so without this the declared height and the padding add up instead of the padding sitting
+   inside the height, and the button reads too tall and off-centre. */
+.ds-btn{box-sizing:border-box}
 .ds-btn{user-select:none}
 a:hover .ds-btn{filter:brightness(1.04)}
 a:active .ds-btn{transform:scale(0.98)}
