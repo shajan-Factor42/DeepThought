@@ -77,7 +77,57 @@ export const BASE_SCOPE = {
 };
 
 /** Load SiteHeader / SiteFooter as render-ready partials, plus the shared <head> fragment. */
+/**
+ * Header CTA.
+ *
+ * The header's "Sign in" was a plain text link pointing at contact.html — it neither signed
+ * anyone in nor stood out. It becomes the primary call to action, pointing at the app, and
+ * "Book a demo" steps down to the outline treatment so there is one obvious thing to click
+ * rather than two buttons competing.
+ *
+ * The desktop actions bar is hidden below 1024px, so the same CTA is added to the mobile
+ * drawer — otherwise phone visitors would never see it.
+ */
+const APP_URL = "https://deepthought.adops.rocks/";
+const CTA_LABEL = "Launch your Campaigns";
+
+const CTA_DESKTOP =
+  `<a href="${APP_URL}" style="display:inline-flex; align-items:center; justify-content:center; ` +
+  `box-sizing:border-box; height:40px; padding:0 20px; border-radius:var(--radius-button); ` +
+  `background:var(--f42-gradient-button); color:var(--text-on-brand); font-family:var(--font-body); ` +
+  `font-size:14.5px; font-weight:700; letter-spacing:-0.01em; text-decoration:none; white-space:nowrap; ` +
+  `box-shadow:var(--shadow-button)">${CTA_LABEL}</a>`;
+
+const CTA_DRAWER =
+  `<a href="${APP_URL}" style="display:block; margin-top:14px; text-align:center; font-size:16px; ` +
+  `font-weight:700; color:#fff; text-decoration:none; background:var(--f42-gradient-button); ` +
+  `border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(0,102,255,0.22)">${CTA_LABEL}</a>`;
+
+function applyHeaderCta(tpl) {
+  let html = tpl;
+
+  const signIn = '<a href="contact.html" style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue); text-decoration:none; white-space:nowrap">Sign in</a>';
+  if (!html.includes(signIn)) throw new Error("SiteHeader: Sign in link not found — site.zip changed");
+  html = html.replace(signIn, CTA_DESKTOP);
+
+  const demoBtn = '<x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="sm" hint-size="120px,36px">Book a demo</x-import>';
+  if (!html.includes(demoBtn)) throw new Error("SiteHeader: desktop demo button not found — site.zip changed");
+  html = html.replace(demoBtn, demoBtn.replace('variant="primary"', 'variant="subtle"'));
+
+  const drawerDemo = '<a href="book-a-demo.html" style="display:block; margin-top:14px; text-align:center; font-size:16px; font-weight:600; color:#fff; text-decoration:none; background:var(--f42-gradient-blue); border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(0,102,255,0.22)">Book a demo</a>';
+  if (!html.includes(drawerDemo)) throw new Error("SiteHeader: drawer demo button not found — site.zip changed");
+  const drawerDemoSubtle = drawerDemo
+    .replace("color:#fff", "color:var(--text-heading)")
+    .replace("background:var(--f42-gradient-blue)", "background:var(--f42-white); border:1px solid var(--border-subtle)")
+    .replace("box-shadow:0 10px 24px rgba(0,102,255,0.22)", "box-shadow:var(--shadow-sm)")
+    .replace("margin-top:14px", "margin-top:10px");
+  html = html.replace(drawerDemo, CTA_DRAWER + "\n        " + drawerDemoSubtle);
+
+  return html;
+}
+
 export async function loadShell(SRC) {
+
   const headerSrc = await readFile(join(SRC, "SiteHeader.dc.html"), "utf8");
   const footerSrc = await readFile(join(SRC, "SiteFooter.dc.html"), "utf8");
 
@@ -90,7 +140,7 @@ export async function loadShell(SRC) {
 
   return {
     helmet,
-    partials: { SiteHeader: templateFrom(headerSrc), SiteFooter: templateFrom(footerSrc) },
+    partials: { SiteHeader: applyHeaderCta(templateFrom(headerSrc)), SiteFooter: templateFrom(footerSrc) },
   };
 }
 

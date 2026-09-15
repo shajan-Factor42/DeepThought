@@ -123,6 +123,11 @@ export const COMPONENT_CSS = `
    through to the browser default serif. */
 body{font-family:var(--font-body)}
 
+/* Form controls are the exception: browsers give <input>, <select>, <textarea> and <button>
+   their own UA font rather than inheriting from body, so the booking and contact forms
+   rendered in the system default while everything around them was Inter. */
+input,select,textarea,button{font-family:inherit}
+
 /* Button was a <button> in the original, which browsers give box-sizing:border-box via the UA
    stylesheet. It renders as a <span> here, because a <button> inside an <a> is invalid HTML —
    so without this the declared height and the padding add up instead of the padding sitting
