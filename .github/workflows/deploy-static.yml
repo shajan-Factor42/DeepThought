@@ -65,7 +65,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       # Renders every page, copies assets, applies the declared copy rewrites from
       # build/aeo-data.json, generates sitemap.xml from the pages that actually rendered,
