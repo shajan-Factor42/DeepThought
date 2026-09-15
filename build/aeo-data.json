@@ -27,28 +27,24 @@
       "https://www.instagram.com/deepthoughtmarketing/",
       "https://nextdoor.com/page/deepthoughtmarketing-dacula-ga",
       "https://www.google.com/maps/place/?q=place_id:ChIJjz4zyebr9YgR6fb9SILesk4"
-    ]
+    ],
+    "hideAddressLine": true
   },
   "pricing": {
     "currency": "USD",
-    "lowPrice": "350",
-    "highPrice": "750",
     "url": "https://deepthought.marketing/pricing.html",
-    "summary": "Per-product monthly management pricing, month to month with no contract. Starting Off (paid search, programmatic display, YouTube Performance Max) is 350 USD per month. Full funnel (search, social, video and display run as one plan) is 750 USD per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10 to 20 percent management fee with media billed at cost in your own ad accounts.",
+    "summary": "Per-product pricing, month to month with no contract, at roughly half what a comparable agency retainer costs. Media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. Budgets of any size can start; Deep Thought recommends the media mix that fits the budget, and the figure for a given business comes from a short call rather than a published rate card.",
     "tiers": [
       {
         "name": "Starting Off",
-        "price": "350",
         "description": "Paid search, shopping and local service ads, programmatic display and retargeting, YouTube Performance Max. Unlimited campaign launches, continuous creative and bid optimization, monthly reporting."
       },
       {
         "name": "Full funnel",
-        "price": "750",
         "description": "Search, social, video and display run as one connected plan. Cross-channel budget reallocation, named marketing expert, CRM and POS revenue attribution, weekly reporting."
       },
       {
         "name": "Multi-Location / Enterprise",
-        "price": null,
         "description": "For brands and franchise systems running many markets. Per-location campaigns and budgets, brand controls and approval flows, roll-up and per-store reporting, user management by role. Quoted custom."
       }
     ]
@@ -65,9 +61,7 @@
     "Named marketing expert on every account",
     "Campaigns run in your own ad accounts with media billed at cost"
   ],
-  "scrub": [
-    "Rates are Factor42 wholesale rates. "
-  ],
+  "scrub": [],
   "faq": [
     {
       "q": "How fast can I launch a campaign?",
@@ -83,11 +77,11 @@
     },
     {
       "q": "Is there a long-term contract?",
-      "a": "No. Month to month, published pricing, cancel any time. Your ad accounts and creative stay yours."
+      "a": "No. Month to month, cancel any time. Your ad accounts and creative stay yours."
     },
     {
       "q": "How much does DeepThought cost?",
-      "a": "Pricing is per product, month to month. Starting Off — paid search, programmatic display and YouTube Performance Max — is $350 per month. Full funnel, which runs search, social, video and display as one connected plan, is $750 per month. Multi-location and enterprise is quoted custom. Managed-spend products carry a 10–20% management fee and media is billed at cost in your own ad accounts."
+      "a": "Pricing is per product and month to month, and it works out to roughly half what a comparable agency retainer costs. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. What you pay depends on which products you run, so the number comes from a short call rather than a rate card — budgets of any size can get started, and Deep Thought recommends the media mix that fits yours."
     },
     {
       "q": "Is DeepThought an agency?",
@@ -97,5 +91,195 @@
   "skip": [
     "thank-you.html",
     "us-map.html"
+  ],
+  "rewrite": [
+    {
+      "from": "One engine. Every channel. Sixty seconds.",
+      "to": "Meet Deep Thought. One Engine, Every Channel. Live in 60 seconds.",
+      "files": [
+        "product.html"
+      ],
+      "note": "product H1"
+    },
+    {
+      "from": "Deep Thought is the AI engine behind DeepThought.",
+      "to": "Deep Thought is an AI engine that consolidates all your digital marketing platforms in one place and manages it for you.",
+      "files": [
+        "product.html"
+      ],
+      "note": "product lede, first sentence"
+    },
+    {
+      "from": "Describe the promotion. Get a live campaign.",
+      "to": "Tell Deep Thought what you’re trying to run. It will do the rest.",
+      "files": [
+        "product.html"
+      ],
+      "note": "product section H2"
+    },
+    {
+      "from": "Optimization that touches the creative, not just the budget",
+      "to": "Optimizations that aim for performance, not just budget pacing",
+      "files": [
+        "product.html"
+      ],
+      "note": "product section H2"
+    },
+    {
+      "from": "Set up once, then just direct",
+      "to": "Set up once, then change what you need",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "NEEDS SIGN-OFF — see open item"
+    },
+    {
+      "from": "After that, running a campaign is one sentence.",
+      "to": "After that, changing what’s running — the offer, the budget, the service area — takes a few clicks instead of a rebuild.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "NEEDS SIGN-OFF — see open item"
+    },
+    {
+      "from": "Plain language. No campaign structure, no keyword lists.",
+      "to": "Plain language. You never touch campaign structure or keyword lists.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "NEEDS SIGN-OFF — see open item"
+    },
+    {
+      "from": "Push $40 off first cleaning in Rockville, $600 this month.",
+      "to": "Push $40 off first cleaning in Lawrenceville, $600 this month.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "template placeholder used a non-Georgia city"
+    },
+    {
+      "cut": "Rate detail by product",
+      "files": [
+        "pricing.html"
+      ],
+      "replaceWith": "<section style=\"max-width:1100px; margin:0 auto; padding:0 40px 96px\">\n  <div style=\"max-width:740px; margin:0 auto; text-align:center\">\n    <div style=\"font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)\">Budget</div>\n    <h2 style=\"font-family:var(--font-display); font-size:32px; font-weight:800; letter-spacing:-0.03em; margin:14px 0 0\">Start at whatever budget you have</h2>\n    <p style=\"font-size:16px; line-height:1.65; color:var(--text-body); margin:18px 0 0\">Budgets of any size can get started. Tell us what you can put behind it this month and Deep Thought recommends the media mix that fits — which channels to run, and how to split the budget across them.</p>\n    <p style=\"font-size:16px; line-height:1.65; color:var(--text-body); margin:14px 0 0\">Some channels carry minimums of their own. The recommendation works around them rather than pretending they are not there, and the mix changes as the budget grows.</p>\n  </div>\n</section>",
+      "note": "item 10/11/12 — rate card out, budget + media-mix language in"
+    },
+    {
+      "from": "Full per-media rates are in the rate card below.",
+      "to": "Budgets of any size can get started — we will recommend the mix that fits yours.",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "pointed at the cut section"
+    },
+    {
+      "from": "<span style=\"font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.03em\">$350</span><span style=\"font-size:14px; color:var(--text-muted)\">/ mo</span>",
+      "to": "<span style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.02em\">Built to your budget</span>",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "Starting Off tier price"
+    },
+    {
+      "from": "<span style=\"font-family:var(--font-display); font-size:34px; font-weight:800; letter-spacing:-0.03em\">$750</span><span style=\"font-size:14px; color:var(--text-muted)\">/ mo</span>",
+      "to": "<span style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.02em\">Built to your budget</span>",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "Full Funnel tier price"
+    },
+    {
+      "cut": "Marcus Whitfield",
+      "files": [
+        "index.html"
+      ],
+      "note": "homepage testimonial — unverified, carries a 31% performance claim"
+    },
+    {
+      "cut": "Placeholder quote",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "placeholder testimonial"
+    },
+    {
+      "from": "We run in your accounts. Spend goes straight to the platforms, unmarked up.",
+      "to": "We run in your accounts. Your media is covered inside the price, not billed on top.",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "account ownership kept, billing model corrected"
+    },
+    {
+      "from": "No. Your spend goes to the platforms unmarked up, and our fee doesn't grow because you scaled your budget.",
+      "to": "No. Your media is covered inside the price rather than billed on top, so nothing we charge grows as a percentage of your spend.",
+      "files": [
+        "faq.html"
+      ]
+    },
+    {
+      "from": "Campaigns run in your ad accounts. Spend goes to the platforms unmarked up, and nothing is held hostage if you leave.",
+      "to": "Campaigns run in your ad accounts. Your media is covered inside the price, and nothing is held hostage if you leave.",
+      "files": [
+        "serving-local-business.html"
+      ]
+    },
+    {
+      "from": "Priced per product from our published rate card. Month to month, in your own ad accounts, no annual contract.",
+      "to": "Priced per product, with your media covered inside the price. Month to month, in your own ad accounts, no annual contract.",
+      "files": [
+        "thank-you.html"
+      ]
+    },
+    {
+      "from": "See the rate card",
+      "to": "See what's included",
+      "files": [
+        "thank-you.html"
+      ]
+    },
+    {
+      "from": "Published pricing",
+      "to": "Priced per product",
+      "files": [
+        "serving-local-business.html"
+      ]
+    },
+    {
+      "from": "A rate card, per product, month to month — about half what a comparable agency retainer costs.",
+      "to": "Per product, month to month — about half what a comparable agency retainer costs, with media covered inside the price.",
+      "files": [
+        "serving-local-business.html"
+      ]
+    },
+    {
+      "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media spend goes to the platforms at cost, in your own accounts.",
+      "to": "Pricing is per product and works out to roughly half a comparable agency retainer. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee.",
+      "note": "county + state FAQ copy, visible text and JSON-LD"
+    },
+    {
+      "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media goes to the platforms at cost in your own accounts.",
+      "to": "Pricing is per product and works out to roughly half a comparable agency retainer. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee.",
+      "note": "Georgia state page variant"
+    },
+    {
+      "from": "Priced per product from our published rate card. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — our management fee does not.",
+      "to": "Priced per product at about half a comparable agency retainer, with media covered inside the price. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — what we charge does not.",
+      "note": "Florida state page variant"
+    },
+    {
+      "from": "full execution, published pricing, no retainer.",
+      "to": "full execution, media covered inside the price, no retainer.",
+      "note": "county + state lede; the pricing figure is no longer published"
+    },
+    {
+      "from": "No. Month to month, published pricing, cancel any time. Your ad accounts and creative stay yours.",
+      "to": "No. Month to month, cancel any time. Your ad accounts and creative stay yours.",
+      "files": [
+        "index.html"
+      ],
+      "note": "home page accordion copy, inline in the template"
+    }
   ]
 }
