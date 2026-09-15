@@ -81,9 +81,18 @@ export const BASE_SCOPE = {
  * Header CTA.
  *
  * The header's "Sign in" was a plain text link pointing at contact.html — it neither signed
- * anyone in nor stood out. It becomes the primary call to action, pointing at the app, and
- * "Book a demo" steps down to the outline treatment so there is one obvious thing to click
- * rather than two buttons competing.
+ * anyone in nor stood out. It becomes a filled call to action pointing at the app.
+ *
+ * "Book a demo" is a filled button too, in orange rather than blue. Orange is the complement
+ * of blue, so the two read as two distinct actions rather than two versions of the same one.
+ *
+ * The specific value matters: orange only becomes legible once it is quite dark. #F97316 and
+ * #EA580C — the oranges most people picture — sit at 2.8:1 and 3.5:1 against a white header
+ * and fail as text. #C2410C is the brightest orange that works, and here it carries white at
+ * 5.2:1, which clears AA. Going lighter for more vividness would break legibility.
+ *
+ * Reading order is kept as it was: the text link sits left of the button, so the eye lands on
+ * the filled CTA last and rightmost.
  *
  * The desktop actions bar is hidden below 1024px, so the same CTA is added to the mobile
  * drawer — otherwise phone visitors would never see it.
@@ -103,25 +112,34 @@ const CTA_DRAWER =
   `font-weight:700; color:#fff; text-decoration:none; background:var(--f42-gradient-button); ` +
   `border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(0,102,255,0.22)">${CTA_LABEL}</a>`;
 
+const DEMO_ORANGE = "#C2410C";
+
+const DEMO_DESKTOP =
+  `<a href="book-a-demo.html" style="display:inline-flex; align-items:center; justify-content:center; ` +
+  `box-sizing:border-box; height:40px; padding:0 20px; border-radius:var(--radius-button); ` +
+  `background:${DEMO_ORANGE}; color:#ffffff; font-family:var(--font-body); font-size:14.5px; ` +
+  `font-weight:700; letter-spacing:-0.01em; text-decoration:none; white-space:nowrap; ` +
+  `box-shadow:0 6px 20px rgba(194,65,12,0.28)">Book a demo</a>`;
+
+const DEMO_DRAWER =
+  `<a href="book-a-demo.html" style="display:block; margin-top:10px; text-align:center; font-size:16px; ` +
+  `font-weight:700; color:#ffffff; text-decoration:none; background:${DEMO_ORANGE}; ` +
+  `border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(194,65,12,0.24)">Book a demo</a>`;
+
 function applyHeaderCta(tpl) {
   let html = tpl;
 
   const signIn = '<a href="contact.html" style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue); text-decoration:none; white-space:nowrap">Sign in</a>';
   if (!html.includes(signIn)) throw new Error("SiteHeader: Sign in link not found — site.zip changed");
-  html = html.replace(signIn, CTA_DESKTOP);
+  html = html.replace(signIn, DEMO_DESKTOP);
 
-  const demoBtn = '<x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="sm" hint-size="120px,36px">Book a demo</x-import>';
-  if (!html.includes(demoBtn)) throw new Error("SiteHeader: desktop demo button not found — site.zip changed");
-  html = html.replace(demoBtn, demoBtn.replace('variant="primary"', 'variant="subtle"'));
+  const demoWrap = '<a href="book-a-demo.html" style="text-decoration:none">\n        <x-import component-from-global-scope="Factor42DesignSystem_376e18.Button" variant="primary" size="sm" hint-size="120px,36px">Book a demo</x-import>\n      </a>';
+  if (!html.includes(demoWrap)) throw new Error("SiteHeader: desktop demo button not found — site.zip changed");
+  html = html.replace(demoWrap, CTA_DESKTOP);
 
   const drawerDemo = '<a href="book-a-demo.html" style="display:block; margin-top:14px; text-align:center; font-size:16px; font-weight:600; color:#fff; text-decoration:none; background:var(--f42-gradient-blue); border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(0,102,255,0.22)">Book a demo</a>';
   if (!html.includes(drawerDemo)) throw new Error("SiteHeader: drawer demo button not found — site.zip changed");
-  const drawerDemoSubtle = drawerDemo
-    .replace("color:#fff", "color:var(--text-heading)")
-    .replace("background:var(--f42-gradient-blue)", "background:var(--f42-white); border:1px solid var(--border-subtle)")
-    .replace("box-shadow:0 10px 24px rgba(0,102,255,0.22)", "box-shadow:var(--shadow-sm)")
-    .replace("margin-top:14px", "margin-top:10px");
-  html = html.replace(drawerDemo, CTA_DRAWER + "\n        " + drawerDemoSubtle);
+  html = html.replace(drawerDemo, CTA_DRAWER + "\n        " + DEMO_DRAWER);
 
   return html;
 }
