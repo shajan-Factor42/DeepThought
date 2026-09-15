@@ -115,22 +115,26 @@ for (const st of states.STATES) {
   };
 
   const description = `Digital marketing in ${st.name}. Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.`;
+  // FAQPage as its own top-level block, not nested inside Service.
+  const jsonld = [{
+    "@context": "https://schema.org", "@type": "Service",
+    serviceType: "Digital marketing", provider: { "@id": `${SITE}/#organization` },
+    areaServed: { "@type": "State", name: st.name },
+    name: `Digital Marketing in ${st.name}`, description, url: `${SITE}/${stateHref(st)}`,
+  }];
+  if ((copy.faq || []).length) {
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: copy.faq.map((f) => ({
+        "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
   await emit(stateHref(st), {
     title: `Digital Marketing in ${st.name} | Digital Marketing Agency | DeepThought`,
     description,
     body: render(STATE_TPL, scope, partials),
-    jsonld: [{
-      "@context": "https://schema.org", "@type": "Service",
-      serviceType: "Digital marketing", provider: { "@id": `${SITE}/#organization` },
-      areaServed: { "@type": "State", name: st.name },
-      name: `Digital Marketing in ${st.name}`, description, url: `${SITE}/${stateHref(st)}`,
-      mainEntity: {
-        "@type": "FAQPage",
-        mainEntity: (copy.faq || []).map((f) => ({
-          "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
-    }],
+    jsonld,
   });
 }
 

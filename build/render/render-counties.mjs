@@ -207,7 +207,10 @@ for (const slug of slugs) {
   const title = `Digital Marketing in ${county.name} County, ${county.state} | Digital Marketing Agency | DeepThought`;
   const description = `Digital marketing in ${county.name} County, ${county.stateName}. Paid search, paid social, connected TV and display for local businesses — a digital marketing agency alternative with campaigns live in 60 seconds.`;
 
-  const jsonld = {
+  // FAQPage ships as its own top-level block rather than nested under Service.mainEntity.
+  // Google documents FAQPage as a page-level type; nesting it inside another entity is a
+  // shape it is not obliged to read.
+  const jsonld = [{
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: "Digital marketing",
@@ -216,14 +219,16 @@ for (const slug of slugs) {
     name: `Digital Marketing in ${county.name} County, ${county.stateName}`,
     description,
     url: canonical,
-    mainEntity: {
-      "@type": "FAQPage",
-      mainEntity: (copy.faq || []).map((f) => ({
+  }];
+  if ((copy.faq || []).length) {
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: copy.faq.map((f) => ({
         "@type": "Question", name: f.q,
         acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
-    },
-  };
+    });
+  }
 
   await writeFile(join(OUT, file), page({ title, description, canonical, jsonld, body, helmet }), "utf8");
   written++;

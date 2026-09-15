@@ -74,22 +74,26 @@ for (const ind of INDUSTRIES) {
     counties: countiesFor(ind.slug),
   };
   const description = `${ind.name} marketing — ${ind.short}. Paid search, paid social, connected TV and display, with campaigns live in 60 seconds.`;
+  // FAQPage as its own top-level block, not nested inside Service.
+  const jsonld = [{
+    "@context": "https://schema.org", "@type": "Service",
+    serviceType: `Digital marketing for ${ind.name.toLowerCase()}`,
+    provider: { "@id": `${SITE}/#organization` },
+    name: `Digital Marketing for ${ind.name}`, description, url: `${SITE}/${href(ind)}`,
+  }];
+  if ((ind.faq || []).length) {
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: ind.faq.map((f) => ({
+        "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
   await emit(href(ind), {
     title: `Digital Marketing for ${ind.name} | DeepThought`,
     description,
     body: render(IND_TPL, scope, partials),
-    jsonld: [{
-      "@context": "https://schema.org", "@type": "Service",
-      serviceType: `Digital marketing for ${ind.name.toLowerCase()}`,
-      provider: { "@id": `${SITE}/#organization` },
-      name: `Digital Marketing for ${ind.name}`, description, url: `${SITE}/${href(ind)}`,
-      mainEntity: {
-        "@type": "FAQPage",
-        mainEntity: (ind.faq || []).map((f) => ({
-          "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
-        })),
-      },
-    }],
+    jsonld,
   });
 }
 
