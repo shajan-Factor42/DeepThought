@@ -27,6 +27,11 @@ const pages = new Set(files);
 
 let holes = [], brokenLinks = 0, brokenAssets = 0, noCanonical = [], badLd = [], emptyish = [];
 let noNap = [], noSocial = [];
+// Schema that points at an entity the page never defines. The rebuild shipped 3,203 pages whose
+// Service and WebPage nodes referenced #organization with nothing defining it — every gate
+// passed because each block was valid JSON. This checks the references resolve.
+let danglingIds = [];
+const danglingSeen = new Map();
 const missing = new Map();
 const note = (t) => missing.set(t, (missing.get(t) || 0) + 1);
 
@@ -40,8 +45,22 @@ for (const f of files) {
   if (!html.includes('id="social-profiles"')) noSocial.push(f);
   if (!/<link rel="canonical"/.test(html)) noCanonical.push(f);
 
+  const defined = new Set(), referenced = new Set();
+  const walk = (x) => {
+    if (Array.isArray(x)) return x.forEach(walk);
+    if (!x || typeof x !== "object") return;
+    if (typeof x["@id"] === "string") {
+      (Object.keys(x).length === 1 ? referenced : defined).add(x["@id"]);
+    }
+    Object.values(x).forEach(walk);
+  };
   for (const m of html.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)) {
-    try { JSON.parse(m[1]); } catch { badLd.push(f); }
+    try { walk(JSON.parse(m[1])); } catch { badLd.push(f); }
+  }
+  const unresolved = [...referenced].filter((id) => !defined.has(id));
+  if (unresolved.length) {
+    danglingIds.push(f);
+    for (const id of unresolved) danglingSeen.set(id, (danglingSeen.get(id) || 0) + 1);
   }
 
   // A page that renders but has almost no text means a renderer silently produced a shell.
@@ -67,7 +86,9 @@ for (const f of files) {
 let sitemapMissing = [];
 try {
   const sm = await readFile(join(DIR, "sitemap.xml"), "utf8");
-  const listed = new Set([...sm.matchAll(/<loc>[^<]*?\/([^/<]+)<\/loc>/g)].map((m) => m[1]));
+  // A loc ending in "/" is the home page, canonical at the root.
+  const listed = new Set([...sm.matchAll(/<loc>([^<]*)<\/loc>/g)]
+    .map((m) => m[1].endsWith("/") ? "index.html" : m[1].split("/").pop()));
   for (const f of files) {
     const html = await readFile(join(DIR, f), "utf8");
     if (/content="[^"]*noindex/.test(html)) continue;
@@ -84,6 +105,7 @@ const rows = [
   ["broken asset refs", brokenAssets, brokenAssets === 0],
   ["missing canonical", noCanonical.length, noCanonical.length === 0],
   ["invalid JSON-LD", badLd.length, badLd.length === 0],
+  ["unresolved @id refs", danglingIds.length, danglingIds.length === 0],
   ["near-empty pages", emptyish.length, emptyish.length === 0],
   ["missing NAP block", noNap.length, noNap.length === 0],
   ["missing social links", noSocial.length, noSocial.length === 0],
@@ -102,6 +124,8 @@ if (failed.length) {
   if (holes.length) console.error("  holes: " + holes.slice(0, 5).join(", "));
   if (noCanonical.length) console.error("  no canonical: " + noCanonical.slice(0, 5).join(", "));
   if (badLd.length) console.error("  bad JSON-LD: " + badLd.slice(0, 5).join(", "));
+  if (danglingIds.length) console.error("  unresolved @id on: " + danglingIds.slice(0, 5).join(", ") +
+    " — " + [...danglingSeen].map(([id, n]) => `${n}x ${id}`).join(", "));
   if (emptyish.length) console.error("  near-empty: " + emptyish.slice(0, 5).join(", "));
   if (noNap.length) console.error("  no NAP: " + noNap.slice(0, 5).join(", "));
   if (noSocial.length) console.error("  no social links: " + noSocial.slice(0, 5).join(", "));

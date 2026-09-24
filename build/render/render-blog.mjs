@@ -100,7 +100,7 @@ for (const post of posts) {
     headline: post.title, description: post.dek,
     datePublished: post.iso, articleSection: post.cat,
     author: { "@type": "Organization", name: "DeepThought" },
-    publisher: { "@type": "Organization", name: "DeepThought", url: SITE },
+    publisher: { "@id": `${SITE}/#organization` },
     mainEntityOfPage: canonical, inLanguage: "en-US",
   }];
   if (post.faq.length) {

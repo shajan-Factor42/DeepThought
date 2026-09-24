@@ -91,7 +91,8 @@ for (const f of files) {
   entries.push({ loc, lastmod: st.mtime.toISOString().slice(0, 10) });
 }
 // home page first, then alphabetical
-entries.sort((a, b) => (a.loc === `${SITE}/index.html` ? -1 : b.loc === `${SITE}/index.html` ? 1 : a.loc.localeCompare(b.loc)));
+const isHome = (l) => l === `${SITE}/` || l === `${SITE}/index.html`;
+entries.sort((a, b) => (isHome(a.loc) ? -1 : isHome(b.loc) ? 1 : a.loc.localeCompare(b.loc)));
 
 await writeFile(join(OUT, "sitemap.xml"),
   '<?xml version="1.0" encoding="UTF-8"?>\n' +

@@ -45,6 +45,7 @@ const LABELS = [
   [/linkedin\./i, "LinkedIn"], [/facebook\./i, "Facebook"], [/instagram\./i, "Instagram"],
   [/(twitter|x)\.com/i, "X"], [/youtube\./i, "YouTube"], [/nextdoor\./i, "Nextdoor"],
   [/tiktok\./i, "TikTok"], [/threads\./i, "Threads"], [/pinterest\./i, "Pinterest"],
+  [/google\.[^/]+\/maps|g\.page|maps\.app\.goo\.gl/i, "Google"],
 ];
 function socialBlock() {
   const urls = (AEO.organization && AEO.organization.sameAs) || [];
@@ -60,6 +61,49 @@ function socialBlock() {
 const FOOTER_BLOCKS = [napBlock(), socialBlock()].filter(Boolean).join("\n  ");
 
 export const SITE = "https://deepthought.marketing";
+
+/**
+ * The site's own entity graph, emitted on every page.
+ *
+ * Every Service, WebPage and BlogPosting points at `#organization` and `#website`. Until
+ * 2026-09-23 nothing defined either node: prerender.mjs used to inject them, and when the
+ * static rebuild retired it nothing took its place — 3,203 pages referenced a business that
+ * did not exist in their schema. Both nodes now come from aeo-data.json, the same source as
+ * the footer NAP and social links, so schema and visible text cannot disagree. verify.mjs
+ * fails the build if any page references an @id it does not define.
+ *
+ * The PostalAddress stays in schema (it corroborates the Google Business Profile) even though
+ * hideAddressLine keeps the street off the visible footer.
+ */
+function siteGraph() {
+  const o = AEO.organization || {};
+  const a = o.address || {};
+  const served = [].concat(o.areaServed || []).map((n) =>
+    /^united states$/i.test(n)
+      ? { "@type": "Country", name: "United States" }
+      : { "@type": "AdministrativeArea", name: n });
+  const org = {
+    "@type": "ProfessionalService",
+    "@id": `${SITE}/#organization`,
+    name: o.name, legalName: o.legalName, alternateName: o.alternateName,
+    url: `${SITE}/`, description: o.description,
+    logo: o.logo, image: o.logo,
+    email: o.email, telephone: o.telephone,
+    address: a.streetAddress ? { "@type": "PostalAddress", ...a } : undefined,
+    areaServed: served.length ? served : undefined,
+    sameAs: o.sameAs && o.sameAs.length ? o.sameAs : undefined,
+  };
+  const website = {
+    "@type": "WebSite", "@id": `${SITE}/#website`,
+    url: `${SITE}/`, name: o.name, publisher: { "@id": `${SITE}/#organization` },
+    inLanguage: "en-US",
+  };
+  return JSON.parse(JSON.stringify({ "@context": "https://schema.org", "@graph": [org, website] }));
+}
+const SITE_GRAPH = siteGraph();
+
+/** The home page is canonical at the root, not at /index.html. */
+export const canonicalUrl = (u) => (u === `${SITE}/index.html` ? `${SITE}/` : u);
 
 /**
  * Scope every page needs. `open` controls the header's mobile drawer, which sits behind an
@@ -144,6 +188,26 @@ function applyHeaderCta(tpl) {
   return html;
 }
 
+/**
+ * Footer.
+ *
+ * Gwinnett is the home market (the Google Business Profile is in Dacula), so it gets a direct
+ * link from every page instead of sitting three clicks deep behind Georgia counties.
+ * The copyright line used "DeepThought Marketing", one of the retired name variants; it now
+ * uses the canonical name from aeo-data.json.
+ */
+function applyFooter(tpl) {
+  let html = tpl;
+  const ga = '<a href="georgia-counties.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Georgia counties</a>';
+  if (!html.includes(ga)) throw new Error("SiteFooter: Georgia counties link not found — site.zip changed");
+  html = html.replace(ga, ga + '\n      <a href="digital-marketing-gwinnett-county-ga.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Gwinnett County, GA</a>');
+
+  const copy = "© 2026 DeepThought Marketing. All rights reserved.";
+  if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");
+  html = html.replace(copy, `© ${new Date().getFullYear()} ${esc((AEO.organization || {}).name || "DeepThought")}. All rights reserved.`);
+  return html;
+}
+
 export async function loadShell(SRC) {
 
   const headerSrc = await readFile(join(SRC, "SiteHeader.dc.html"), "utf8");
@@ -158,7 +222,7 @@ export async function loadShell(SRC) {
 
   return {
     helmet,
-    partials: { SiteHeader: applyHeaderCta(templateFrom(headerSrc)), SiteFooter: templateFrom(footerSrc) },
+    partials: { SiteHeader: applyHeaderCta(templateFrom(headerSrc)), SiteFooter: applyFooter(templateFrom(footerSrc)) },
   };
 }
 
@@ -173,9 +237,12 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
       ? body + "\n  " + FOOTER_BLOCKS
       : body.slice(0, at) + FOOTER_BLOCKS + "\n  " + body.slice(at);
   }
-  const blocks = (Array.isArray(jsonld) ? jsonld : [jsonld]).filter(Boolean);
+  canonical = canonicalUrl(canonical);
+  const home = JSON.stringify(`${SITE}/index.html`);
+  const blocks = [SITE_GRAPH, ...(Array.isArray(jsonld) ? jsonld : [jsonld])].filter(Boolean);
   const ld = blocks
-    .map((b) => `<script type="application/ld+json">${JSON.stringify(b)}</script>`)
+    // any JSON-LD url pointing at /index.html follows the canonical to the root
+    .map((b) => `<script type="application/ld+json">${JSON.stringify(b).split(home).join(JSON.stringify(`${SITE}/`))}</script>`)
     .join("\n");
 
   return `<!DOCTYPE html>

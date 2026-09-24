@@ -19,14 +19,19 @@
       "postalCode": "30019",
       "addressCountry": "US"
     },
-    "areaServed": "United States",
+    "areaServed": [
+      "United States",
+      "Gwinnett County, Georgia"
+    ],
     "description": "DeepThought is a paid media execution platform for small and medium businesses. Its AI engine turns a plain-language description of a promotion into a live, managed, multi-channel campaign in under 60 seconds.",
     "logo": "https://deepthought.marketing/assets/logo.png",
     "sameAs": [
       "https://www.facebook.com/DeepThoughtDigitalMarketing/",
       "https://www.instagram.com/deepthoughtmarketing/",
       "https://nextdoor.com/page/deepthoughtmarketing-dacula-ga",
-      "https://www.google.com/maps/place/?q=place_id:ChIJjz4zyebr9YgR6fb9SILesk4"
+      "https://www.google.com/maps/place/?q=place_id:ChIJjz4zyebr9YgR6fb9SILesk4",
+      "https://www.youtube.com/@DeepThought.Marketing",
+      "https://www.linkedin.com/company/deepthoughtdigitalmarketing"
     ],
     "hideAddressLine": true
   },
