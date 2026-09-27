@@ -77,7 +77,7 @@ const NAV = {
 // on every post, so it would have carried the old claim across the whole blog.
 const CTA = {
   ctaHeading: "Want this run for you instead of read about?",
-  ctaBody: "Deep Thought runs search, social, streaming TV, and display for local businesses — for about half what an agency charges.",
+  ctaBody: "Deep Thought runs search, social, streaming TV, and display for local businesses — for a fraction of what an agency charges.",
   ctaLabel: "See pricing",
   ctaHref: "pricing.html",
 };

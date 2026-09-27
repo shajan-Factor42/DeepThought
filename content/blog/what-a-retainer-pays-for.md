@@ -68,6 +68,6 @@ If the answer is vague, or the question is treated as hostile, that is informati
 
 If most of your retainer is going to execution, you are probably in good shape, and the right move is to leave it alone. If most of it is going to coordination you would happily give up, you have two options. You can renegotiate the scope so fewer hours go to calls and decks and more go to the campaigns themselves. Or you can move to a model built around execution instead.
 
-That second option is what DeepThought is for. It consolidates your advertising platforms in one place and manages the campaigns for you, with a named marketing expert available when you want strategy rather than a standing meeting you have to attend. It runs about half a comparable agency retainer, month to month.
+That second option is what DeepThought is for. It consolidates your advertising platforms in one place and manages the campaigns for you, with a named marketing expert available when you want strategy rather than a standing meeting you have to attend. It costs a fraction of a comparable agency retainer, month to month.
 
 Whichever way you go, start with the split. It is the one number that tells you what your retainer is actually paying for.

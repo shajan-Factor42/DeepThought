@@ -23,7 +23,7 @@
       "United States",
       "Gwinnett County, Georgia"
     ],
-    "description": "DeepThought is an AI-powered paid media platform for small and medium businesses. Its AI recommends the channels, budget and audiences, drafts the ads, and reports results in plain English, across 22 ad products from search and social to streaming TV, for about half the cost of a comparable agency retainer.",
+    "description": "DeepThought is a done-for-you digital advertising service for small and medium businesses. We plan, buy, launch and manage ads across 22 advertising products. Our AI recommends the channels, budget and audiences, drafts the ads and writes plain-English reports; our team runs the media. It costs a fraction of a comparable agency retainer.",
     "logo": "https://deepthought.marketing/assets/logo.png",
     "sameAs": [
       "https://www.facebook.com/DeepThoughtDigitalMarketing/",
@@ -33,12 +33,23 @@
       "https://www.youtube.com/@DeepThought.Marketing",
       "https://www.linkedin.com/company/deepthoughtdigitalmarketing"
     ],
-    "hideAddressLine": true
+    "hideAddressLine": true,
+    "slogan": "Better ads. Fraction of the cost.",
+    "knowsAbout": [
+      "Digital advertising",
+      "Paid media management",
+      "Google Ads management",
+      "PPC management",
+      "Social media advertising",
+      "Connected TV advertising",
+      "Programmatic advertising",
+      "Local business marketing"
+    ]
   },
   "pricing": {
     "currency": "USD",
     "url": "https://deepthought.marketing/pricing.html",
-    "summary": "Per-product pricing, month to month with no contract, at roughly half what a comparable agency retainer costs. Media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. Budgets of any size can start; Deep Thought recommends the media mix that fits the budget, and the figure for a given business comes from a short call rather than a published rate card.",
+    "summary": "Per-product pricing, month to month with no contract, at a fraction of what a comparable agency retainer costs. Media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. Budgets of any size can start; Deep Thought recommends the media mix that fits the budget, and the figure for a given business comes from a short call rather than a published rate card.",
     "tiers": [
       {
         "name": "Starting Off",
@@ -64,7 +75,7 @@
     "Plain-language reporting on a chosen schedule",
     "Unlimited campaign launches",
     "Named marketing expert on every account",
-    "Month-to-month pricing at about half a comparable agency retainer"
+    "Month-to-month pricing at a fraction of a comparable agency retainer"
   ],
   "scrub": [],
   "faq": [
@@ -86,7 +97,7 @@
     },
     {
       "q": "How much does DeepThought cost?",
-      "a": "Pricing is per product and month to month, and it works out to roughly half what a comparable agency retainer costs. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. What you pay depends on which products you run, so the number comes from a short call rather than a rate card — budgets of any size can get started, and Deep Thought recommends the media mix that fits yours."
+      "a": "Pricing is per product and month to month, and it works out to a fraction of what a comparable agency retainer costs. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee. What you pay depends on which products you run, so the number comes from a short call rather than a rate card — budgets of any size can get started, and Deep Thought recommends the media mix that fits yours."
     },
     {
       "q": "Is DeepThought an agency?",
@@ -253,29 +264,29 @@
     },
     {
       "from": "A rate card, per product, month to month — about half what a comparable agency retainer costs.",
-      "to": "Per product, month to month — about half what a comparable agency retainer costs.",
+      "to": "Per product, month to month — a fraction of what a comparable agency retainer costs.",
       "files": [
         "serving-local-business.html"
       ]
     },
     {
       "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media spend goes to the platforms at cost, in your own accounts.",
-      "to": "Pricing is per product and works out to roughly half a comparable agency retainer, with no percentage-of-spend management fee.",
+      "to": "Pricing is per product and works out to a fraction of a comparable agency retainer, with no percentage-of-spend management fee.",
       "note": "county + state FAQ copy, visible text and JSON-LD"
     },
     {
       "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media goes to the platforms at cost in your own accounts.",
-      "to": "Pricing is per product and works out to roughly half a comparable agency retainer, with no percentage-of-spend management fee.",
+      "to": "Pricing is per product and works out to a fraction of a comparable agency retainer, with no percentage-of-spend management fee.",
       "note": "Georgia state page variant"
     },
     {
       "from": "Priced per product from our published rate card. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — our management fee does not.",
-      "to": "Priced per product at about half a comparable agency retainer. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — what we charge does not.",
+      "to": "Priced per product at a fraction of a comparable agency retainer. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — what we charge does not.",
       "note": "Florida state page variant"
     },
     {
       "from": "full execution, published pricing, no retainer.",
-      "to": "full execution at about half the cost, no retainer.",
+      "to": "full execution at a fraction of the cost, no retainer.",
       "note": "county + state lede; the pricing figure is no longer published"
     },
     {
@@ -288,7 +299,7 @@
     },
     {
       "from": "Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.",
-      "to": "Paid search, paid social, connected TV and display for local businesses — at about half the cost of an agency.",
+      "to": "Paid search, paid social, connected TV and display for local businesses — at a fraction of the cost of an agency.",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state meta/og/schema description",
       "min": 150
     },
@@ -306,7 +317,7 @@
     },
     {
       "from": "Paid media execution for small and medium businesses. You direct; Deep Thought executes.",
-      "to": "AI-powered ad management for small and medium businesses, at about half the cost of an agency.",
+      "to": "AI-powered ad management for small and medium businesses, at a fraction of the cost of an agency.",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — footer tagline",
       "min": 3400
     },
@@ -342,7 +353,7 @@
     },
     {
       "from": "Pricing is per product, published on our rate card, and roughly half what a comparable agency retainer costs.",
-      "to": "Pricing is per product and roughly half what a comparable agency retainer costs.",
+      "to": "Pricing is per product and costs a fraction of a comparable agency retainer.",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county body",
       "min": 3042
     },
@@ -393,7 +404,7 @@
     },
     {
       "from": "text-transform:uppercase; color:var(--text-muted)\">Campaign live in</div>\n      <div style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px\">60 seconds</div>\n      <div style=\"font-size:13px; color:var(--text-muted); margin-top:4px\">From your order to published</div>",
-      "to": "text-transform:uppercase; color:var(--text-muted)\">Cost vs. an agency</div>\n      <div style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px\">About half</div>\n      <div style=\"font-size:13px; color:var(--text-muted); margin-top:4px\">Of a comparable retainer</div>",
+      "to": "text-transform:uppercase; color:var(--text-muted)\">Compared with an agency</div>\n      <div style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px\">A fraction</div>\n      <div style=\"font-size:13px; color:var(--text-muted); margin-top:4px\">Of the retainer cost</div>",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state page stat",
       "min": 50
     },
@@ -426,7 +437,7 @@
     },
     {
       "from": "DeepThought is the paid media execution platform powered by an AI engine that takes you from idea to a live, expert, multi-channel campaign in under 60 seconds. You direct; Deep Thought executes.",
-      "to": "DeepThought’s AI picks your channels, budget and audience, writes your ads, and reports results in plain English. Our team runs it across Google, Facebook, streaming TV and more.",
+      "to": "DeepThought’s AI picks your channels, budget and audience, writes your ads, and reports results in plain English. Our team buys the media and manages every campaign across Google, Facebook, streaming TV and more. You approve; we run it.",
       "files": [
         "index.html"
       ],
@@ -471,7 +482,7 @@
     },
     {
       "from": "letter-spacing:-0.02em\">30+</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Channels in one flow</div>",
-      "to": "letter-spacing:-0.02em\">~50%</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Less than an agency</div>",
+      "to": "letter-spacing:-0.02em\">Plain English</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Reports you can read</div>",
       "files": [
         "index.html"
       ],
@@ -633,7 +644,7 @@
     },
     {
       "from": "Idea to a live, multi-channel campaign in under 60 seconds — for about half a comparable agency retainer.",
-      "to": "Better ads for about half a comparable agency retainer.",
+      "to": "Better ads for a fraction of a comparable agency retainer.",
       "files": [
         "media-kit.html"
       ],
@@ -651,7 +662,7 @@
     },
     {
       "from": "Describe your digital marketing campaign in plain language and its AI engine builds and launches it across every channel in under 60 seconds — at roughly half the cost of a comparable agency retainer.",
-      "to": "Its AI recommends the channels, budget and audiences, drafts the ads, and reports results in plain English — at roughly half the cost of a comparable agency retainer.",
+      "to": "Its AI recommends the channels, budget and audiences, drafts the ads, and reports results in plain English — at a fraction of the cost of a comparable agency retainer.",
       "files": [
         "media-kit.html"
       ],
@@ -759,7 +770,7 @@
     },
     {
       "from": ">30+</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Channels in one flow</div>",
-      "to": ">~50%</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Less than an agency</div>",
+      "to": ">Month to month</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">No long-term contract</div>",
       "files": [
         "media-kit.html"
       ],
@@ -774,6 +785,39 @@
       ],
       "min": 1,
       "note": "2026-09-26 hero trust line (CRO hero block; 'Gwinnett County' chosen over Buford/Dacula)"
+    },
+    {
+      "from": "Management runs about half a comparable agency retainer, and your exact price",
+      "to": "Management costs a fraction of a comparable agency retainer, and your exact price",
+      "min": 6382,
+      "note": "2026-09-27 pricing wording: 'a fraction of the cost' replaces 'about half' (SEO chat decision)"
+    },
+    {
+      "from": "Priced per product. About half what an agency charges.</h1>",
+      "to": "Priced per product. A fraction of the agency cost.</h1>",
+      "min": 1,
+      "note": "2026-09-27 pricing wording: 'a fraction of the cost' replaces 'about half' (SEO chat decision)",
+      "files": [
+        "pricing.html"
+      ]
+    },
+    {
+      "from": "<span style=\"color:var(--f42-primary-blue)\">50% less than agency</span>",
+      "to": "<span style=\"color:var(--f42-primary-blue)\">A fraction of the cost</span>",
+      "min": 1,
+      "note": "2026-09-27 pricing wording: 'a fraction of the cost' replaces 'about half' (SEO chat decision)",
+      "files": [
+        "pricing.html"
+      ]
+    },
+    {
+      "from": "About 50% less than an agency retainer.",
+      "to": "A fraction of an agency retainer.",
+      "min": 1,
+      "note": "2026-09-27 pricing wording: 'a fraction of the cost' replaces 'about half' (SEO chat decision)",
+      "files": [
+        "media-kit.html"
+      ]
     }
   ],
   "bannedClaims": [
@@ -808,6 +852,50 @@
     {
       "pattern": "you direct; deep ?thought executes|start directing",
       "why": "retired tagline tied to the prompt claim"
+    },
+    {
+      "pattern": "about half|roughly half|half the cost|half a comparable|half what (a|an) |~50%|50% less",
+      "why": "pricing wording is 'a fraction of the cost' everywhere (decided 2026-09-27)"
     }
-  ]
+  ],
+  "products": {
+    "Search advertising": [
+      "Google Search ads",
+      "Microsoft (Bing) Ads",
+      "Google Local Services Ads",
+      "Performance Max and Shopping ads"
+    ],
+    "Social advertising": [
+      "Facebook and Instagram ads",
+      "LinkedIn ads",
+      "Nextdoor ads",
+      "TikTok ads"
+    ],
+    "Video and streaming TV advertising": [
+      "YouTube ads",
+      "Connected TV (CTV/OTT) ads",
+      "Online video pre-roll"
+    ],
+    "Display advertising": [
+      "Programmatic display",
+      "Native ads",
+      "Retargeting",
+      "Geofencing"
+    ],
+    "Audio advertising": [
+      "Streaming audio ads",
+      "Podcast ads"
+    ],
+    "Email and direct mail": [
+      "Targeted email",
+      "Email match",
+      "Postal direct mail"
+    ],
+    "Local advertising": [
+      "Yelp ads"
+    ],
+    "Retail media": [
+      "Amazon ads"
+    ]
+  }
 }

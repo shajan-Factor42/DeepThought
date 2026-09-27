@@ -92,6 +92,7 @@ function siteGraph() {
     address: a.streetAddress ? { "@type": "PostalAddress", ...a } : undefined,
     areaServed: served.length ? served : undefined,
     sameAs: o.sameAs && o.sameAs.length ? o.sameAs : undefined,
+    slogan: o.slogan, knowsAbout: o.knowsAbout,
   };
   const website = {
     "@type": "WebSite", "@id": `${SITE}/#website`,

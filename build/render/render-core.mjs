@@ -85,13 +85,13 @@ const SERVING_STATES = ["GA", "FL"].map((ab) => {
 
 const PAGES = [
   { file: "index.html", title: "AI Paid Media Platform for Small Business | DeepThought",
-    description: "AI-powered ad management for local businesses. Google, Facebook, streaming TV and more, run for about half the cost of an agency.",
+    description: "AI-powered ad management for local businesses. Google, Facebook, streaming TV and more, run for a fraction of the cost of an agency.",
     acc: { count: 4, open: "open", toggle: "toggle", sign: "sign" },
     scope: { showLogos: false, heroHasMedia: true, gridColumns: "repeat(3, 1fr)",
              heroGhostStyle: BASE_SCOPE.ghostBtn, ctaWhiteStyle: BASE_SCOPE.whiteBtn } },
 
   { file: "pricing.html", title: "Pricing | DeepThought",
-    description: "Per-product pricing at about half a comparable agency retainer, month to month, with no annual contract.",
+    description: "Per-product pricing at a fraction of a comparable agency retainer, month to month, with no annual contract.",
     scope: { fullWidth: { style: { width: "100%" } },
              featuredCard: { style: { borderColor: "var(--border-hover)", boxShadow: "0 0 30px rgba(0,102,255,0.20)" } } } },
 
@@ -205,6 +205,26 @@ for (const def of PAGES) {
     name: def.title, description: def.description, url: canonical,
     isPartOf: { "@id": `${SITE}/#website` },
   }];
+
+  // The home page also names the service and the 22 products it covers (from aeo-data.json
+  // "products"). Only here, not in the per-page company node, so 3,400 pages don't carry it.
+  if (def.file === "index.html" && aeo.products) {
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "Service", "@id": `${SITE}/#service`,
+      name: "Done-for-you digital advertising management", serviceType: "Paid media management",
+      provider: { "@id": `${SITE}/#organization` },
+      areaServed: { "@type": "Country", name: "United States" },
+      audience: { "@type": "BusinessAudience", name: "Small and medium businesses" },
+      description: "We plan the media, buy and place it, build the ads, launch and manage the campaigns, and report results in plain English. Month to month, no long-term contract.",
+      hasOfferCatalog: {
+        "@type": "OfferCatalog", name: "Advertising products DeepThought runs",
+        itemListElement: Object.entries(aeo.products).map(([group, items]) => ({
+          "@type": "OfferCatalog", name: group,
+          itemListElement: items.map((name) => ({ "@type": "Offer", itemOffered: { "@type": "Service", name } })),
+        })),
+      },
+    });
+  }
 
   // The home page and FAQ page carry the canonical question set, from one source, so the
   // visible text and the schema cannot disagree — the mismatch faq-sync.mjs existed to police.

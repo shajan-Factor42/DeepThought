@@ -220,7 +220,7 @@ for (const slug of slugs) {
   // Shortened 2026-09-26 (SEO): the old "| Digital Marketing Agency |" middle pushed titles to
   // ~80 characters, past where Google truncates.
   const title = `Digital Marketing in ${place}, ${county.state} | DeepThought`;
-  const description = `Digital marketing in ${place}, ${county.stateName}. Paid search, paid social, connected TV and display for local businesses — a digital marketing agency alternative at about half the cost.`;
+  const description = `Digital marketing in ${place}, ${county.stateName}. Paid search, paid social, connected TV and display for local businesses — a digital marketing agency alternative at a fraction of the cost.`;
 
   // FAQPage ships as its own top-level block rather than nested under Service.mainEntity.
   // Google documents FAQPage as a page-level type; nesting it inside another entity is a
