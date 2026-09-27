@@ -82,8 +82,11 @@ for (const hole of ["tQuote", "tName", "tRole", "tBusiness", "tInitials", "statP
 /* ---------- the county object, as the runtime built it ---------- */
 
 function buildCounty(slug) {
+  // byslug() falls back to Fulton when it finds nothing, so only an exact slug match counts.
+  // The old check trusted any result for slugs without "-county-", which meant all 64
+  // Louisiana parishes and 29 Alaska boroughs rendered as Fulton County, GA (fixed 2026-09-26).
   const known = counties.byslug ? counties.byslug(slug) : null;
-  if (known && !slug.includes("-county-")) return known;
+  if (known && known.slug === slug) return known;
 
   const parsed = countyIndex.parse(slug);
   if (!parsed) return null;
@@ -91,7 +94,7 @@ function buildCounty(slug) {
   const gaFl = counties.ALL_COUNTIES.find(
     (c) => c.state === parsed.state && c.name.toLowerCase() === parsed.name.toLowerCase()
   );
-  if (gaFl) return gaFl;
+  if (gaFl) return { ...gaFl, type: parsed.type };
 
   const st = states.byab(parsed.state);
   if (!st) return null;
@@ -100,7 +103,7 @@ function buildCounty(slug) {
     name: parsed.name, seat: "", state: st.ab, stateName: st.name,
     region: st.region, regionLabel: st.regionLabel,
     cities: st.metros.slice(0, 2), industries: st.industries,
-    generated: true, stateSlug: st.slug,
+    generated: true, stateSlug: st.slug, type: parsed.type,
   };
 }
 
@@ -140,11 +143,11 @@ function directoryFor(county) {
 const nf = (n) => Number(n).toLocaleString("en-US");
 
 /** The stat strip, rebuilt from real figures. Omitted entirely when a county has no match. */
-function statStrip(slug) {
+function statStrip(slug, kind = "County") {
   const f = FACTS[slug];
   if (!f || !f.population) return "";
   const cells = [
-    ["County population", nf(f.population), `US Census estimate, ${f.populationYear}`],
+    [`${kind} population`, nf(f.population), `US Census estimate, ${f.populationYear}`],
     f.employed ? ["Employed workforce", nf(f.employed), `Bureau of Labor Statistics, ${f.employedYear}`] : null,
     f.avgIncome ? ["Average income", "$" + nf(f.avgIncome), "US Census, per capita"] : null,
   ].filter(Boolean);
@@ -195,7 +198,8 @@ for (const slug of slugs) {
   };
 
   let body = render(TEMPLATE, scope, partials);
-  const strip = statStrip(slug);
+  const stripKind = county.type ? county.type.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "County";
+  const strip = statStrip(slug, stripKind);
   if (strip) {
     const anchor = body.indexOf("</section>");
     if (anchor !== -1) body = body.slice(0, anchor + 10) + strip + body.slice(anchor + 10);
@@ -204,8 +208,19 @@ for (const slug of slugs) {
 
   const file = `digital-marketing-${slug}.html`;
   const canonical = `${SITE}/${file}`;
-  const title = `Digital Marketing in ${county.name} County, ${county.state} | Digital Marketing Agency | DeepThought`;
-  const description = `Digital marketing in ${county.name} County, ${county.stateName}. Paid search, paid social, connected TV and display for local businesses — a digital marketing agency alternative with campaigns live in 60 seconds.`;
+  // "Acadia Parish", "Anchorage Borough", "Gwinnett County".
+  const kind = county.type ? county.type.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "County";
+  const place = `${county.name} ${kind}`;
+  // The county copy says "{name} County" throughout. For a parish or borough, say what it is —
+  // but leave a neighbour across a state line ("Jefferson County, TX") alone.
+  const nameRe = kind === "County" ? null
+    : new RegExp(`${county.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")} County(?!, [A-Z]{2}\\b)`, "g");
+  const fixPlace = (t) => (nameRe && typeof t === "string" ? t.replace(nameRe, place) : t);
+  body = fixPlace(body);
+  // Shortened 2026-09-26 (SEO): the old "| Digital Marketing Agency |" middle pushed titles to
+  // ~80 characters, past where Google truncates.
+  const title = `Digital Marketing in ${place}, ${county.state} | DeepThought`;
+  const description = `Digital marketing in ${place}, ${county.stateName}. Paid search, paid social, connected TV and display for local businesses — a digital marketing agency alternative at about half the cost.`;
 
   // FAQPage ships as its own top-level block rather than nested under Service.mainEntity.
   // Google documents FAQPage as a page-level type; nesting it inside another entity is a
@@ -215,8 +230,11 @@ for (const slug of slugs) {
     "@type": "Service",
     serviceType: "Digital marketing",
     provider: { "@id": `${SITE}/#organization` },
-    areaServed: { "@type": "AdministrativeArea", name: `${county.name} County, ${county.stateName}` },
-    name: `Digital Marketing in ${county.name} County, ${county.stateName}`,
+    areaServed: {
+      "@type": "AdministrativeArea", name: `${place}, ${county.stateName}`,
+      containedInPlace: { "@type": "State", name: county.stateName },
+    },
+    name: `Digital Marketing in ${place}, ${county.stateName}`,
     description,
     url: canonical,
   }];
@@ -224,8 +242,8 @@ for (const slug of slugs) {
     jsonld.push({
       "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: copy.faq.map((f) => ({
-        "@type": "Question", name: f.q,
-        acceptedAnswer: { "@type": "Answer", text: f.a },
+        "@type": "Question", name: fixPlace(f.q),
+        acceptedAnswer: { "@type": "Answer", text: fixPlace(f.a) },
       })),
     });
   }

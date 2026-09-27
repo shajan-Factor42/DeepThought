@@ -27,6 +27,9 @@ const pages = new Set(files);
 
 let holes = [], brokenLinks = 0, brokenAssets = 0, noCanonical = [], badLd = [], emptyish = [];
 let noNap = [], noSocial = [], noAnalytics = [];
+// Two pages with one title means one of them is showing the wrong content — how 93 parish and
+// borough pages shipped as copies of Fulton County, GA until 2026-09-26.
+const titles = new Map();
 
 // Retired claims. The list lives in aeo-data.json ("bannedClaims") so a new decision is a data
 // edit, not a code change. Checked against visible text, attributes and JSON-LD — everything
@@ -51,6 +54,8 @@ for (const f of files) {
   if (!html.includes('id="nap-block"')) noNap.push(f);
   if (!html.includes('id="social-profiles"')) noSocial.push(f);
   if (!html.includes('src="analytics.js"')) noAnalytics.push(f);
+  const tm = /<title>([^<]*)<\/title>/.exec(html);
+  if (tm && !/content="[^"]*noindex/.test(html)) titles.set(tm[1], [...(titles.get(tm[1]) || []), f]);
   if (BANNED.length) {
     const text = html
       .replace(/<style[\s\S]*?<\/style>/gi, "")
@@ -113,6 +118,8 @@ try {
 
 const extraSitemaps = (await readdir(DIR)).filter((f) => /^sitemap.*\.xml$/.test(f) && f !== "sitemap.xml");
 
+const dupTitles = [...titles].filter(([, fs]) => fs.length > 1);
+
 const rows = [
   ["pages", files.length, files.length >= MIN_PAGES],
   ["template holes", holes.length, holes.length === 0],
@@ -125,6 +132,7 @@ const rows = [
   ["missing NAP block", noNap.length, noNap.length === 0],
   ["missing social links", noSocial.length, noSocial.length === 0],
   ["missing analytics", noAnalytics.length, noAnalytics.length === 0],
+  ["duplicate titles", dupTitles.length, dupTitles.length === 0],
   ["retired claims", BANNED.reduce((n, b) => n + b.pages.length, 0), BANNED.every((b) => b.pages.length === 0)],
   ["not in sitemap", sitemapMissing.length, sitemapMissing.length === 0],
   ["extra sitemap files", extraSitemaps.length, extraSitemaps.length === 0],
@@ -147,6 +155,7 @@ if (failed.length) {
   if (noNap.length) console.error("  no NAP: " + noNap.slice(0, 5).join(", "));
   if (noSocial.length) console.error("  no social links: " + noSocial.slice(0, 5).join(", "));
   if (noAnalytics.length) console.error("  no analytics tag: " + noAnalytics.slice(0, 5).join(", "));
+  for (const [t, fs] of dupTitles.slice(0, 5)) console.error(`  ${fs.length} pages titled "${t}": ${fs.slice(0, 3).join(", ")}`);
   for (const b of BANNED) if (b.pages.length) {
     console.error(`  retired claim /${b.re.source}/ on ${b.pages.length} page(s), e.g. ${b.pages.slice(0, 3).join(", ")}`);
     console.error(`    why: ${b.why}`);

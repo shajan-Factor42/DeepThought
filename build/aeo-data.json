@@ -287,12 +287,6 @@
       "note": "home page accordion copy, inline in the template"
     },
     {
-      "from": "a digital marketing agency alternative with campaigns live in 60 seconds.",
-      "to": "a digital marketing agency alternative at about half the cost.",
-      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county meta/og/schema description",
-      "min": 9423
-    },
-    {
       "from": "Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.",
       "to": "Paid search, paid social, connected TV and display for local businesses — at about half the cost of an agency.",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state meta/og/schema description",
@@ -368,7 +362,7 @@
       "from": "Our rate card is published, per product, and does not increase because you had a good quarter.",
       "to": "Our pricing is per product, and it does not increase because you had a good quarter.",
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
-      "min": 94
+      "min": 1
     },
     {
       "from": "Our rate card is published, priced per product, month to month, and campaigns run in your own ad accounts.",
@@ -771,6 +765,15 @@
       ],
       "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — stat",
       "min": 1
+    },
+    {
+      "from": "See how it works</span></a>\n          </div>",
+      "to": "See how it works</span></a>\n          </div>\n          <div style=\"font-size:14px; color:rgba(255,255,255,0.66); margin-top:20px\">Month-to-month · Based in Gwinnett County, GA · <a href=\"tel:+17702999583\" style=\"color:inherit; text-decoration:none\">770-299-9583</a></div>",
+      "files": [
+        "index.html"
+      ],
+      "min": 1,
+      "note": "2026-09-26 hero trust line (CRO hero block; 'Gwinnett County' chosen over Buford/Dacula)"
     }
   ],
   "bannedClaims": [

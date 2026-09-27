@@ -79,6 +79,7 @@ for (const ind of INDUSTRIES) {
     "@context": "https://schema.org", "@type": "Service",
     serviceType: `Digital marketing for ${ind.name.toLowerCase()}`,
     provider: { "@id": `${SITE}/#organization` },
+    areaServed: { "@type": "Country", name: "United States" },
     name: `Digital Marketing for ${ind.name}`, description, url: `${SITE}/${href(ind)}`,
   }];
   if ((ind.faq || []).length) {
