@@ -51,7 +51,7 @@ That means no management fee stacked on your spend, and no fee that quietly grow
 
 Stack that against a comparable retainer and more of the same budget ends up as advertising. Not because the work is thinner. Because building campaigns, trafficking them and producing creative is automated, and when the execution stops taking two weeks, the coordination layer that existed to manage those two weeks stops being necessary.
 
-Here’s the honest trade. Nobody is going to decide what your business should say this quarter. You describe the campaign you want, in plain English, and it gets built. If what you actually want is someone else holding that steering wheel, hire an agency. That’s a real service and it’s worth paying for.
+Here’s the honest trade. Nobody is going to decide what your business should say this quarter. You bring the goal and the budget; the AI recommends the channels and audiences and drafts the ads. If what you actually want is someone else holding that steering wheel, hire an agency. That’s a real service and it’s worth paying for.
 
 ## What are DSP minimums and why do they set your floor?
 

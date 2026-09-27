@@ -27,6 +27,13 @@ const pages = new Set(files);
 
 let holes = [], brokenLinks = 0, brokenAssets = 0, noCanonical = [], badLd = [], emptyish = [];
 let noNap = [], noSocial = [], noAnalytics = [];
+
+// Retired claims. The list lives in aeo-data.json ("bannedClaims") so a new decision is a data
+// edit, not a code change. Checked against visible text, attributes and JSON-LD — everything
+// except stylesheets and executable scripts. Added 2026-09-26 after retired copy survived on
+// ~3,000 pages for over a week because nothing failed when it was still there.
+const AEO = JSON.parse(await readFile(new URL("../aeo-data.json", import.meta.url), "utf8"));
+const BANNED = (AEO.bannedClaims || []).map((b) => ({ re: new RegExp(b.pattern, "i"), why: b.why, pages: [] }));
 // Schema that points at an entity the page never defines. The rebuild shipped 3,203 pages whose
 // Service and WebPage nodes referenced #organization with nothing defining it — every gate
 // passed because each block was valid JSON. This checks the references resolve.
@@ -44,6 +51,13 @@ for (const f of files) {
   if (!html.includes('id="nap-block"')) noNap.push(f);
   if (!html.includes('id="social-profiles"')) noSocial.push(f);
   if (!html.includes('src="analytics.js"')) noAnalytics.push(f);
+  if (BANNED.length) {
+    const text = html
+      .replace(/<style[\s\S]*?<\/style>/gi, "")
+      .replace(/<script(?![^>]*ld\+json)[\s\S]*?<\/script>/gi, "")
+      .replace(/&#39;|&#x27;/g, "'").replace(/&amp;/g, "&").replace(/&quot;/g, '"');
+    for (const b of BANNED) if (b.re.test(text)) b.pages.push(f);
+  }
   if (!/<link rel="canonical"/.test(html)) noCanonical.push(f);
 
   const defined = new Set(), referenced = new Set();
@@ -111,6 +125,7 @@ const rows = [
   ["missing NAP block", noNap.length, noNap.length === 0],
   ["missing social links", noSocial.length, noSocial.length === 0],
   ["missing analytics", noAnalytics.length, noAnalytics.length === 0],
+  ["retired claims", BANNED.reduce((n, b) => n + b.pages.length, 0), BANNED.every((b) => b.pages.length === 0)],
   ["not in sitemap", sitemapMissing.length, sitemapMissing.length === 0],
   ["extra sitemap files", extraSitemaps.length, extraSitemaps.length === 0],
 ];
@@ -132,6 +147,10 @@ if (failed.length) {
   if (noNap.length) console.error("  no NAP: " + noNap.slice(0, 5).join(", "));
   if (noSocial.length) console.error("  no social links: " + noSocial.slice(0, 5).join(", "));
   if (noAnalytics.length) console.error("  no analytics tag: " + noAnalytics.slice(0, 5).join(", "));
+  for (const b of BANNED) if (b.pages.length) {
+    console.error(`  retired claim /${b.re.source}/ on ${b.pages.length} page(s), e.g. ${b.pages.slice(0, 3).join(", ")}`);
+    console.error(`    why: ${b.why}`);
+  }
   if (sitemapMissing.length) console.error("  not in sitemap: " + sitemapMissing.slice(0, 5).join(", "));
   if (extraSitemaps.length) console.error("  extra sitemaps: " + extraSitemaps.join(", "));
   for (const [t, n] of [...missing].slice(0, 10)) console.error(`  ${n}x missing target: ${t}`);

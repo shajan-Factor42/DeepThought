@@ -34,6 +34,6 @@ If your question is "get this offer in front of everyone within twenty miles by 
 
 ## A sensible split
 
-The pattern that works for most local operators: keep the strategy and the offer — you know your market better than any vendor will — and outsource execution to whoever can do it across every channel, quickly, at a published price. Spend the savings on media.
+The pattern that works for most local operators: keep the strategy and the offer — you know your market better than any vendor will — and outsource execution to whoever can do it across every channel, quickly, at a clear price. Spend the savings on media.
 
 That is not a compromise version of an agency. For a business under a few million in revenue, it is usually the better structure.

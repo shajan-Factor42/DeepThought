@@ -4,15 +4,15 @@ slug: how-long-to-get-a-campaign-live
 category: "Ad Operations"
 date: 2026-09-17
 read: "5 min"
-stat: "60s"
-statLabel: "From change to live"
+stat: "3 wks"
+statLabel: "Typical build, mostly waiting"
 dek: "Most of a two-to-three week build is spent waiting, not working. Here is where the time actually goes, and what has to change before it can be compressed."
 author: "Marcus Ellery"
 authorRole: "Head of Media Operations"
 takeaways:
   - "A campaign build is a few hours of work spread across two or three weeks of calendar."
   - "Queues are not sensitive to how fast the people in them are, so hiring faster people does not shorten a wait."
-  - "Sixty seconds is what is left once every waiting step has been removed."
+  - "Speed comes from removing the waiting steps, not from rushing the work."
 ---
 ## The honest answer is a range
 
@@ -58,10 +58,10 @@ The context cannot be rebuilt from scratch each time, or you are paying for a di
 
 Remove those four waits and what remains is approval, which is the only step that genuinely requires a human to look at something and decide.
 
-## Where that leaves sixty seconds
+## What is left when the waiting is gone
 
-That is the whole claim behind a campaign going live in under a minute. It is not that the work happens faster than a person could do it. It is that none of it is waiting on anyone.
+That is the whole idea behind getting a campaign live as soon as possible. It is not that the work happens faster than a person could do it. It is that none of it is waiting on anyone.
 
 Setup happens once — your services, your service area, your budget, the way you want to be represented — captured a single time rather than re-established on a call before every build. After that, putting something new in market is a change rather than a rebuild. A new offer, a larger budget, two more towns. The creative, the platform builds and the checks run in one pass off that setup, and what comes back is a campaign to look at and approve.
 
-The approval step is still yours, and it should be. The campaigns run in your own ad accounts, so what gets built belongs to you. What changes is not the quality of the work. It is that the calendar stops being the unit of measurement.
+The approval step is still yours, and it should be. What changes is not the quality of the work. It is that the calendar stops being the unit of measurement.

@@ -73,7 +73,7 @@ for (const ind of INDUSTRIES) {
     others: others(ind.slug).map((o) => ({ name: o.name, short: o.short, href: href(o) })),
     counties: countiesFor(ind.slug),
   };
-  const description = `${ind.name} marketing — ${ind.short}. Paid search, paid social, connected TV and display, with campaigns live in 60 seconds.`;
+  const description = `${ind.name} marketing — ${ind.short}. Paid search, paid social, connected TV and display, at about half the cost of an agency.`;
   // FAQPage as its own top-level block, not nested inside Service.
   const jsonld = [{
     "@context": "https://schema.org", "@type": "Service",

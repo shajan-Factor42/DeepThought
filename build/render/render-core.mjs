@@ -84,23 +84,23 @@ const SERVING_STATES = ["GA", "FL"].map((ab) => {
 });
 
 const PAGES = [
-  { file: "index.html", title: "DeepThought — One Engine, Every Channel, Live in 60 Seconds",
-    description: "Deep Thought is an AI engine that consolidates all your digital marketing platforms in one place and manages it for you. Paid search, social, streaming TV and display for local businesses.",
+  { file: "index.html", title: "AI Paid Media Platform for Small Business | DeepThought",
+    description: "AI-powered ad management for local businesses. Google, Facebook, streaming TV and more, run for about half the cost of an agency.",
     acc: { count: 4, open: "open", toggle: "toggle", sign: "sign" },
     scope: { showLogos: false, heroHasMedia: true, gridColumns: "repeat(3, 1fr)",
              heroGhostStyle: BASE_SCOPE.ghostBtn, ctaWhiteStyle: BASE_SCOPE.whiteBtn } },
 
   { file: "pricing.html", title: "Pricing | DeepThought",
-    description: "Per-product pricing at about half a comparable agency retainer, month to month, with your media covered inside the price.",
+    description: "Per-product pricing at about half a comparable agency retainer, month to month, with no annual contract.",
     scope: { fullWidth: { style: { width: "100%" } },
              featuredCard: { style: { borderColor: "var(--border-hover)", boxShadow: "0 0 30px rgba(0,102,255,0.20)" } } } },
 
   { file: "faq.html", title: "Frequently Asked Questions | DeepThought",
-    description: "How DeepThought works, what it costs, who owns the ad accounts, and what happens if you leave.",
+    description: "How DeepThought works, what it costs, and what happens if you leave.",
     acc: { count: 11, open: "o", toggle: "t", sign: "s" } },
 
   { file: "product.html", title: "Product | DeepThought",
-    description: "One engine across paid search, paid social, connected TV, display and audio — briefed in plain language, live in 60 seconds." },
+    description: "AI that recommends your channels, budget and audiences, drafts your ads and reports in plain English — across search, social, streaming TV, display and audio." },
 
   { file: "serving-local-business.html", title: "Local Business Marketing | DeepThought",
     description: "Digital marketing for local businesses, built county by county.",
@@ -118,7 +118,7 @@ const PAGES = [
   { file: "case-studies.html", title: "Case Studies | DeepThought", description: "How local businesses run campaigns with Deep Thought." },
   { file: "media-kit.html", title: "Media Kit | DeepThought", description: "Brand assets, logos and product screenshots." },
   { file: "contact.html", title: "Contact | DeepThought", description: "Talk to Deep Thought about your market and your budget." },
-  { file: "book-a-demo.html", title: "Book a Demo | DeepThought", description: "See a campaign built and launched in 60 seconds." },
+  { file: "book-a-demo.html", title: "Book a Demo | DeepThought", description: "See how DeepThought plans, drafts and reports on your campaigns, and what it would cost for your business." },
   { file: "thank-you.html", title: "Thank You | DeepThought", description: "We'll be in touch shortly.", noindex: true },
 ];
 

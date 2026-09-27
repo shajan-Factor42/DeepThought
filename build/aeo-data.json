@@ -23,7 +23,7 @@
       "United States",
       "Gwinnett County, Georgia"
     ],
-    "description": "DeepThought is a paid media execution platform for small and medium businesses. Its AI engine turns a plain-language description of a promotion into a live, managed, multi-channel campaign in under 60 seconds.",
+    "description": "DeepThought is an AI-powered paid media platform for small and medium businesses. Its AI recommends the channels, budget and audiences, drafts the ads, and reports results in plain English, across 22 ad products from search and social to streaming TV, for about half the cost of a comparable agency retainer.",
     "logo": "https://deepthought.marketing/assets/logo.png",
     "sameAs": [
       "https://www.facebook.com/DeepThoughtDigitalMarketing/",
@@ -55,8 +55,8 @@
     ]
   },
   "featureList": [
-    "Idea to live campaign in under 60 seconds",
-    "30+ channels in one flow: paid search, social, connected TV, display",
+    "AI recommendations for channels, budget and audiences",
+    "22 ad products across search, social, streaming TV, display, audio, email and local",
     "AI-generated creative, copy, audiences, and channel mix",
     "Continuous post-launch optimization and creative rewrites",
     "Local competitive intelligence and per-location performance",
@@ -64,13 +64,13 @@
     "Plain-language reporting on a chosen schedule",
     "Unlimited campaign launches",
     "Named marketing expert on every account",
-    "Campaigns run in your own ad accounts with media billed at cost"
+    "Month-to-month pricing at about half a comparable agency retainer"
   ],
   "scrub": [],
   "faq": [
     {
       "q": "How fast can I launch a campaign?",
-      "a": "Under 60 seconds from prompt to live. Connect your ad accounts once; after that every campaign is a single description away."
+      "a": "As soon as possible. Once your accounts are set up, Deep Thought's AI recommends the channels, budget and audiences and drafts the ads, so there is no weeks-long production queue."
     },
     {
       "q": "What kinds of businesses use DeepThought?",
@@ -82,7 +82,7 @@
     },
     {
       "q": "Is there a long-term contract?",
-      "a": "No. Month to month, cancel any time. Your ad accounts and creative stay yours."
+      "a": "No. Month to month, cancel any time."
     },
     {
       "q": "How much does DeepThought cost?",
@@ -100,7 +100,7 @@
   "rewrite": [
     {
       "from": "One engine. Every channel. Sixty seconds.",
-      "to": "Meet Deep Thought. One Engine, Every Channel. Live in 60 seconds.",
+      "to": "Meet Deep Thought. One engine for every channel you run.",
       "files": [
         "product.html"
       ],
@@ -116,7 +116,7 @@
     },
     {
       "from": "Describe the promotion. Get a live campaign.",
-      "to": "Tell Deep Thought what you’re trying to run. It will do the rest.",
+      "to": "Tell us your goal and budget. Deep Thought does the planning.",
       "files": [
         "product.html"
       ],
@@ -210,7 +210,7 @@
     },
     {
       "from": "We run in your accounts. Spend goes straight to the platforms, unmarked up.",
-      "to": "We run in your accounts. Your media is covered inside the price, not billed on top.",
+      "to": "Your media is covered inside the price, not billed on top.",
       "files": [
         "pricing.html"
       ],
@@ -225,14 +225,14 @@
     },
     {
       "from": "Campaigns run in your ad accounts. Spend goes to the platforms unmarked up, and nothing is held hostage if you leave.",
-      "to": "Campaigns run in your ad accounts. Your media is covered inside the price, and nothing is held hostage if you leave.",
+      "to": "Month to month, and nothing is held hostage if you leave.",
       "files": [
         "serving-local-business.html"
       ]
     },
     {
       "from": "Priced per product from our published rate card. Month to month, in your own ad accounts, no annual contract.",
-      "to": "Priced per product, with your media covered inside the price. Month to month, in your own ad accounts, no annual contract.",
+      "to": "Priced per product. Month to month, no annual contract.",
       "files": [
         "thank-you.html"
       ]
@@ -253,38 +253,558 @@
     },
     {
       "from": "A rate card, per product, month to month — about half what a comparable agency retainer costs.",
-      "to": "Per product, month to month — about half what a comparable agency retainer costs, with media covered inside the price.",
+      "to": "Per product, month to month — about half what a comparable agency retainer costs.",
       "files": [
         "serving-local-business.html"
       ]
     },
     {
       "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media spend goes to the platforms at cost, in your own accounts.",
-      "to": "Pricing is per product and works out to roughly half a comparable agency retainer. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee.",
+      "to": "Pricing is per product and works out to roughly half a comparable agency retainer, with no percentage-of-spend management fee.",
       "note": "county + state FAQ copy, visible text and JSON-LD"
     },
     {
       "from": "Management is priced per product from our published rate card — a percentage of managed spend for search and social, a CPM for video, display and audio. Media goes to the platforms at cost in your own accounts.",
-      "to": "Pricing is per product and works out to roughly half a comparable agency retainer. Your media is covered inside the price rather than billed on top, and there is no percentage-of-spend management fee.",
+      "to": "Pricing is per product and works out to roughly half a comparable agency retainer, with no percentage-of-spend management fee.",
       "note": "Georgia state page variant"
     },
     {
       "from": "Priced per product from our published rate card. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — our management fee does not.",
-      "to": "Priced per product at about half a comparable agency retainer, with media covered inside the price. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — what we charge does not.",
+      "to": "Priced per product at about half a comparable agency retainer. South Florida clicks cost more than Panhandle clicks, so budgets differ by market — what we charge does not.",
       "note": "Florida state page variant"
     },
     {
       "from": "full execution, published pricing, no retainer.",
-      "to": "full execution, media covered inside the price, no retainer.",
+      "to": "full execution at about half the cost, no retainer.",
       "note": "county + state lede; the pricing figure is no longer published"
     },
     {
       "from": "No. Month to month, published pricing, cancel any time. Your ad accounts and creative stay yours.",
-      "to": "No. Month to month, cancel any time. Your ad accounts and creative stay yours.",
+      "to": "No. Month to month, cancel any time.",
       "files": [
         "index.html"
       ],
       "note": "home page accordion copy, inline in the template"
+    },
+    {
+      "from": "a digital marketing agency alternative with campaigns live in 60 seconds.",
+      "to": "a digital marketing agency alternative at about half the cost.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county meta/og/schema description",
+      "min": 9423
+    },
+    {
+      "from": "Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.",
+      "to": "Paid search, paid social, connected TV and display for local businesses — at about half the cost of an agency.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state meta/og/schema description",
+      "min": 150
+    },
+    {
+      "from": "our platform builds and launches the campaign in under a minute and manages it continuously, with a named marketing expert for strategy.",
+      "to": "our AI recommends the channels, budget and audiences, drafts the ads and manages the campaign continuously, with a named marketing expert for strategy.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county comparison copy",
+      "min": 6282
+    },
+    {
+      "from": "our platform builds and launches in under a minute and manages continuously, with a named expert for strategy.",
+      "to": "our AI recommends the mix, drafts the ads and manages continuously, with a named expert for strategy.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state comparison copy",
+      "min": 100
+    },
+    {
+      "from": "Paid media execution for small and medium businesses. You direct; Deep Thought executes.",
+      "to": "AI-powered ad management for small and medium businesses, at about half the cost of an agency.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — footer tagline",
+      "min": 3400
+    },
+    {
+      "from": "<a href=\"product.html#launch\" style=\"font-size:14px; color:var(--text-muted); text-decoration:none\">Launch in 60 seconds</a>",
+      "to": "<a href=\"product.html#launch\" style=\"font-size:14px; color:var(--text-muted); text-decoration:none\">How it works</a>",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — footer link label",
+      "min": 3400
+    },
+    {
+      "from": "published on our rate card rather than quoted per client.",
+      "to": "and your exact price comes from a short call.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county/state FAQ, visible + schema",
+      "min": 6382
+    },
+    {
+      "from": "rather than a physical office — campaigns publish in under a minute and are managed continuously.",
+      "to": "rather than a physical office — campaigns go live as soon as possible and are managed continuously.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county FAQ, visible + schema",
+      "min": 6382
+    },
+    {
+      "from": "You keep your own ad accounts, your own creative and your own data. ",
+      "to": "",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county body — own-accounts emphasis removed",
+      "min": 3042
+    },
+    {
+      "from": "You describe the promotion, and the campaign is built, published and managed continuously — creative, audiences, bids and channel mix —",
+      "to": "You tell us your goal and budget; our AI recommends the channels and audiences, drafts the ads, and manages the campaign continuously —",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county body — prompt claim",
+      "min": 3042
+    },
+    {
+      "from": "Pricing is per product, published on our rate card, and roughly half what a comparable agency retainer costs.",
+      "to": "Pricing is per product and roughly half what a comparable agency retainer costs.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county body",
+      "min": 3042
+    },
+    {
+      "from": "Because campaigns publish in under a minute, a promotion decided on Monday morning is live Monday morning —",
+      "to": "Because there is no production queue, a promotion can go live as soon as possible —",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — county regional variants",
+      "min": 3042
+    },
+    {
+      "from": "Because campaigns publish in under a minute, a promotion decided Monday morning is live Monday morning.",
+      "to": "Because there is no production queue, a promotion can go live as soon as possible.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state variant",
+      "min": 50
+    },
+    {
+      "from": "Our rate card is published, per product, and does not increase because you had a good quarter.",
+      "to": "Our pricing is per product, and it does not increase because you had a good quarter.",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 94
+    },
+    {
+      "from": "Our rate card is published, priced per product, month to month, and campaigns run in your own ad accounts.",
+      "to": "Our pricing is per product and month to month.",
+      "files": [
+        "digital-marketing-georgia.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Because campaigns publish in under a minute, the switch becomes a decision rather than a production cycle.",
+      "to": "With no production queue, the switch becomes a decision rather than a production cycle.",
+      "files": [
+        "digital-marketing-florida.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Because campaigns publish in under a minute, that switch is a decision rather than a production cycle.",
+      "to": "With no production queue, that switch is a decision rather than a production cycle.",
+      "files": [
+        "digital-marketing-chatham-county-ga.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "text-transform:uppercase; color:var(--text-muted)\">Campaign live in</div>\n      <div style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px\">60 seconds</div>\n      <div style=\"font-size:13px; color:var(--text-muted); margin-top:4px\">From your order to published</div>",
+      "to": "text-transform:uppercase; color:var(--text-muted)\">Cost vs. an agency</div>\n      <div style=\"font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.025em; margin-top:8px\">About half</div>\n      <div style=\"font-size:13px; color:var(--text-muted); margin-top:4px\">Of a comparable retainer</div>",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state page stat",
+      "min": 50
+    },
+    {
+      "from": "Under a minute from the moment you describe it. That is the point of the platform.",
+      "to": "As soon as possible once your accounts are set up. There is no weeks-long production queue.",
+      "files": [
+        "digital-marketing-gwinnett-county-ga.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 2
+    },
+    {
+      "from": "For small and medium businesses</div>",
+      "to": "For local and growing businesses</div>",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero eyebrow (CRO hero block)",
+      "min": 1
+    },
+    {
+      "from": ">Paid media execution for every campaign you run</h1>",
+      "to": ">Better ads. Fraction of the cost.</h1>",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero headline, decided 2026-09-26 in the CMO chat",
+      "min": 1
+    },
+    {
+      "from": "DeepThought is the paid media execution platform powered by an AI engine that takes you from idea to a live, expert, multi-channel campaign in under 60 seconds. You direct; Deep Thought executes.",
+      "to": "DeepThought’s AI picks your channels, budget and audience, writes your ads, and reports results in plain English. Our team runs it across Google, Facebook, streaming TV and more.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero subhead (CRO hero block)",
+      "min": 1
+    },
+    {
+      "from": ">Try DeepThought now</span></a>\n            <a href=\"book-a-demo.html\" style=\"text-decoration:none\">",
+      "to": ">Try DeepThought now</span></a>\n            <a href=\"product.html\" style=\"text-decoration:none\">",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero secondary button → product",
+      "min": 1
+    },
+    {
+      "from": ">Try DeepThought now</span>",
+      "to": ">Book a free demo</span>",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero primary button",
+      "min": 1
+    },
+    {
+      "from": "background:rgba(255,255,255,0.06); color:#fff\">Book a demo</span></a>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:36px; margin-top:56px",
+      "to": "background:rgba(255,255,255,0.06); color:#fff\">See how it works</span></a>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:36px; margin-top:56px",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero secondary button label",
+      "min": 1
+    },
+    {
+      "from": "letter-spacing:-0.02em\">60 sec</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Idea to live campaign</div>",
+      "to": "letter-spacing:-0.02em\">22</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Ad products</div>",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero stat 1",
+      "min": 1
+    },
+    {
+      "from": "letter-spacing:-0.02em\">30+</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Channels in one flow</div>",
+      "to": "letter-spacing:-0.02em\">~50%</div>\n              <div style=\"font-size:13px; color:rgba(255,255,255,0.6); margin-top:4px\">Less than an agency</div>",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero stat 2",
+      "min": 1
+    },
+    {
+      "from": "Not a template you fill in. Describe the promotion in plain language and Deep Thought builds the creative, the targeting, and the channel mix — then keeps working after launch.",
+      "to": "Not a template you fill in. Tell us your goal and budget. Deep Thought’s AI recommends the channels and audiences, drafts the ads, and reports results in plain English — then keeps working after launch.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — approved replacement line",
+      "min": 1
+    },
+    {
+      "from": "alt=\"Describe the promotion\"",
+      "to": "alt=\"Deep Thought campaign view\"",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">Idea to live in 60 seconds<",
+      "to": ">Your plan and ads, drafted for you<",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Describe it once. Deep Thought creates, localizes, and publishes across 30+ channels in one flow.",
+      "to": "Deep Thought recommends the mix and drafts the ads across 22 ad products — search, social, streaming TV, display and more.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Creative, copy, audiences, and channel mix assembled and published in under a minute.",
+      "to": "Creative, copy, audiences and channel mix, drafted and recommended for you.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Start directing. Let Deep Thought execute.",
+      "to": "Better ads. Fraction of the cost.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — closing CTA",
+      "min": 1
+    },
+    {
+      "from": "Most customers launch in under a minute.",
+      "to": "",
+      "files": [
+        "product.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Enter your order details, your targeting and the budget in plain language. Deep Thought returns a complete campaign — headlines, descriptions, images, audiences, placements, and budget splits — ready to review and publish.",
+      "to": "Tell us your goal, your area and your budget. Deep Thought’s AI recommends the channels, audiences and budget splits, and drafts the headlines, descriptions and images for you to review.",
+      "files": [
+        "product.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "height:1\">60s</div>\n        <div style=\"font-family:var(--font-display); font-size:16px; font-weight:700; margin-top:10px\">Idea to live</div>\n        <p style=\"font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 0\">Describe the promotion; Deep Thought builds and publishes it.</p>",
+      "to": "height:1\">22</div>\n        <div style=\"font-family:var(--font-display); font-size:16px; font-weight:700; margin-top:10px\">Ad products</div>\n        <p style=\"font-size:14.5px; line-height:1.6; color:var(--text-body); margin:8px 0 0\">Search, social, streaming TV, display, audio and more, from one place.</p>",
+      "files": [
+        "solutions.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Describe the offer; Deep Thought does the rest.",
+      "to": "Tell us the offer; Deep Thought drafts the plan and the ads.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Deep Thought launches it in a minute, the day you think of it.",
+      "to": "Deep Thought gets it live as soon as possible, not months later.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">Your accounts, your data<",
+      "to": ">No lock-in<",
+      "files": [
+        "serving-local-business.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — heading for the rewritten card",
+      "min": 1
+    },
+    {
+      "from": "Describe the promotion; it publishes in under a minute. No brief, no production queue, no waiting for a status call.",
+      "to": "Tell us the promotion; it goes live as soon as possible. No brief, no production queue, no waiting for a status call.",
+      "files": [
+        "serving-local-business.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">Campaigns live the same day<",
+      "to": ">Campaigns live fast<",
+      "files": [
+        "serving-local-business.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Cancel any time; your accounts and creative stay yours.",
+      "to": "Cancel any time.",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">Your ad accounts<",
+      "to": ">Simple billing<",
+      "files": [
+        "pricing.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — heading for the rewritten card",
+      "min": 1
+    },
+    {
+      "from": "Under 60 seconds once you're set up.",
+      "to": "As soon as possible once you're set up.",
+      "files": [
+        "faq.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Idea to a live, multi-channel campaign in under 60 seconds — for about half a comparable agency retainer.",
+      "to": "Better ads for about half a comparable agency retainer.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Idea to a live, expert, multi-channel campaign in under 60 seconds.",
+      "to": "Better ads. Fraction of the cost.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Describe your digital marketing campaign in plain language and its AI engine builds and launches it across every channel in under 60 seconds — at roughly half the cost of a comparable agency retainer.",
+      "to": "Its AI recommends the channels, budget and audiences, drafts the ads, and reports results in plain English — at roughly half the cost of a comparable agency retainer.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "an operator describes the digital marketing campaign they want in plain language; the platform writes the copy, builds the creative, selects audiences, allocates the channel mix, and publishes across more than 30 channels in under a minute.",
+      "to": "its AI recommends the channels, budget and audiences, drafts the copy and creative, and runs campaigns across 22 ad products.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": " Campaigns run inside the client's own ad accounts, so creative, audiences, conversion history, and reporting stay with the business.",
+      "to": "",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Describe the campaign in plain language; DeepThought builds and publishes it.",
+      "to": "Tell DeepThought the goal; its AI recommends the plan and drafts the ads.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">You describe it<",
+      "to": ">You set the goal<",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "The campaign you want to run, written in plain language. No briefs, no templates, no production cycle.",
+      "to": "Your offer, your area and your budget. No briefs, no templates, no production cycle.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": ">Deep Thought builds it<",
+      "to": ">Deep Thought drafts it<",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Creative, copy, audiences, and channel mix assembled and published across 30+ channels in under 60 seconds.",
+      "to": "Creative, copy, audiences and channel mix, recommended and drafted across 22 ad products.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "Creative, copy, audiences, and channel mix published across 30+ channels.",
+      "to": "Creative, copy, audiences and channel mix across 22 ad products.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 1
+    },
+    {
+      "from": "You direct. Deep Thought executes.",
+      "to": "Better ads. Fraction of the cost.",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy",
+      "min": 2
+    },
+    {
+      "from": "Under 60 seconds from prompt to live. Connect your ad accounts once; after that every campaign is a single description away.",
+      "to": "As soon as possible. Once your accounts are set up, Deep Thought's AI recommends the channels, budget and audiences and drafts the ads, so there is no weeks-long production queue.",
+      "files": [
+        "index.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — home visible FAQ — must match FAQPage schema from aeo-data",
+      "min": 1
+    },
+    {
+      "from": "02em\">60 sec</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Idea to live campaign</div>",
+      "to": "02em\">22</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Ad products</div>",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — stat",
+      "min": 1
+    },
+    {
+      "from": ">30+</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Channels in one flow</div>",
+      "to": ">~50%</div>\n          <div style=\"font-size:13px; color:rgba(255,255,255,0.62); margin-top:5px\">Less than an agency</div>",
+      "files": [
+        "media-kit.html"
+      ],
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — stat",
+      "min": 1
+    }
+  ],
+  "bannedClaims": [
+    {
+      "pattern": "describe (the|your) promotion|plain-language description|single description away|from prompt|prompt to live|briefed in plain language",
+      "why": "prompt-to-campaign claim retired 2026-09-17 — the app cannot build campaigns from a typed prompt"
+    },
+    {
+      "pattern": "60 seconds|60 sec\\b|under a minute|in under 60",
+      "why": "speed claim retired — approved wording is 'as soon as possible'"
+    },
+    {
+      "pattern": "published on our rate card|our rate card is published|published rate card|published pricing|published rates|see the rate card",
+      "why": "published pricing retired 2026-09-14 — the price comes from a call"
+    },
+    {
+      "pattern": "\\$350|\\$750",
+      "why": "price figures retired 2026-09-14"
+    },
+    {
+      "pattern": "30\\+ channels|more than 30 channels|channels in one flow",
+      "why": "channel count — the confirmed lineup is 22 ad products"
+    },
+    {
+      "pattern": "654-2216|6542216",
+      "why": "old phone number — current is 770-299-9583"
+    },
+    {
+      "pattern": "placeholder quote|marcus whitfield",
+      "why": "fabricated testimonials removed 2026-09-14"
+    },
+    {
+      "pattern": "you direct; deep ?thought executes|start directing",
+      "why": "retired tagline tied to the prompt claim"
     }
   ]
 }
