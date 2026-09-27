@@ -205,6 +205,14 @@ function applyFooter(tpl) {
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");
   html = html.replace(copy, `© ${new Date().getFullYear()} ${esc((AEO.organization || {}).name || "DeepThought")}. All rights reserved.`);
+
+  // Terms and Privacy pointed at "#" until 2026-09-26. They now go to the pages that
+  // render-legal.mjs builds from content/legal/.
+  for (const [label, href] of [["Terms", "terms.html"], ["Privacy", "privacy.html"]]) {
+    const dead = `<a href="#" style="color:var(--text-muted); text-decoration:none">${label}</a>`;
+    if (!html.includes(dead)) throw new Error(`SiteFooter: ${label} link not found — site.zip changed`);
+    html = html.replace(dead, `<a href="${href}" style="color:var(--text-muted); text-decoration:none">${label}</a>`);
+  }
   return html;
 }
 
@@ -259,6 +267,7 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <meta property="og:url" content="${canonical}">
 <meta name="robots" content="${noindex ? "noindex,follow" : "index,follow"}">
 ${ld}
+${ANALYTICS}
 ${helmet}
 <style>${COMPONENT_CSS}
 [data-hdr-drawer]{display:none}
@@ -271,6 +280,16 @@ ${NAV_SCRIPT}
 </html>
 `;
 }
+
+/**
+ * Google Tag Manager (GTM-KFDRCF2X, which carries GA4 G-GTDGM2MZT8) plus form-submit and
+ * thank-you conversion events. analytics.js comes from site.zip and is copied with the assets.
+ *
+ * The browser-assembled pages loaded it; the static rebuild on 2026-09-15 dropped the tag, and
+ * the site ran with no analytics until 2026-09-26. verify.mjs now fails the build if any
+ * page is missing it.
+ */
+const ANALYTICS = `<script src="analytics.js" async></script>`;
 
 /**
  * The only JavaScript the rebuilt site ships. Opening the mobile nav is genuine interactivity,

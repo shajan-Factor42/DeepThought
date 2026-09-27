@@ -54,6 +54,7 @@ await run("render-counties.mjs");
 await run("render-states.mjs");
 await run("render-industries.mjs");
 await run("render-blog.mjs", ["--content", join(CONTENT, "blog")]);
+await run("render-legal.mjs", ["--content", join(CONTENT, "legal")]);
 
 /* ---------- 2. assets ---------- */
 

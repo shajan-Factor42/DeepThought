@@ -26,7 +26,7 @@ const files = (await readdir(DIR)).filter((f) => f.endsWith(".html")).sort();
 const pages = new Set(files);
 
 let holes = [], brokenLinks = 0, brokenAssets = 0, noCanonical = [], badLd = [], emptyish = [];
-let noNap = [], noSocial = [];
+let noNap = [], noSocial = [], noAnalytics = [];
 // Schema that points at an entity the page never defines. The rebuild shipped 3,203 pages whose
 // Service and WebPage nodes referenced #organization with nothing defining it — every gate
 // passed because each block was valid JSON. This checks the references resolve.
@@ -43,6 +43,7 @@ for (const f of files) {
   // which was 3,032 of them. They render with the footer now, so every page should carry them.
   if (!html.includes('id="nap-block"')) noNap.push(f);
   if (!html.includes('id="social-profiles"')) noSocial.push(f);
+  if (!html.includes('src="analytics.js"')) noAnalytics.push(f);
   if (!/<link rel="canonical"/.test(html)) noCanonical.push(f);
 
   const defined = new Set(), referenced = new Set();
@@ -109,6 +110,7 @@ const rows = [
   ["near-empty pages", emptyish.length, emptyish.length === 0],
   ["missing NAP block", noNap.length, noNap.length === 0],
   ["missing social links", noSocial.length, noSocial.length === 0],
+  ["missing analytics", noAnalytics.length, noAnalytics.length === 0],
   ["not in sitemap", sitemapMissing.length, sitemapMissing.length === 0],
   ["extra sitemap files", extraSitemaps.length, extraSitemaps.length === 0],
 ];
@@ -129,6 +131,7 @@ if (failed.length) {
   if (emptyish.length) console.error("  near-empty: " + emptyish.slice(0, 5).join(", "));
   if (noNap.length) console.error("  no NAP: " + noNap.slice(0, 5).join(", "));
   if (noSocial.length) console.error("  no social links: " + noSocial.slice(0, 5).join(", "));
+  if (noAnalytics.length) console.error("  no analytics tag: " + noAnalytics.slice(0, 5).join(", "));
   if (sitemapMissing.length) console.error("  not in sitemap: " + sitemapMissing.slice(0, 5).join(", "));
   if (extraSitemaps.length) console.error("  extra sitemaps: " + extraSitemaps.join(", "));
   for (const [t, n] of [...missing].slice(0, 10)) console.error(`  ${n}x missing target: ${t}`);
