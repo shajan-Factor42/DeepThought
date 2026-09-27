@@ -112,6 +112,13 @@ jobs:
           fi
           echo "organization.logo resolves: $rel"
 
+      # IndexNow, part 1. Compares every page with the manifest the last deploy published and
+      # works out which ones actually changed. Unchanged pages keep their old sitemap <lastmod>
+      # instead of all 3,400 being stamped with today's date, which taught Google to ignore it.
+      # Runs before verify so the gate checks the sitemap that ships.
+      - name: IndexNow - find changed pages, fix sitemap dates
+        run: node build/indexnow.mjs prepare --dir _site --list indexnow-urls.txt
+
       # The final gate runs on the bytes that deploy, after the overlay and the two injection
       # steps have had their turn. Checks page count, template holes, every internal link and
       # asset reference, canonicals, JSON-LD validity, near-empty pages, and that every
@@ -125,3 +132,10 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+
+      # IndexNow, part 2. Pages and the key file are live now, so tell Bing (which also feeds
+      # ChatGPT search and Copilot) exactly which URLs changed. Never fails the deploy: a missed
+      # ping only costs speed, and the next deploy re-diffs against what is live.
+      - name: IndexNow - notify Bing and other engines
+        continue-on-error: true
+        run: node build/indexnow.mjs submit --list indexnow-urls.txt
