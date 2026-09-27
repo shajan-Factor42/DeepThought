@@ -118,9 +118,59 @@ const PAGES = [
   { file: "case-studies.html", title: "Case Studies | DeepThought", description: "How local businesses run campaigns with Deep Thought." },
   { file: "media-kit.html", title: "Media Kit | DeepThought", description: "Brand assets, logos and product screenshots." },
   { file: "contact.html", title: "Contact | DeepThought", description: "Talk to Deep Thought about your market and your budget." },
-  { file: "book-a-demo.html", title: "Book a Demo | DeepThought", description: "See how DeepThought plans, drafts and reports on your campaigns, and what it would cost for your business." },
+  { file: "book-a-demo.html", title: "Book a Demo | DeepThought", description: "Book a free 15-minute call. See how DeepThought would run your ads, and what it would cost for your business.",
+    transform: bookingPage },
   { file: "thank-you.html", title: "Thank You | DeepThought", description: "We'll be in touch shortly.", noindex: true },
 ];
+
+/**
+ * Book a Demo: the Web3Forms form becomes a Google Calendar booking page (decided 2026-09-26),
+ * so visitors pick a time instead of waiting for an email. The page copy moves to the free
+ * 15-minute call, and the "Dana Lindsey" testimonial goes — it was invented, and the 14 Sept
+ * decision removed all testimonials.
+ *
+ * Every swap asserts its anchor, so a re-exported site.zip that changes this page fails the
+ * build instead of shipping a half-edited page.
+ */
+const BOOKING_URL = "https://calendar.app.google/Bw7NXyTw6HX7V8bG8";
+const BOOKING_EMBED = "https://calendar.google.com/calendar/appointments/schedules/AcZssZ1eU851T4twxrt8zMAc_4ecUPvZpyRuSnplTYItbVm7rnAGBMkBPzkl6y7B_FO77cHU7Xj4Lvmg?gv=true";
+
+function bookingPage(html) {
+  const swap = (from, to, label) => {
+    if (!html.includes(from)) throw new Error(`book-a-demo: ${label} not found — site.zip changed`);
+    html = html.replace(from, to);
+  };
+  swap(">Bring one promotion. We'll build it on the call.</h1>", ">Pick a time. Get a straight answer.</h1>", "headline");
+  swap("Twenty minutes, no slides. Tell us the offer and the market and you'll watch Deep Thought produce the campaign live — creative, targeting, channel mix, and budget.",
+       "Fifteen minutes, no slides. Tell us your business, your area and your budget, and we'll show you how Deep Thought would run your ads — and what it would cost.", "lede");
+  swap(">A live build</div>", ">A look at the platform</div>", "step 2 title");
+  swap("Your real promotion, built in the product while you watch.",
+       "How the AI would plan your channels, audiences and ads, shown in the product.", "step 2 text");
+
+  // the invented testimonial card: from its opening <div class="ds-card"> to the matching </div>
+  const quote = html.indexOf("Dana Lindsey");
+  if (quote === -1) throw new Error("book-a-demo: testimonial not found — site.zip changed");
+  const cardStart = html.lastIndexOf('<div class="ds-card"', quote);
+  let depth = 0, k = cardStart, cardEnd = -1;
+  const tag = /<div\b|<\/div>/g;
+  tag.lastIndex = cardStart;
+  for (let m; (m = tag.exec(html)); ) {
+    depth += m[0] === "</div>" ? -1 : 1;
+    if (depth === 0) { cardEnd = m.index + m[0].length; break; }
+  }
+  if (cardStart === -1 || cardEnd < quote) throw new Error("book-a-demo: testimonial card bounds not found");
+  html = html.slice(0, cardStart) + html.slice(cardEnd);
+
+  // the form -> the calendar
+  const f0 = html.indexOf("<form"), f1 = html.indexOf("</form>");
+  if (f0 === -1 || f1 === -1) throw new Error("book-a-demo: form not found — site.zip changed");
+  html = html.slice(0, f0) + `<h2 style="font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-0.02em; margin:0 0 6px">Pick a time</h2>
+      <p style="font-size:14.5px; line-height:1.55; color:var(--text-body); margin:0 0 16px">Free 15-minute call. Choose a slot and you'll get a calendar invite right away.</p>
+      <style>@media (max-width:640px){.ds-card:has(.dt-booking){padding:24px 12px!important}.ds-card:has(.dt-booking)>h2,.ds-card:has(.dt-booking)>p{padding:0 8px}.dt-booking{height:760px!important}}</style>
+      <iframe class="dt-booking" src="${BOOKING_EMBED}" title="Book a free 15-minute call with DeepThought" loading="lazy" style="border:0; width:100%; height:640px; border-radius:12px; background:#fff" frameborder="0"></iframe>
+      <p style="font-size:13.5px; line-height:1.55; color:var(--text-muted); margin:14px 0 0">Calendar not loading? <a href="${BOOKING_URL}" target="_blank" rel="noopener" onclick="window.dataLayer&amp;&amp;dataLayer.push({event:'demo_booking_link_click'})" style="color:var(--color-accent)">Open the booking page</a> or call <a href="tel:+17702999583" style="color:var(--color-accent)">770-299-9583</a>.</p>` + html.slice(f1 + "</form>".length);
+  return html;
+}
 
 /** Pages that exist only to serve query-string URLs; every target now has its own page. */
 // us-map.html rendered an interactive SVG map from JavaScript. Without it the page is 19
@@ -145,7 +195,8 @@ for (const def of PAGES) {
     scope = { ...scope, ...signs(def.acc.count, def.acc.sign) };
   }
 
-  const body = render(tpl, scope, partials);
+  let body = render(tpl, scope, partials);
+  if (def.transform) body = def.transform(body);
   if (body.includes("{{")) holes.push(def.file);
 
   const canonical = `${SITE}/${def.file}`;
