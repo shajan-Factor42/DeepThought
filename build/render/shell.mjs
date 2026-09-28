@@ -259,6 +259,7 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="facebook-domain-verification" content="tvqcov6zwybriz40h11vvolpgs5s3x">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
