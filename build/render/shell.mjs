@@ -244,7 +244,7 @@ export async function loadShell(SRC) {
  * Wrap rendered body markup in a complete document.
  * `jsonld` may be a single object or an array of blocks.
  */
-export function page({ title, description, canonical, jsonld, body, helmet, noindex = false }) {
+export function page({ title, description, canonical, jsonld, body, helmet, noindex = false, image = null, imageAlt = null, ogType = "website" }) {
   if (FOOTER_BLOCKS) {
     const at = body.lastIndexOf("<footer");
     body = at === -1
@@ -274,13 +274,13 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <link rel="canonical" href="${canonical}">
 <meta property="og:title" content="${esc(title)}">
 <meta property="og:description" content="${esc(description)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="${ogType}">
 <meta property="og:url" content="${canonical}">
 <meta property="og:site_name" content="DeepThought">
-<meta property="og:image" content="${SITE}/og-image.png">
+<meta property="og:image" content="${image ? `${SITE}/${image}` : `${SITE}/og-image.png`}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="DeepThought: Better ads. Fraction of the cost.">
+<meta property="og:image:alt" content="${esc(imageAlt || "DeepThought: Better ads. Fraction of the cost.")}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="${noindex ? "noindex,follow" : "index,follow"}">
 ${ld}

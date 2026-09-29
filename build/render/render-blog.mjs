@@ -25,7 +25,9 @@ const OUT = resolvePath(arg("out", "_site"));
 const { helmet, partials } = await loadShell(SRC);
 const countyIndex = await import(join(SRC, "county-index.js").replace(/^/, "file://"));
 
-const POST_TPL = templateFrom(await readFile(join(SRC, "Blog Post.dc.html"), "utf8"));
+const POST_TPL = templateFrom(await readFile(join(SRC, "Blog Post.dc.html"), "utf8"))
+  // Byline brand name is one word (decided 2026-09). The template hard-codes two.
+  .replace("{{ authorRole }}, Deep Thought<", "{{ authorRole }}, DeepThought<");
 
 // The chips were buttons wired to a client-side filter. Make them links to the category pages.
 let INDEX_TPL = templateFrom(await readFile(join(SRC, "Blog.dc.html"), "utf8"))
@@ -90,15 +92,25 @@ const rendered = [];
 
 for (const post of posts) {
   const scope = { ...BASE_SCOPE, ...post, ...NAV, ...CTA, related: relatedFor(post), counties: countiesFor(post.slug) };
-  const body = render(POST_TPL, scope, partials);
+  let body = render(POST_TPL, scope, partials);
   if (body.includes("{{")) holes++;
+
+  // Header image: placed between the byline and the stat card.
+  if (post.image) {
+    const anchor = '<section style="max-width:760px; margin:0 auto; padding:32px 40px 0">';
+    const at = body.indexOf(anchor);
+    if (at === -1) throw new Error(`${post.slug}: can't find where to place the header image`);
+    const fig = `<section style="max-width:760px; margin:0 auto; padding:28px 40px 0"><img src="${esc(post.image)}" alt="${esc(post.imageAlt)}" width="1200" height="630" loading="eager" style="display:block; width:100%; height:auto; border-radius:16px"></section>\n\n`;
+    body = body.slice(0, at) + fig + body.slice(at);
+  }
 
   const file = postHref(post);
   const canonical = `${SITE}/${file}`;
   const jsonld = [{
     "@context": "https://schema.org", "@type": "BlogPosting",
     headline: post.title, description: post.dek,
-    datePublished: post.iso, articleSection: post.cat,
+    datePublished: post.iso, dateModified: post.updated, articleSection: post.cat,
+    ...(post.image ? { image: `${SITE}/${post.image}` } : {}),
     author: { "@type": "Organization", name: "DeepThought" },
     publisher: { "@id": `${SITE}/#organization` },
     mainEntityOfPage: canonical, inLanguage: "en-US",
@@ -114,7 +126,8 @@ for (const post of posts) {
   }
 
   await writeFile(join(OUT, file),
-    page({ title: `${post.title} | Deep Thought`, description: post.dek, canonical, jsonld, body, helmet }),
+    page({ title: `${post.seoTitle} | DeepThought`, description: post.description, canonical, jsonld, body, helmet,
+      image: post.image || null, imageAlt: post.image ? post.imageAlt : null, ogType: "article" }),
     "utf8");
   rendered.push(file); written++;
 }
@@ -160,7 +173,7 @@ async function writeIndex({ file, selected, list, title, description }) {
 
 await writeIndex({
   file: "blog.html", selected: "All", list: posts,
-  title: "Blog | Deep Thought",
+  title: "Blog | DeepThought",
   description: "Benchmarks, pricing teardowns and operating playbooks from the team that runs campaigns across every channel.",
 });
 
@@ -168,7 +181,7 @@ for (const c of categories) {
   const list = posts.filter((p) => p.cat === c);
   await writeIndex({
     file: catHref(c), selected: c, list,
-    title: `${c} | Deep Thought Blog`,
+    title: `${c} | DeepThought Blog`,
     description: `${list.length} article${list.length === 1 ? "" : "s"} on ${c.toLowerCase()} from Deep Thought.`,
   });
 }

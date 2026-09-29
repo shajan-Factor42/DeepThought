@@ -34,6 +34,6 @@ It also creates a quiet incentive against the recommendation you most need to he
 
 ## Questions that get straight answers
 
-Ask for the fee as a percentage of your total budget, all-in. Ask what happens to the fee if your spend drops by half. Ask what is included when you want a new promotion live this week. Ask who does the work — the person in the room, or a team you will never meet.
+Ask for the fee as a percentage of your total budget, all-in. Then work out your [working media ratio](blog-working-media-ratio.html): the share that actually buys ads. Ask what happens to the fee if your spend drops by half. Ask what is included when you want a new promotion live this week. Ask who does the work — the person in the room, or a team you will never meet.
 
 Providers who price transparently answer these quickly. That responsiveness is itself the signal.

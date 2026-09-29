@@ -21,6 +21,11 @@
  *   stat: "30-40%"
  *   statLabel: "What agencies charge on top of your media"
  *   dek: "One or two sentences that appear under the title and in the index."
+ *   seoTitle: "Shorter title for search results"   # optional; defaults to title
+ *   description: "Meta description, ~155 characters" # optional; defaults to dek
+ *   image: blog/working-media.png      # optional; file lives in build/static/blog/
+ *   imageAlt: "What the image shows"   # optional; defaults to title
+ *   updated: 2026-09-30                # optional; dateModified, defaults to date
  *   author: "Deep Thought Research"
  *   authorRole: "Research Team"
  *   takeaways:
@@ -163,7 +168,16 @@ export function postFrom(src, file) {
   return {
     slug,
     title: String(data.title),
+    // Optional: a shorter <title> (search results cut off around 60 characters) and a shorter
+    // meta description. The on-page headline and dek stay as written.
+    seoTitle: String(data.seoTitle || data.title),
+    description: String(data.description || data.dek),
     dek: String(data.dek),
+    // Optional header image, 1200x630 PNG in build/static/blog/. Shown under the byline and
+    // used as the share image (og:image) and the BlogPosting image.
+    image: data.image ? String(data.image) : "",
+    imageAlt: String(data.imageAlt || data.title),
+    updated: String(data.updated || data.date),
     cat: String(data.category),
     iso: String(data.date),
     date: displayDate(data.date),

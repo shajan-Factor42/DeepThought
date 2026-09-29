@@ -30,7 +30,7 @@ Each line was justified when it was added. Nobody ever re-adds them up.
 
 Pull three months of statements and sort every marketing dollar into two columns: money that a platform received to show your ad, and everything else. Retainers, tools, contractors, and the loaded cost of internal time all go in the second column.
 
-Divide column two by the total. Under 25 percent is healthy. Between 25 and 40 percent is common and worth attacking. Above 40 percent means you are paying more to run your marketing than to be seen.
+Divide column two by the total. (The flip side, column one divided by the total, is your [working media ratio](blog-working-media-ratio.html).) Under 25 percent is healthy. Between 25 and 40 percent is common and worth attacking. Above 40 percent means you are paying more to run your marketing than to be seen.
 
 ## What good looks like
 

@@ -37,6 +37,6 @@ The barrier is almost never data quality. It is that nobody ever made it a task.
 
 ## Keep ownership
 
-Whoever runs your media should hold access to your accounts and audiences, not title to them. If a provider builds audiences that live in their own account, you are renting your own customer list back.
+Whoever runs your media should hold access to your accounts and audiences, not title to them. If a provider builds audiences that live in their own account, you are renting your own customer list back. Run this [ad account ownership checklist](blog-who-owns-your-ad-accounts.html) before you sign.
 
 Get it in writing before the first upload, not after the relationship sours.

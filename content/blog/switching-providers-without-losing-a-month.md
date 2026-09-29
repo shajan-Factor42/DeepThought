@@ -23,7 +23,7 @@ Every one of those is a sequencing problem, not a vendor problem.
 
 ## Before you give notice
 
-Confirm you own the ad accounts, pixels, audiences, and creative. If you do not, that is the first negotiation — and the reason to have it in writing next time.
+Confirm you own the ad accounts, pixels, audiences, and creative. If you do not, that is the first negotiation — and the reason to have it in writing next time. See [how to check who owns your ad accounts](blog-who-owns-your-ad-accounts.html).
 
 Export ninety days of performance data yourself. Screenshot the account structures. Note your current cost per lead by channel so you have a baseline nobody can dispute later.
 

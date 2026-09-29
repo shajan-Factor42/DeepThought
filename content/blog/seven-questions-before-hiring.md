@@ -19,7 +19,7 @@ takeaways:
 
 Ask it first because it reframes the whole conversation from price to value. You want total budget in, media out, as a percentage.
 
-Good answers are specific and immediate. Bad answers explain why the question is complicated. It is not complicated — it is division.
+Good answers are specific and immediate. Bad answers explain why the question is complicated. It is not complicated — it is division. [How to calculate your working media ratio](blog-working-media-ratio.html) shows the math.
 
 ## Two: who will actually do the work?
 
@@ -43,7 +43,7 @@ Be suspicious of reporting that leads with impressions, reach, or engagement rat
 
 ## Five: who owns the accounts and the data?
 
-Your ad accounts, pixels, audiences, creative, and historical performance should be yours, with the provider holding access. Get it in writing, including what happens to history on termination.
+Your ad accounts, pixels, audiences, creative, and historical performance should be yours, with the provider holding access. Get it in writing, including what happens to history on termination. The [ad account ownership checklist](blog-who-owns-your-ad-accounts.html) shows how to check Google Ads and Meta, with wording you can send.
 
 This one question determines whether leaving is an afternoon of admin or a rebuild from zero. It is also the clearest signal of how a provider thinks about the relationship.
 

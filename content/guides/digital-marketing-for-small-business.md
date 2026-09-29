@@ -67,7 +67,7 @@ Two things those averages hide. Emergency searches ("burst pipe," "no heat") cos
 
 The help is where budgets differ most. Agencies usually charge a monthly retainer, a percentage of your ad spend, or both. A freelancer usually charges by the hour or a flat monthly fee. Doing it yourself costs your time. We break down real agency fee ranges in [How much does digital marketing cost for a small business?](blog-digital-marketing-cost-small-business-gwinnett-county.html) and what a retainer actually pays for in [What your agency invoice is actually buying](blog-what-your-invoice-buys.html).
 
-The question to ask of any quote: **how much of this money reaches a customer?** The more of your budget that goes to the ads themselves, the more your campaigns have to work with.
+The question to ask of any quote: **how much of this money reaches a customer?** The more of your budget that goes to the ads themselves, the more your campaigns have to work with. That share is your [working media ratio](blog-working-media-ratio.html), and you can work it out from one invoice.
 
 ## Who should run it? Four options compared
 
@@ -84,7 +84,7 @@ Every small business ends up in one of four places. None is right for everyone.
 
 **A freelancer** is a good fit for one channel done well. The limits are hours and range: one person rarely covers search, social, video and reporting all at once.
 
-**An agency** is the right answer when you want someone else to own the strategy — what you say, to whom, and why — and your budget can carry the fee and still leave enough for the ads. Good agencies earn their fee. Ask how much of your total will reach customers, and who will actually work on your account. [Seven questions before you let anyone touch your ad budget](blog-seven-questions-before-hiring.html) is a checklist for that conversation.
+**An agency** is the right answer when you want someone else to own the strategy — what you say, to whom, and why — and your budget can carry the fee and still leave enough for the ads. Good agencies earn their fee. Ask how much of your total will reach customers, and who will actually work on your account. [Seven questions before you let anyone touch your ad budget](blog-seven-questions-before-hiring.html) is a checklist for that conversation, and [Who owns your ad accounts?](blog-who-owns-your-ad-accounts.html) covers what to check before you sign.
 
 **A done-for-you service** sits between a freelancer and an agency. You set the goal and the budget and approve the plan; the service plans, buys, launches and manages the ads. It suits owners who want the work handled but don't need, or can't afford, a full agency team.
 
