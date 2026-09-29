@@ -874,6 +874,10 @@
     {
       "pattern": "about half|roughly half|half the cost|half a comparable|half what (a|an) |~50%|50% less",
       "why": "pricing wording is 'a fraction of the cost' everywhere (decided 2026-09-27)"
+    },
+    {
+      "pattern": "Deep\\s+Thought(?! Digital Marketing)(?! Marketing\")(?!\")",
+      "why": "Brand is written DeepThought (one word) everywhere, 2026-09-29. Only the legal entity name and the schema alternateName list keep two words."
     }
   ],
   "products": {

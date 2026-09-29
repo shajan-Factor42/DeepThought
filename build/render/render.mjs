@@ -84,6 +84,26 @@ await new Promise((resolve, reject) => {
   p.on("exit", (c) => (c === 0 ? resolve() : reject(new Error("copy-rewrite failed"))));
 });
 
+/* ---------- 3b. brand spelling ---------- */
+
+// The brand is written "DeepThought" (one word) everywhere a visitor or search engine reads it
+// (decided 2026-09-29). Two exceptions stay as they are: the legal entity name "Deep Thought
+// Digital Marketing" (legalName, privacy and terms), and the schema alternateName list, which
+// exists so searches for the two-word spelling still match us. verify.mjs fails the build if a
+// two-word "Deep Thought" is left anywhere else.
+{
+  let fixed = 0, pages = 0;
+  for (const f of (await readdir(OUT)).filter((f) => f.endsWith(".html"))) {
+    const path = join(OUT, f);
+    const html = await readFile(path, "utf8");
+    let n = 0;
+    const out = html.replace(/("alternateName":\[[^\]]*\]|Deep Thought Digital Marketing)|Deep\s+Thought/g,
+      (m, keep) => (keep ? keep : (n++, "DeepThought")));
+    if (n) { await writeFile(path, out, "utf8"); fixed += n; pages++; }
+  }
+  console.log(`brand: ${fixed} "Deep Thought" -> "DeepThought" on ${pages} page(s)`);
+}
+
 /* ---------- 4. one sitemap, generated from what shipped ---------- */
 
 const files = (await readdir(OUT)).filter((f) => f.endsWith(".html")).sort();
