@@ -47,7 +47,7 @@ None of that is a rip-off. Strategy is real work. But you’re buying labor, and
 
 A platform swaps out the pricing model. Ours is all-inclusive: one price, month to month, with your media covered inside it rather than billed on top of it.
 
-That means no management fee stacked on your spend, and no fee that quietly grows every time you add budget. No annual contract either, and the price is published instead of waiting behind a discovery call.
+That means no management fee stacked on your spend, and no fee that quietly grows every time you add budget. No annual contract either, and your number comes from one short call rather than a long discovery process.
 
 Stack that against a comparable retainer and more of the same budget ends up as advertising. Not because the work is thinner. Because building campaigns, trafficking them and producing creative is automated, and when the execution stops taking two weeks, the coordination layer that existed to manage those two weeks stops being necessary.
 

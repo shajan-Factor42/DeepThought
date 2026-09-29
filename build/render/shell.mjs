@@ -202,6 +202,11 @@ function applyFooter(tpl) {
   const ga = '<a href="georgia-counties.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Georgia counties</a>';
   if (!html.includes(ga)) throw new Error("SiteFooter: Georgia counties link not found — site.zip changed");
   html = html.replace(ga, ga + '\n      <a href="digital-marketing-gwinnett-county-ga.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Gwinnett County, GA</a>');
+  // Pillar guide for the 'digital marketing for small business' cluster (2026-09-29, SEO chat).
+  // Linked from every page so it carries site-wide weight; cluster posts link to it as they publish.
+  const allSolutions = '<a href="solutions.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">All solutions</a>';
+  if (!html.includes(allSolutions)) throw new Error("SiteFooter: All solutions link not found — site.zip changed");
+  html = html.replace(allSolutions, allSolutions + '\n      <a href="digital-marketing-for-small-business.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Digital marketing for small business</a>');
 
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");

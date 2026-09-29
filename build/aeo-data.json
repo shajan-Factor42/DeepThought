@@ -848,7 +848,7 @@
       "why": "speed claim retired — approved wording is 'as soon as possible'"
     },
     {
-      "pattern": "published on our rate card|our rate card is published|published rate card|published pricing|published rates|see the rate card",
+      "pattern": "published on our rate card|our rate card is published|published rate card|published pricing|published rates|see the rate card|price is published|pricing is published",
       "why": "published pricing retired 2026-09-14 — the price comes from a call"
     },
     {
