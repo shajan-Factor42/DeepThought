@@ -71,6 +71,10 @@ async function copyTree(from, to) {
 }
 await copyTree(SRC, OUT);
 console.log(`assets: ${copied} copied, ${skipped} dropped (runtime no longer needed)`);
+// Site-root files kept in the repo rather than in site.zip (favicons, share image). Copied here,
+// not in the workflow's overlay step, because verify runs inside this script and checks every
+// <link> target. Added 2026-09-28 (SEO chat).
+await copyTree(join(HERE, "..", "static"), OUT);
 
 /* ---------- 3. declared copy rewrites ---------- */
 

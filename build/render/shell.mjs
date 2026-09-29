@@ -260,6 +260,10 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="facebook-domain-verification" content="tvqcov6zwybriz40h11vvolpgs5s3x">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/png" href="/favicon-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
@@ -267,6 +271,12 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="website">
 <meta property="og:url" content="${canonical}">
+<meta property="og:site_name" content="DeepThought">
+<meta property="og:image" content="${SITE}/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DeepThought: Better ads. Fraction of the cost.">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="${noindex ? "noindex,follow" : "index,follow"}">
 ${ld}
 ${ANALYTICS}

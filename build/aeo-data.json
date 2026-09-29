@@ -818,11 +818,29 @@
       "files": [
         "media-kit.html"
       ]
+    },
+    {
+      "from": ">\"Push $40 off first cleaning in Lawrenceville, $600 this month.\"</div>",
+      "to": ">Tell us the offer and the budget</div>",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "min": 1,
+      "note": "2026-09-28 retired prompt claim on local-service steps (flagged by the SEO chat's daily scan)"
+    },
+    {
+      "from": "Plain language. You never touch campaign structure or keyword lists.",
+      "to": "For example, $40 off a first cleaning in Lawrenceville, $600 this month. Our AI recommends the channels and audiences and drafts the ads. You never touch campaign structure or keyword lists.",
+      "files": [
+        "solutions-local-service.html"
+      ],
+      "min": 1,
+      "note": "2026-09-28 retired prompt claim on local-service steps (flagged by the SEO chat's daily scan)"
     }
   ],
   "bannedClaims": [
     {
-      "pattern": "describe (the|your) promotion|plain-language description|single description away|from prompt|prompt to live|briefed in plain language",
+      "pattern": "describe (the|your) promotion|plain-language description|single description away|from prompt|prompt to live|briefed in plain language|plain language\\. (you never|no campaign)|\"push \\$",
       "why": "prompt-to-campaign claim retired 2026-09-17 — the app cannot build campaigns from a typed prompt"
     },
     {
