@@ -2,7 +2,7 @@
 title: "Privacy Policy"
 slug: privacy
 description: "How Deep Thought Digital Marketing collects, uses and protects information when you visit deepthought.marketing or contact us."
-updated: 2026-09-26
+updated: 2026-10-01
 ---
 This policy explains what information Deep Thought Digital Marketing ("Deep Thought", "we", "us") collects when you visit deepthought.marketing, fill in one of our forms, or contact us, and what we do with it. It covers this website only. If you become a customer, your service agreement and any separate terms for our campaign platform also apply.
 
@@ -25,6 +25,10 @@ If you arrive by clicking one of our Google ads, the page records the Google cli
 
 We do not use this information to identify you personally from your browsing alone.
 
+## Chat assistant
+
+The site has an AI chat assistant. When you send it a message, the conversation and the page you are on pass through a relay we run on Cloudflare to Anthropic, whose Claude model writes the reply. You do not need to give a name or email to use it, and please do not share passwords, payment details or other sensitive information in the chat. We do not save chat conversations. Your conversation is kept in your browser only until you close the tab. We record that a chat was opened and how many messages were sent in Google Analytics, but not what was said. AI answers can be wrong; for anything important, talk to our team.
+
 ## How we use your information
 
 - To reply to your enquiry and set up any demo or call you asked for
@@ -44,6 +48,7 @@ We share information only with service providers that help us run the site and t
 - **Web3Forms**, which delivers form submissions to our inbox
 - **Google** (Tag Manager, Analytics and Ads), for site analytics and ad measurement
 - **GitHub**, which hosts the website
+- **Cloudflare** and **Anthropic**, which relay and answer chat assistant messages
 - Email, phone and business software we use to respond to you and serve customers
 
 We may also disclose information if the law requires it, to protect our rights or the safety of others, or as part of a merger, acquisition or sale of the business.

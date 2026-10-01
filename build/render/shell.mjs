@@ -284,7 +284,7 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <meta name="twitter:card" content="summary_large_image">
 <meta name="robots" content="${noindex ? "noindex,follow" : "index,follow"}">
 ${ld}
-${ANALYTICS}
+${ANALYTICS}${CHAT}
 ${helmet}
 <style>${COMPONENT_CSS}
 [data-hdr-drawer]{display:none}
@@ -307,6 +307,13 @@ ${NAV_SCRIPT}
  * page is missing it.
  */
 const ANALYTICS = `<script src="analytics.js" async></script>`;
+
+/**
+ * Website chat bubble (build/static/chat.js), added 2026-10-01. Off until aeo-data.json
+ * "chat.endpoint" holds the chat relay's URL (chat-worker/, deployed to Cloudflare). The
+ * script waits for page load + 1.5s before drawing anything, so it doesn't touch page speed.
+ */
+const CHAT = AEO.chat?.endpoint ? `\n<script src="chat.js" data-endpoint="${esc(AEO.chat.endpoint)}" defer></script>` : "";
 
 /**
  * The only JavaScript the rebuilt site ships. Opening the mobile nav is genuine interactivity,

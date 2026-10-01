@@ -1,0 +1,16 @@
+# DeepThought website chat relay. Deployed by .github/workflows/deploy-chat-worker.yml.
+# The API key is a secret (ANTHROPIC_API_KEY), never in this file.
+name = "deepthought-chat"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+[vars]
+SITE = "https://deepthought.marketing"
+ALLOWED_ORIGINS = "https://deepthought.marketing,https://www.deepthought.marketing"
+# Cheapest, fastest current model. Swap for claude-sonnet-5-5 if answers need more depth.
+MODEL = "claude-haiku-4-5-20251001"
+MAX_TOKENS = "600"
+
+[observability]
+enabled = true

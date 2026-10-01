@@ -1,4 +1,8 @@
 {
+  "chat": {
+    "endpoint": "",
+    "note": "URL of the chat relay (chat-worker/), e.g. https://deepthought-chat.<account>.workers.dev/chat. Empty = chat bubble off."
+  },
   "site": "https://deepthought.marketing",
   "organization": {
     "name": "DeepThought",

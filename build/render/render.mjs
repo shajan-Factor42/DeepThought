@@ -128,6 +128,13 @@ await writeFile(join(OUT, "sitemap.xml"),
   "\n</urlset>\n", "utf8");
 console.log(`sitemap: ${entries.length} URLs (${files.length - entries.length} noindex page(s) excluded)`);
 
+/* ---------- 4b. chat bot knowledge (chat-knowledge.json) ---------- */
+
+await new Promise((resolve, reject) => {
+  const p = spawn(process.execPath, [join(HERE, "..", "chat-knowledge.mjs"), "--out", OUT, "--content", CONTENT], { stdio: "inherit" });
+  p.on("exit", (c) => (c === 0 ? resolve() : reject(new Error("chat-knowledge failed"))));
+});
+
 /* ---------- 5. gates ---------- */
 
 await new Promise((resolve, reject) => {
