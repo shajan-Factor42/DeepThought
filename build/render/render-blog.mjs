@@ -115,6 +115,21 @@ for (const post of posts) {
     publisher: { "@id": `${SITE}/#organization` },
     mainEntityOfPage: canonical, inLanguage: "en-US",
   }];
+  if (post.serviceType && post.serviceArea) {
+    const [areaName, stateName] = post.serviceArea.split(/,\s*/);
+    const area = { "@type": "AdministrativeArea", name: post.serviceArea,
+      ...(stateName ? { containedInPlace: { "@type": "State", name: stateName } } : {}) };
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "Service",
+      name: `${post.serviceType} in ${areaName}`, serviceType: post.serviceType,
+      provider: { "@id": `${SITE}/#organization` },
+      areaServed: [area, ...post.serviceCities.map((c) => ({
+        "@type": "City", name: `${c}, ${stateName === "Georgia" ? "GA" : stateName || ""}`.replace(/, $/, ""),
+        containedInPlace: { "@type": "AdministrativeArea", name: post.serviceArea },
+      }))],
+      url: canonical,
+    });
+  }
   if (post.faq.length) {
     jsonld.push({
       "@context": "https://schema.org", "@type": "FAQPage",

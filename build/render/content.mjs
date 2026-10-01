@@ -26,6 +26,10 @@
  *   image: blog/working-media.png      # optional; file lives in build/static/blog/
  *   imageAlt: "What the image shows"   # optional; defaults to title
  *   updated: 2026-09-30                # optional; dateModified, defaults to date
+ *   serviceType: "Digital marketing for home services businesses"  # optional; adds Service schema
+ *   serviceArea: "Gwinnett County, Georgia"   # optional; the Service's areaServed
+ *   serviceCities:                     # optional; cities inside serviceArea
+ *     - "Dacula"
  *   author: "Deep Thought Research"
  *   authorRole: "Research Team"
  *   takeaways:
@@ -190,6 +194,12 @@ export function postFrom(src, file) {
     body: sections,
     takeaways: (Array.isArray(data.takeaways) ? data.takeaways : []).map(String),
     faq,
+    // Optional: a local-service post can declare the service it describes and where. Emits a
+    // Service node (provider = the site's ProfessionalService) with areaServed set to the
+    // county and its cities. Used by the Gwinnett home-services post (2026-10-01).
+    serviceType: data.serviceType ? String(data.serviceType) : "",
+    serviceArea: data.serviceArea ? String(data.serviceArea) : "",
+    serviceCities: (Array.isArray(data.serviceCities) ? data.serviceCities : []).map(String),
   };
 }
 

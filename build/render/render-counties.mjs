@@ -171,6 +171,26 @@ if (LIMIT) slugs = slugs.slice(0, LIMIT);
 
 let written = 0, skipped = [], holes = 0;
 
+// Hand-picked further reading for counties where we have local posts. Rendered as a small
+// section after the stat strip so the county page links into its local content (and the
+// posts pass authority back). Added 2026-10-01 with the Gwinnett home-services post.
+const LOCAL_READING = {
+  "gwinnett-county-ga": [
+    { href: "blog-home-services-marketing-gwinnett-county.html",
+      label: "Digital marketing for home services businesses in Gwinnett County",
+      blurb: "HVAC, plumbing, roofing, electrical and landscaping: channels, seasons and targeting, trade by trade." },
+    { href: "blog-digital-marketing-cost-small-business-gwinnett-county.html",
+      label: "How much does digital marketing cost for a small business in Gwinnett County?",
+      blurb: "Real ranges for retainers, platform fees and ad spend." },
+  ],
+};
+function readingBlock(slug, place) {
+  const items = LOCAL_READING[slug];
+  if (!items) return "";
+  const li = items.map((i) => `<li style="margin:0 0 14px"><a href="${i.href}" style="color:var(--color-accent); font-weight:600">${i.label}</a><br><span style="color:var(--text-muted); font-size:15px">${i.blurb}</span></li>`).join("");
+  return `<section style="max-width:1200px; margin:0 auto; padding:40px 40px 8px"><h2 style="font-size:24px; margin:0 0 16px">Local guides for ${place}</h2><ul style="list-style:none; padding:0; margin:0">${li}</ul></section>`;
+}
+
 for (const slug of slugs) {
   const county = buildCounty(slug);
   if (!county) { skipped.push(slug); continue; }
@@ -200,9 +220,11 @@ for (const slug of slugs) {
   let body = render(TEMPLATE, scope, partials);
   const stripKind = county.type ? county.type.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase()) : "County";
   const strip = statStrip(slug, stripKind);
-  if (strip) {
+  const reading = readingBlock(slug, `${county.name} County`);
+  if (strip || reading) {
     const anchor = body.indexOf("</section>");
-    if (anchor !== -1) body = body.slice(0, anchor + 10) + strip + body.slice(anchor + 10);
+    if (anchor !== -1) body = body.slice(0, anchor + 10) + (strip || "") + reading + body.slice(anchor + 10);
+    else if (reading) throw new Error(`${slug}: can't place the local reading block`);
   }
   if (body.includes("{{")) holes++;
 
