@@ -1,6 +1,7 @@
 ---
 title: "How Much Does Digital Marketing Cost for a Small Business in Gwinnett County?"
 slug: digital-marketing-cost-small-business-gwinnett-county
+seoTitle: "Digital Marketing Cost for Small Business: Gwinnett County"
 category: "Cost & Pricing"
 date: 2026-09-15
 read: "6 min"

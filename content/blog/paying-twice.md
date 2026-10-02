@@ -1,6 +1,7 @@
 ---
 title: "You Are Probably Paying Twice What Your Marketing Should Cost"
 slug: paying-twice
+seoTitle: "Paying Twice What Your Marketing Should Cost?"
 category: "Cost & Pricing"
 date: 2026-07-14
 read: "6 min"

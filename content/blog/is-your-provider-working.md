@@ -1,6 +1,7 @@
 ---
 title: "How to Tell Whether Your Marketing Provider Is Actually Working"
 slug: is-your-provider-working
+seoTitle: "Is Your Marketing Provider Actually Working?"
 category: "How-To Guide"
 date: 2026-02-26
 read: "5 min"

@@ -1,6 +1,7 @@
 ---
 title: "Holiday Advertising Starts Later Than You Think, and Ends Earlier"
 slug: holiday-starts-later
+seoTitle: "Holiday Advertising Starts Later Than You Think"
 category: "Playbooks"
 date: 2026-05-28
 read: "5 min"

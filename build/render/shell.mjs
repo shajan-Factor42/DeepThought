@@ -258,6 +258,16 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
       : body.slice(0, at) + FOOTER_BLOCKS + "\n  " + body.slice(at);
   }
   canonical = canonicalUrl(canonical);
+  // Length safety net (2026-10-02, SEO chat). Google shows ~60 characters of a title and ~160
+  // of a description. A title over 60 drops its "| DeepThought" suffix (the brand is already in
+  // the URL and the result's site name). A description over 160 is cut at the last sentence or
+  // word boundary that fits. Pages that set their own short copy are untouched.
+  if (title && title.length > 60 && / \| DeepThought$/.test(title)) title = title.replace(/ \| DeepThought$/, "");
+  if (description && description.length > 160) {
+    const cut = description.slice(0, 160);
+    const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "));
+    description = end > 90 ? cut.slice(0, end + 1) : cut.slice(0, cut.lastIndexOf(" ")).replace(/[\s,;:—–-]+$/, "") + "…";
+  }
   const home = JSON.stringify(`${SITE}/index.html`);
   const blocks = [SITE_GRAPH, ...(Array.isArray(jsonld) ? jsonld : [jsonld])].filter(Boolean);
   const ld = blocks

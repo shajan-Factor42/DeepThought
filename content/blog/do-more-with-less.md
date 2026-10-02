@@ -1,6 +1,7 @@
 ---
 title: "Doing More With Less Is a Structure Problem, Not an Effort Problem"
 slug: do-more-with-less
+seoTitle: "Doing More With Less Is a Structure Problem"
 category: "Cost & Pricing"
 date: 2026-08-11
 read: "5 min"

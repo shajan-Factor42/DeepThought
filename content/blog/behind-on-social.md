@@ -1,6 +1,7 @@
 ---
 title: "If Your Social Feels Behind, You Are Measuring the Wrong Thing"
 slug: behind-on-social
+seoTitle: "Social Feels Behind? You're Measuring the Wrong Thing"
 category: "Paid Social"
 date: 2025-09-25
 read: "5 min"

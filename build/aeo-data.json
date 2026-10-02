@@ -35,7 +35,8 @@
       "https://nextdoor.com/page/deepthoughtmarketing-dacula-ga",
       "https://www.google.com/maps/place/?q=place_id:ChIJjz4zyebr9YgR6fb9SILesk4",
       "https://www.youtube.com/@DeepThought.Marketing",
-      "https://www.linkedin.com/company/deepthoughtdigitalmarketing"
+      "https://www.linkedin.com/company/deepthoughtdigitalmarketing",
+      "https://www.tiktok.com/@deepthoughtdigital"
     ],
     "hideAddressLine": true,
     "slogan": "Better ads. Fraction of the cost.",
@@ -300,12 +301,6 @@
         "index.html"
       ],
       "note": "home page accordion copy, inline in the template"
-    },
-    {
-      "from": "Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.",
-      "to": "Paid search, paid social, connected TV and display for local businesses — at a fraction of the cost of an agency.",
-      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — state meta/og/schema description",
-      "min": 150
     },
     {
       "from": "our platform builds and launches the campaign in under a minute and manages it continuously, with a named marketing expert for strategy.",
@@ -859,6 +854,30 @@
         "faq.html"
       ],
       "note": "2026-10-06: 24-hour promise."
+    },
+    {
+      "from": "Enterprise brands have teams, tooling, and analysts. Everyone else gets a template, a junior account manager, or a spare hour on Sunday night. DeepThought exists to close that gap — not with more software to learn, but with an engine that does the work.",
+      "to": "DeepThought is a done-for-you digital advertising service for small and local businesses, based in Gwinnett County, Georgia. Our AI recommends the channels, budget and audiences and drafts the ads. Our team buys the media and runs every campaign across 22 advertising products, from Google search to streaming TV. Enterprise brands have teams, tooling and analysts; everyone else gets a template, a junior account manager or a spare hour on Sunday night. We exist to close that gap, at a fraction of the cost of an agency.",
+      "files": [
+        "about.html"
+      ],
+      "note": "about lede: say plainly who we are and where (entity definition for Google and AI answers), 2026-10-02 SEO"
+    },
+    {
+      "from": "Deep Thought is built to be handed a decision and to finish it.",
+      "to": "Our AI does the planning and our team runs the campaigns, so the work actually gets done.",
+      "files": [
+        "about.html"
+      ],
+      "note": "about belief 2: our team runs the media, 2026-10-02 SEO"
+    },
+    {
+      "from": "Deep Thought rewrites the actual ads and copy against performance data after launch — not just the budget.",
+      "to": "Our team refreshes the ads and copy based on performance data after launch, not just the budget.",
+      "files": [
+        "index.html"
+      ],
+      "note": "home: retired 'rewrites the ad' claim, 2026-10-02 SEO"
     }
   ],
   "bannedClaims": [
@@ -901,6 +920,10 @@
     {
       "pattern": "Deep\\s+Thought(?! Digital Marketing)(?! Marketing\")(?!\")",
       "why": "Brand is written DeepThought (one word) everywhere, 2026-09-29. Only the legal entity name and the schema alternateName list keep two words."
+    },
+    {
+      "pattern": "pricing should be published|rewrites the actual ads",
+      "why": "retired 2026-10-02: no published pricing; creative is refreshed by our team, not auto-rewritten"
     }
   ],
   "products": {

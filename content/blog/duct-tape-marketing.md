@@ -1,6 +1,7 @@
 ---
 title: "Most Local Businesses Run Marketing on Duct Tape. Here Is the Bill."
 slug: duct-tape-marketing
+seoTitle: "Local Marketing on Duct Tape: Here Is the Bill"
 category: "Industry Research"
 date: 2026-07-11
 read: "4 min"

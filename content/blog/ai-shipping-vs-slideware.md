@@ -1,6 +1,7 @@
 ---
 title: "AI in Campaign Operations: What Is Shipping and What Is Slideware"
 slug: ai-shipping-vs-slideware
+seoTitle: "AI in Campaign Operations: Shipping vs Slideware"
 category: "AI & Technology"
 date: 2026-03-03
 read: "10 min"

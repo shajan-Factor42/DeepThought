@@ -114,7 +114,7 @@ for (const st of states.STATES) {
     lede: copy.lede, sections: copy.sections, faq: copy.faq, nearby,
   };
 
-  const description = `Digital marketing in ${st.name}. Paid search, paid social, connected TV and display for local businesses — campaigns live in 60 seconds.`;
+  const description = `Digital marketing in ${st.name}. Paid search, paid social, connected TV and display for local businesses, at a fraction of the cost of an agency.`;
   // FAQPage as its own top-level block, not nested inside Service.
   const jsonld = [{
     "@context": "https://schema.org", "@type": "Service",
@@ -131,7 +131,7 @@ for (const st of states.STATES) {
     });
   }
   await emit(stateHref(st), {
-    title: `Digital Marketing in ${st.name} | Digital Marketing Agency | DeepThought`,
+    title: `Digital Marketing in ${st.name} | DeepThought`,
     description,
     body: render(STATE_TPL, scope, partials),
     jsonld,

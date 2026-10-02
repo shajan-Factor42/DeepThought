@@ -1,6 +1,7 @@
 ---
 title: "Four and a Half Hours a Report: The Cost of Stitching Data by Hand"
 slug: hours-per-report
+seoTitle: "4.5 Hours a Report: The Cost of Manual Reporting"
 category: "Programmatic"
 date: 2026-02-07
 read: "8 min"

@@ -1,6 +1,7 @@
 ---
 title: "Eleven Platforms, One Marketing Person: The Math Does Not Work"
 slug: eleven-platforms
+seoTitle: "Eleven Platforms, One Marketing Person"
 category: "Industry Research"
 date: 2026-03-24
 read: "7 min"

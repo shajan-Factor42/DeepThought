@@ -1,6 +1,7 @@
 ---
 title: "The Quiet Tax on Every Campaign: What Setup Errors Really Cost"
 slug: setup-errors-tax
+seoTitle: "What Campaign Setup Errors Really Cost"
 category: "Industry Research"
 date: 2026-04-08
 read: "9 min"

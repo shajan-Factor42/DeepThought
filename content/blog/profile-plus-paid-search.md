@@ -1,6 +1,7 @@
 ---
 title: "Your Business Profile Is Half of Your Paid Search Performance"
 slug: profile-plus-paid-search
+seoTitle: "Your Business Profile Is Half Your Paid Search"
 category: "Local SEO"
 date: 2025-12-18
 read: "5 min"

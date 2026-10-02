@@ -1,6 +1,7 @@
 ---
 title: "White-Label Execution: Your Brand in Front, Our Hands on the Levers"
 slug: white-label-execution
+seoTitle: "White-Label Ad Execution: Your Brand in Front"
 category: "White-Label"
 date: 2026-06-02
 read: "7 min"
