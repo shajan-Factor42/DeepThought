@@ -923,5 +923,9 @@
     "Retail media": [
       "Amazon ads"
     ]
+  },
+  "leads": {
+    "endpoint": "https://script.google.com/macros/s/AKfycbzi0ujRc26plP0yuO0CxXS43GAKB5Rw8NW4t3WaUsnuLvXnefTXmYxGZ7ZUOSjAPjoq/exec",
+    "note": "2026-10-02: Apps Script web app (build/leads/apps-script.gs) writing to the DeepThought Leads sheet in Shajan's Drive and emailing him."
   }
 }
