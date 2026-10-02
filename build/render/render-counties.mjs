@@ -176,6 +176,9 @@ let written = 0, skipped = [], holes = 0;
 // posts pass authority back). Added 2026-10-01 with the Gwinnett home-services post.
 const LOCAL_READING = {
   "gwinnett-county-ga": [
+    { href: "hvac-marketing-atlanta.html",
+      label: "HVAC marketing for Atlanta and Gwinnett HVAC companies",
+      blurb: "Search, Local Services Ads, social and retargeting for HVAC companies, run in one place." },
     { href: "blog-home-services-marketing-gwinnett-county.html",
       label: "Digital marketing for home services businesses in Gwinnett County",
       blurb: "HVAC, plumbing, roofing, electrical and landscaping: channels, seasons and targeting, trade by trade." },

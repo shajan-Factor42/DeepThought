@@ -108,7 +108,7 @@ const TPL = `<dc-import name="SiteHeader" hint-size="100%,68px"></dc-import>
   <div style="border-radius:18px; padding:36px; background:linear-gradient(135deg,#0066ff 0%,#00b2d8 100%); color:#fff">
     <h2 style="font-family:var(--font-display); font-size:28px; font-weight:800; letter-spacing:-0.02em; margin:0; color:#fff">{{ ctaHeading }}</h2>
     <p style="font-size:17px; line-height:1.6; margin:12px 0 22px; color:#eaf4ff">{{ ctaText }}</p>
-    <a href="book-a-demo.html" style="display:inline-block; background:#fff; color:#0a2a66; font-weight:700; padding:13px 22px; border-radius:999px; text-decoration:none">Book a demo</a>
+    <a href="second-opinion.html" data-lead-cta="guide" style="display:inline-block; background:#fff; color:#0a2a66; font-weight:700; padding:13px 22px; border-radius:999px; text-decoration:none">Get a free Second Opinion</a>
   </div>
 </section>
 
@@ -158,6 +158,21 @@ for (const f of files) {
       ],
     },
   ];
+  // Optional Service node for commercial guides (e.g. HVAC marketing). Same shape as blog posts.
+  if (data.serviceType && data.serviceArea) {
+    const cities = Array.isArray(data.serviceCities) ? data.serviceCities.map(String) : [];
+    const [, stateName] = String(data.serviceArea).split(/,\s*/);
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "Service",
+      name: String(data.seoTitle || data.title), serviceType: String(data.serviceType),
+      provider: { "@id": `${SITE}/#organization` },
+      areaServed: [
+        { "@type": "AdministrativeArea", name: String(data.serviceArea), ...(stateName ? { containedInPlace: { "@type": "State", name: stateName } } : {}) },
+        ...cities.map((c) => ({ "@type": "City", name: `${c}, GA`, containedInPlace: { "@type": "AdministrativeArea", name: String(data.serviceArea) } })),
+      ],
+      url: canonical,
+    });
+  }
   if (faq.length) jsonld.push({
     "@context": "https://schema.org", "@type": "FAQPage",
     mainEntity: faq.map((x) => ({ "@type": "Question", name: x.q, acceptedAnswer: { "@type": "Answer", text: x.a } })),

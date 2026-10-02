@@ -210,7 +210,9 @@ function applyFooter(tpl) {
   // Linked from every page so it carries site-wide weight; cluster posts link to it as they publish.
   const allSolutions = '<a href="solutions.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">All solutions</a>';
   if (!html.includes(allSolutions)) throw new Error("SiteFooter: All solutions link not found — site.zip changed");
-  html = html.replace(allSolutions, allSolutions + '\n      <a href="digital-marketing-for-small-business.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Digital marketing for small business</a>');
+  html = html.replace(allSolutions, allSolutions + '\n      <a href="digital-marketing-for-small-business.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Digital marketing for small business</a>'
+    // HVAC landing page (2026-10-02, SEO chat): first trade page, linked sitewide like the pillar.
+    + '\n      <a href="hvac-marketing-atlanta.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">HVAC marketing</a>');
 
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");

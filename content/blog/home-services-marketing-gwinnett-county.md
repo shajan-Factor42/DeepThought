@@ -67,7 +67,7 @@ Gwinnett is also Georgia's most diverse county. In parts of Duluth, Norcross and
 
 ## What does an HVAC campaign look like in Gwinnett?
 
-HVAC marketing in Georgia follows the thermometer, and the budget should too.
+HVAC marketing in Georgia follows the thermometer, and the budget should too. (For what we run for HVAC companies and what it costs, see our [HVAC marketing page](hvac-marketing-atlanta.html).)
 
 **Summer (late May to September)** is the busy season. The first hot, humid week brings a wave of "AC not cooling" searches, and those clicks are some of the most expensive in home services because the person searching wants someone today. Campaigns should raise budgets on hot days, run call ads in the evening, and keep emergency keywords separate from routine ones so the expensive clicks get the attention they deserve.
 
