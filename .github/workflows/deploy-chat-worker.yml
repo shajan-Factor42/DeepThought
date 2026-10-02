@@ -1,10 +1,11 @@
 name: Deploy chat relay (Cloudflare Worker)
 
-# Deploys chat-worker/ to Cloudflare whenever it changes. Needs three repository secrets:
+# Deploys chat-worker/ to Cloudflare whenever it changes. Repository secrets:
 #   CLOUDFLARE_API_TOKEN   (Cloudflare → My Profile → API Tokens → "Edit Cloudflare Workers" template)
 #   CLOUDFLARE_ACCOUNT_ID  (Cloudflare dashboard → Workers & Pages → Account ID, right side)
 #   ANTHROPIC_API_KEY      (console.anthropic.com → API Keys)
-# Until they exist, the job skips instead of failing.
+#   RESEND_API_KEY         (optional; resend.com → API Keys) turns on the daily chat digest email
+# Until the first three exist, the job skips instead of failing.
 
 on:
   push:
@@ -19,29 +20,52 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      KV_TITLE: deepthought-chat-log
     steps:
       - name: Check secrets
         id: check
-        env:
-          CF: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          ACC: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: |
-          if [ -n "$CF" ] && [ -n "$ACC" ] && [ -n "$KEY" ]; then echo "ready=true" >> "$GITHUB_OUTPUT";
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ] && [ -n "$ANTHROPIC_API_KEY" ]; then echo "ready=true" >> "$GITHUB_OUTPUT";
           else echo "::notice::Chat relay not deployed: add CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID and ANTHROPIC_API_KEY secrets."; fi
 
       - uses: actions/checkout@v4
         if: steps.check.outputs.ready == 'true'
 
+      - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
+        with:
+          node-version: "22"
+
+      # The chat log lives in a Workers KV namespace. Create it once, then reuse it by title.
+      - name: Find or create the chat log storage
+        if: steps.check.outputs.ready == 'true'
+        working-directory: chat-worker
+        run: |
+          set -e
+          api="https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/storage/kv/namespaces"
+          auth="Authorization: Bearer $CLOUDFLARE_API_TOKEN"
+          id=$(curl -fsS -H "$auth" "$api?per_page=100" | jq -r --arg t "$KV_TITLE" '.result[] | select(.title==$t) | .id' | head -1)
+          if [ -z "$id" ]; then
+            id=$(curl -fsS -X POST -H "$auth" -H "Content-Type: application/json" -d "{\"title\":\"$KV_TITLE\"}" "$api" | jq -r '.result.id')
+            echo "Created KV namespace $KV_TITLE"
+          fi
+          [ -n "$id" ] && [ "$id" != "null" ] || { echo "::error::Could not find or create the KV namespace"; exit 1; }
+          sed -i "s/KV_ID_PLACEHOLDER/$id/" wrangler.toml
+
       - name: Deploy
         if: steps.check.outputs.ready == 'true'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          wranglerVersion: "4"
-          workingDirectory: chat-worker
-          secrets: |
-            ANTHROPIC_API_KEY
-        env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        working-directory: chat-worker
+        run: |
+          set -e
+          npx --yes wrangler@4 deploy
+          printf '%s' "$ANTHROPIC_API_KEY" | npx --yes wrangler@4 secret put ANTHROPIC_API_KEY
+          if [ -n "$RESEND_API_KEY" ]; then
+            printf '%s' "$RESEND_API_KEY" | npx --yes wrangler@4 secret put RESEND_API_KEY
+          else
+            echo "::notice::RESEND_API_KEY not set: chats are logged, but the daily digest email is off."
+          fi

@@ -11,6 +11,20 @@ ALLOWED_ORIGINS = "https://deepthought.marketing,https://www.deepthought.marketi
 # Cheapest, fastest current model. Swap for claude-sonnet-5-5 if answers need more depth.
 MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = "600"
+# Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
+# in Resend (resend.com → Domains). Comma-separate several recipients.
+DIGEST_TO = "support@deepthought.marketing"
+DIGEST_FROM = "DeepThought Chat <chat@deepthought.marketing>"
 
 [observability]
 enabled = true
+
+# Chat log: one record per conversation, kept 90 days. The id is filled in by the deploy
+# workflow (it creates the namespace "deepthought-chat-log" on first deploy).
+[[kv_namespaces]]
+binding = "CHAT_LOG"
+id = "KV_ID_PLACEHOLDER"
+
+# Daily digest at 12:00 UTC (8am New York in summer, 7am in winter).
+[triggers]
+crons = ["0 12 * * *"]

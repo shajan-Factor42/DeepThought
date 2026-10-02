@@ -66,6 +66,7 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | — | Header CTA "Launch your Campaigns" points to the app at https://deepthought.adops.rocks/. | Primary product link. |
 | 2026-09-29 | Pillar page: `digital-marketing-for-small-business.html`. Blog posts link to it. | Topic cluster for SEO. |
 | 2026-10-01 | **Website chat assistant**: custom Claude-powered bot (Haiku 4.5) via a Cloudflare Worker relay, not Tidio/Crisp/Intercom. Knowledge rebuilt from `aeo-data.json` and `llms.txt` on every deploy. Off until `chat.endpoint` is set. | Cheapest to run, follows approved wording. |
+| 2026-10-01 | **Chat conversations are logged** for 90 days (Cloudflare KV, no IP address) and a **daily digest email** of yesterday's chats goes out via Resend, booking clicks first. Privacy policy and chat footer say so. Digest goes to support@deepthought.marketing by default. | Learn what visitors ask; catch wrong answers. |
 
 ## Technical
 

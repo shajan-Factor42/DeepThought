@@ -14,11 +14,18 @@ The bot's knowledge comes from `https://deepthought.marketing/chat-knowledge.jso
 
 To turn the chat off, empty `chat.endpoint` and push.
 
+## Chat log and daily digest
+
+- Each conversation is saved in the Workers KV namespace `deepthought-chat-log` for 90 days, then deleted automatically. The deploy workflow creates it on first run.
+- Record: start time, page, whether the visitor clicked a booking link, and the full transcript. No IP address.
+- Every day at 12:00 UTC the Worker emails yesterday's chats (New York time) to `DIGEST_TO`, booking clicks first. It needs the `RESEND_API_KEY` secret, and the `DIGEST_FROM` domain verified in Resend. No chats means no email.
+- To read older chats: Cloudflare dashboard → Storage & Databases → KV → deepthought-chat-log.
+
 ## Guards
 
 - Only accepts requests from deepthought.marketing (`ALLOWED_ORIGINS`).
 - 20 messages per visitor per 10 minutes; 24 messages per conversation; 1,200 characters per message; 600 tokens per reply.
-- Nothing is stored. Errors only are logged in Cloudflare.
+- Conversations are stored as above; otherwise only errors are logged in Cloudflare.
 
 ## Local test
 

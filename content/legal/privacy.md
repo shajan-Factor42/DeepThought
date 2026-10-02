@@ -27,7 +27,7 @@ We do not use this information to identify you personally from your browsing alo
 
 ## Chat assistant
 
-The site has an AI chat assistant. When you send it a message, the conversation and the page you are on pass through a relay we run on Cloudflare to Anthropic, whose Claude model writes the reply. You do not need to give a name or email to use it, and please do not share passwords, payment details or other sensitive information in the chat. We do not save chat conversations. Your conversation is kept in your browser only until you close the tab. We record that a chat was opened and how many messages were sent in Google Analytics, but not what was said. AI answers can be wrong; for anything important, talk to our team.
+The site has an AI chat assistant. When you send it a message, the conversation and the page you are on pass through a relay we run on Cloudflare to Anthropic, whose Claude model writes the reply. You do not need to give a name or email to use it, and please do not share passwords, payment details or other sensitive information in the chat. We save each chat conversation (what you and the assistant wrote, the page you started on, and whether you clicked through to book a call) for 90 days so our team can review the questions people ask and improve the answers, and then it is deleted automatically. We do not save your IP address with the conversation. Our team receives a daily email summary of the previous day's chats, sent through Resend. In Google Analytics we record that a chat was opened and how many messages were sent, but not what was said. AI answers can be wrong; for anything important, talk to our team.
 
 ## How we use your information
 
@@ -48,7 +48,8 @@ We share information only with service providers that help us run the site and t
 - **Web3Forms**, which delivers form submissions to our inbox
 - **Google** (Tag Manager, Analytics and Ads), for site analytics and ad measurement
 - **GitHub**, which hosts the website
-- **Cloudflare** and **Anthropic**, which relay and answer chat assistant messages
+- **Cloudflare** and **Anthropic**, which relay, store and answer chat assistant messages
+- **Resend**, which sends our team the daily chat summary email
 - Email, phone and business software we use to respond to you and serve customers
 
 We may also disclose information if the law requires it, to protect our rights or the safety of others, or as part of a merger, acquisition or sale of the business.

@@ -20,6 +20,17 @@
   function load() { try { return JSON.parse(sessionStorage.getItem(KEY)) || []; } catch (e) { return []; } }
   function save(m) { try { sessionStorage.setItem(KEY, JSON.stringify(m.slice(-24))); } catch (e) {} }
 
+  var EVENT = ENDPOINT.replace(/\/chat$/, "/event");
+  // Conversation id: date (New York) + random, so the daily digest can find yesterday's chats.
+  function newConv() {
+    var d = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date()).replace(/-/g, "");
+    return d + "-" + Math.random().toString(36).slice(2, 12);
+  }
+  var CONV = (function () { try { return sessionStorage.getItem(KEY + "-id") || (function (c) { sessionStorage.setItem(KEY + "-id", c); return c; })(newConv()); } catch (e) { return newConv(); } })();
+  function booked() {
+    try { fetch(EVENT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ type: "booking", conv: CONV }), keepalive: true }); } catch (e) {}
+  }
+
   var messages = load();
   var busy = false;
 
@@ -84,7 +95,7 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
     '<div id="dtc-head"><div><b>Ask DeepThought</b><span>AI assistant · usually instant</span></div><button id="dtc-x" type="button" aria-label="Close chat">×</button></div>' +
     '<div id="dtc-log" aria-live="polite"></div>' +
     '<form id="dtc-form"><textarea id="dtc-in" rows="1" maxlength="1200" placeholder="Type your question…" aria-label="Your message"></textarea><button id="dtc-send" type="submit">Send</button></form>' +
-    '<div id="dtc-foot">AI answers can be wrong. Don\'t share sensitive info. <a href="privacy.html">Privacy</a> · <a href="' + BOOK + '">Talk to a person</a></div>');
+    '<div id="dtc-foot">AI answers can be wrong. Chats are saved for 90 days to improve answers; don\'t share sensitive info. <a href="privacy.html">Privacy</a> · <a href="' + BOOK + '">Talk to a person</a></div>');
 
   function mount() {
     document.head.appendChild(style);
@@ -136,11 +147,15 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) close(); });
     log.addEventListener("click", function (e) {
       var a = e.target.closest && e.target.closest("a");
-      if (a) track("chat_link_click", { chat_link: a.getAttribute("href"), chat_booking: a.href.indexOf("book-a-demo") > -1 });
+      if (a) {
+        var isBook = a.href.indexOf("book-a-demo") > -1;
+        track("chat_link_click", { chat_link: a.getAttribute("href"), chat_booking: isBook });
+        if (isBook && messages.length) booked();
+      }
     });
     panel.querySelector("#dtc-foot").addEventListener("click", function (e) {
       var a = e.target.closest && e.target.closest("a");
-      if (a && a.href.indexOf("book-a-demo") > -1) track("chat_link_click", { chat_link: a.getAttribute("href"), chat_booking: true });
+      if (a && a.href.indexOf("book-a-demo") > -1) { track("chat_link_click", { chat_link: a.getAttribute("href"), chat_booking: true }); if (messages.length) booked(); }
     });
 
     input.addEventListener("keydown", function (e) {
@@ -167,7 +182,7 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
       fetch(ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: messages, page: location.pathname }),
+        body: JSON.stringify({ messages: messages, page: location.pathname, conv: CONV }),
       }).then(function (res) {
         if (!res.ok || !res.body) return res.text().then(function (t) { throw new Error(t || "HTTP " + res.status); });
         var reader = res.body.getReader();

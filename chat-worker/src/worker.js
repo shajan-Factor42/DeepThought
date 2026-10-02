@@ -12,7 +12,12 @@
  * Guards: origin allowlist, per-visitor rate limit, message length and count caps, a hard
  * max_tokens per reply. Set a monthly spend limit in the Anthropic Console as the backstop.
  *
- * Secrets:  ANTHROPIC_API_KEY
+ * Chat log (added 2026-10-01): each conversation is saved to the CHAT_LOG KV namespace for
+ * 90 days (key c:<YYYYMMDD>-<random>, one record per conversation, rewritten each turn).
+ * A daily cron emails yesterday's chats to DIGEST_TO via Resend, booked-a-call chats first.
+ * Without the KV binding or RESEND_API_KEY those parts switch off; chat still works.
+ *
+ * Secrets:  ANTHROPIC_API_KEY, RESEND_API_KEY (optional)
  * Vars:     see wrangler.toml
  */
 
@@ -20,6 +25,9 @@ const KNOWLEDGE_TTL = 600; // seconds
 const MAX_MESSAGES = 24; // per conversation (12 back-and-forths)
 const MAX_CHARS = 1200; // per visitor message
 const RATE = { limit: 20, windowMs: 10 * 60 * 1000 }; // messages per visitor per window
+
+const LOG_TTL = 90 * 24 * 3600; // seconds chats are kept
+const CONV_RE = /^\d{8}-[a-z0-9]{8,24}$/;
 
 const hits = new Map(); // best-effort, per Worker instance
 function limited(key) {
@@ -102,6 +110,86 @@ ${k.llmsTxt}
 ${pages}`;
 }
 
+async function logTurn(env, conv, page, messages, reply) {
+  if (!env.CHAT_LOG || !CONV_RE.test(conv || "")) return;
+  const key = `c:${conv}`;
+  const prev = (await env.CHAT_LOG.get(key, "json")) || {};
+  const now = new Date().toISOString();
+  const rec = {
+    id: conv,
+    started: prev.started || now,
+    updated: now,
+    page: prev.page || page,
+    booked: !!prev.booked,
+    messages: [...messages, { role: "assistant", content: reply }],
+  };
+  await env.CHAT_LOG.put(key, JSON.stringify(rec), { expirationTtl: LOG_TTL });
+}
+
+async function markBooked(env, conv) {
+  if (!env.CHAT_LOG || !CONV_RE.test(conv || "")) return;
+  const key = `c:${conv}`;
+  const rec = await env.CHAT_LOG.get(key, "json");
+  if (!rec || rec.booked) return;
+  rec.booked = true;
+  await env.CHAT_LOG.put(key, JSON.stringify(rec), { expirationTtl: LOG_TTL });
+}
+
+const escHtml = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+/** Yesterday's date in New York as YYYYMMDD, plus a readable label. */
+function yesterdayNY(now = new Date()) {
+  const d = new Date(now.getTime() - 24 * 3600 * 1000);
+  const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" })
+    .formatToParts(d).map((p) => [p.type, p.value]));
+  const label = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", weekday: "long", month: "long", day: "numeric" }).format(d);
+  return { ymd: `${parts.year}${parts.month}${parts.day}`, label };
+}
+
+export function digestHtml(chats, label, site) {
+  const booked = chats.filter((c) => c.booked).length;
+  const turns = (c) => c.messages.filter((m) => m.role === "user").length;
+  const time = (iso) => new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }).format(new Date(iso));
+  const block = (c) => `
+  <div style="border:1px solid #e2e8f0;border-radius:12px;padding:16px;margin:0 0 16px;${c.booked ? "border-color:#0066FF;" : ""}">
+    <div style="font-size:13px;color:#64748b;margin:0 0 10px">${c.booked ? '<b style="color:#0066FF">CLICKED BOOK A CALL</b> · ' : ""}${time(c.started)} · ${turns(c)} question${turns(c) === 1 ? "" : "s"} · started on <a href="${escHtml(site + (c.page || "/"))}" style="color:#64748b">${escHtml(c.page || "/")}</a></div>
+    ${c.messages.map((m) => `<p style="margin:0 0 8px;font-size:14px;line-height:1.5;${m.role === "user" ? "color:#0A0F1E;font-weight:600" : "color:#334155"}">${m.role === "user" ? "Visitor" : "Bot"}: ${escHtml(m.content).replace(/\n/g, "<br>")}</p>`).join("")}
+  </div>`;
+  return `<div style="font-family:Inter,Arial,sans-serif;max-width:680px;margin:0 auto;color:#334155">
+  <h2 style="color:#0A0F1E;margin:0 0 6px">Website chats: ${escHtml(label)}</h2>
+  <p style="margin:0 0 20px">${chats.length} chat${chats.length === 1 ? "" : "s"}, ${booked} clicked through to book a call.</p>
+  ${chats.map(block).join("")}
+  <p style="font-size:12px;color:#94a3b8">Chats are kept for 90 days, then deleted automatically.</p></div>`;
+}
+
+async function sendDigest(env, now) {
+  if (!env.CHAT_LOG || !env.RESEND_API_KEY || !env.DIGEST_TO) return "skipped: not configured";
+  const { ymd, label } = yesterdayNY(now);
+  const keys = [];
+  let cursor;
+  do {
+    const page = await env.CHAT_LOG.list({ prefix: `c:${ymd}-`, cursor });
+    keys.push(...page.keys.map((k) => k.name));
+    cursor = page.list_complete ? undefined : page.cursor;
+  } while (cursor);
+  if (!keys.length) return "skipped: no chats";
+  const chats = (await Promise.all(keys.map((k) => env.CHAT_LOG.get(k, "json")))).filter(Boolean)
+    .sort((a, b) => (b.booked - a.booked) || a.started.localeCompare(b.started));
+  const booked = chats.filter((c) => c.booked).length;
+  const res = await fetch(env.RESEND_URL || "https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from: env.DIGEST_FROM,
+      to: env.DIGEST_TO.split(",").map((s) => s.trim()).filter(Boolean),
+      subject: `Website chats ${label}: ${chats.length} chat${chats.length === 1 ? "" : "s"}${booked ? `, ${booked} booking click${booked === 1 ? "" : "s"}` : ""}`,
+      html: digestHtml(chats, label, env.SITE),
+    }),
+  });
+  if (!res.ok) throw new Error(`resend ${res.status}: ${(await res.text()).slice(0, 300)}`);
+  return `sent ${chats.length}`;
+}
+
 function cors(origin, env) {
   const allowed = (env.ALLOWED_ORIGINS || "").split(",").map((s) => s.trim()).filter(Boolean);
   const ok = allowed.includes(origin);
@@ -135,13 +223,24 @@ function clean(messages) {
 }
 
 export default {
-  async fetch(request, env) {
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(sendDigest(env, new Date(event.scheduledTime)).then((r) => console.log("digest", r), (e) => console.error("digest", e.message)));
+  },
+
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin") || "";
     const c = cors(origin, env);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: c.headers });
     if (url.pathname === "/health") return text("ok", 200, c.headers);
+    if (url.pathname === "/event" && request.method === "POST") {
+      if (!c.ok) return text("Forbidden", 403, c.headers);
+      if (limited(request.headers.get("CF-Connecting-IP") || "unknown")) return text("", 429, c.headers);
+      let ev; try { ev = await request.json(); } catch { return text("Bad request", 400, c.headers); }
+      if (ev && ev.type === "booking") ctx.waitUntil(markBooked(env, ev.conv).catch((e) => console.error("log", e.message)));
+      return new Response(null, { status: 204, headers: c.headers });
+    }
     if (url.pathname !== "/chat" || request.method !== "POST") return text("Not found", 404, c.headers);
     if (!c.ok) return text("Forbidden", 403, c.headers);
 
@@ -161,6 +260,7 @@ export default {
       return text("Chat is unavailable right now. Please call 770-299-9583 or email support@deepthought.marketing.", 503, c.headers);
     }
     const page = typeof body.page === "string" ? body.page.slice(0, 200) : "";
+    const conv = typeof body.conv === "string" ? body.conv : "";
 
     const upstream = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -190,6 +290,7 @@ export default {
     const decoder = new TextDecoder();
     const encoder = new TextEncoder();
     let buf = "";
+    let reply = "";
     const stream = upstream.body.pipeThrough(new TransformStream({
       transform(chunk, ctrl) {
         buf += decoder.decode(chunk, { stream: true });
@@ -200,9 +301,15 @@ export default {
           if (!line.startsWith("data:")) continue;
           try {
             const ev = JSON.parse(line.slice(5));
-            if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") ctrl.enqueue(encoder.encode(ev.delta.text));
+            if (ev.type === "content_block_delta" && ev.delta?.type === "text_delta") {
+              reply += ev.delta.text;
+              ctrl.enqueue(encoder.encode(ev.delta.text));
+            }
           } catch { /* ignore keep-alives and partial lines */ }
         }
+      },
+      flush() {
+        if (reply.trim()) ctx.waitUntil(logTurn(env, conv, page, messages, reply).catch((e) => console.error("log", e.message)));
       },
     }));
 
