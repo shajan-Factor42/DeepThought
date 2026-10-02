@@ -25,6 +25,7 @@ import { join, resolve as resolvePath } from "node:path";
 import { pathToFileURL } from "node:url";
 import { render, templateFrom, findBlock } from "./dc.mjs";
 import { loadShell, page, SITE, BASE_SCOPE, esc } from "./shell.mjs";
+import { leadSection, secondOpinionPage, afterHero, heroCta } from "./leads.mjs";
 
 const args = process.argv.slice(2);
 const arg = (n, d) => { const i = args.indexOf("--" + n); return i === -1 ? d : args[i + 1]; };
@@ -83,6 +84,8 @@ const SERVING_STATES = ["GA", "FL"].map((ab) => {
   };
 });
 
+const LEADS_EP = (aeo.leads && aeo.leads.endpoint) || "";
+
 const PAGES = [
   { file: "index.html", title: "AI Paid Media Platform for Small Business | DeepThought",
     description: "AI-powered ad management for local businesses. Google, Facebook, streaming TV and more, run for a fraction of the cost of an agency.",
@@ -120,6 +123,11 @@ const PAGES = [
   { file: "contact.html", title: "Contact | DeepThought", description: "Talk to Deep Thought about your market and your budget." },
   { file: "book-a-demo.html", title: "Book a Demo | DeepThought", description: "Book a free 15-minute call. See how DeepThought would run your ads, and what it would cost for your business.",
     transform: bookingPage },
+  // Lead capture (CRO, 2026-10-01): Second Opinion form after the hero on home and pricing,
+  // and its own page built from the contact template. Endpoint: aeo-data.json leads.endpoint.
+  { file: "second-opinion.html", src: "contact.html", title: "Free Second Opinion on Your Marketing | DeepThought",
+    description: "Send three details and a real person reviews your ads and calls you back with a plain-English answer on what's working and what it should cost. Free, no contract.",
+    transform: (b) => secondOpinionPage(b, LEADS_EP) },
   { file: "thank-you.html", title: "Thank You | DeepThought", description: "We'll be in touch shortly.", noindex: true },
 ];
 
@@ -184,7 +192,7 @@ const rendered = [];
 for (const def of PAGES) {
   if (def.skip || DROP.has(def.file)) continue;
   let src;
-  try { src = await readFile(join(SRC, def.file), "utf8"); }
+  try { src = await readFile(join(SRC, def.src || def.file), "utf8"); }
   catch { console.error(`  skip (not in source): ${def.file}`); continue; }
 
   let tpl = templateFrom(src);
@@ -197,6 +205,8 @@ for (const def of PAGES) {
 
   let body = render(tpl, scope, partials);
   if (def.transform) body = def.transform(body);
+  if (def.file === "index.html" || def.file === "pricing.html")
+    body = afterHero(def.file === "index.html" ? heroCta(body) : body, leadSection(LEADS_EP, def.file.replace(".html", "")), def.file);
   if (body.includes("{{")) holes.push(def.file);
 
   const canonical = `${SITE}/${def.file}`;

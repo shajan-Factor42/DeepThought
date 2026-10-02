@@ -66,8 +66,9 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
 #dtc-send:disabled{opacity:.5;cursor:default}\
 #dtc-foot{font-size:11.5px;color:#64748b;padding:0 14px 10px;background:#fff}\
 #dtc-foot a{color:#64748b}\
+@media (max-width:767px){#dtc-btn{bottom:88px}}\
 @media (max-width:520px){#dtc-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100%;max-height:100%;border-radius:0}\
-#dtc-btn{right:16px;bottom:16px;width:56px;height:56px}html[data-dtc-open] #dtc-btn{display:none}}\
+#dtc-btn{right:16px;bottom:88px;width:56px;height:56px}html[data-dtc-open] #dtc-btn{display:none}}\
 @media (prefers-reduced-motion:reduce){#dtc-btn{transition:none}.dtc-dots i{animation:none;opacity:.6}}";
 
   function el(tag, attrs, html) {

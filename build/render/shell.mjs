@@ -6,6 +6,7 @@
  * never loaded responsive.css.
  */
 
+import { MOBILE_BAR, LEAD_SCRIPT } from "./leads.mjs";
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { templateFrom, helmetFrom, COMPONENT_CSS, esc } from "./dc.mjs";
@@ -143,33 +144,36 @@ export const BASE_SCOPE = {
  * drawer — otherwise phone visitors would never see it.
  */
 const APP_URL = "https://deepthought.adops.rocks/";
-const CTA_LABEL = "Launch your Campaigns";
+// CRO 2026-10-01: the main button is the Second Opinion form, not the app login. Cold visitors
+// can't use the app; existing clients find it under "Log in". Booking a call is the third option.
+const CTA_LABEL = "Free Second Opinion";
+const LEAD_URL = "second-opinion.html";
 
 const CTA_DESKTOP =
-  `<a href="${APP_URL}" style="display:inline-flex; align-items:center; justify-content:center; ` +
+  `<a href="${LEAD_URL}" data-lead-cta="header" style="display:inline-flex; align-items:center; justify-content:center; ` +
   `box-sizing:border-box; height:40px; padding:0 20px; border-radius:var(--radius-button); ` +
   `background:var(--f42-gradient-button); color:var(--text-on-brand); font-family:var(--font-body); ` +
   `font-size:14.5px; font-weight:700; letter-spacing:-0.01em; text-decoration:none; white-space:nowrap; ` +
   `box-shadow:var(--shadow-button)">${CTA_LABEL}</a>`;
 
 const CTA_DRAWER =
-  `<a href="${APP_URL}" style="display:block; margin-top:14px; text-align:center; font-size:16px; ` +
+  `<a href="${LEAD_URL}" data-lead-cta="drawer" style="display:block; margin-top:14px; text-align:center; font-size:16px; ` +
   `font-weight:700; color:#fff; text-decoration:none; background:var(--f42-gradient-button); ` +
   `border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(0,102,255,0.22)">${CTA_LABEL}</a>`;
 
 const DEMO_ORANGE = "#C2410C";
 
+// Secondary: phone and booking as quiet text links, app login quieter still.
 const DEMO_DESKTOP =
-  `<a href="book-a-demo.html" style="display:inline-flex; align-items:center; justify-content:center; ` +
-  `box-sizing:border-box; height:40px; padding:0 20px; border-radius:var(--radius-button); ` +
-  `background:${DEMO_ORANGE}; color:#ffffff; font-family:var(--font-body); font-size:14.5px; ` +
-  `font-weight:700; letter-spacing:-0.01em; text-decoration:none; white-space:nowrap; ` +
-  `box-shadow:0 6px 20px rgba(194,65,12,0.28)">Book a demo</a>`;
+  `<a href="${APP_URL}" style="font-size:14px; font-weight:500; color:var(--text-muted); text-decoration:none; white-space:nowrap">Log in</a>` +
+  `<a href="tel:+17702999583" style="font-size:14.5px; font-weight:700; color:var(--text-heading); text-decoration:none; white-space:nowrap">770-299-9583</a>`;
 
 const DEMO_DRAWER =
-  `<a href="book-a-demo.html" style="display:block; margin-top:10px; text-align:center; font-size:16px; ` +
-  `font-weight:700; color:#ffffff; text-decoration:none; background:${DEMO_ORANGE}; ` +
-  `border-radius:12px; padding:15px 20px; box-shadow:0 10px 24px rgba(194,65,12,0.24)">Book a demo</a>`;
+  `<a href="tel:+17702999583" style="display:block; margin-top:10px; text-align:center; font-size:16px; ` +
+  `font-weight:700; color:var(--f42-primary-blue); text-decoration:none; background:#fff; border:1.5px solid var(--f42-primary-blue); ` +
+  `border-radius:12px; padding:14px 20px">Call 770-299-9583</a>` +
+  `\n        <a href="book-a-demo.html" style="display:block; margin-top:10px; text-align:center; font-size:15px; font-weight:600; color:var(--f42-primary-blue); text-decoration:none; padding:8px">Book a call</a>` +
+  `\n        <a href="${APP_URL}" style="display:block; margin-top:2px; text-align:center; font-size:14px; color:var(--text-muted); text-decoration:none; padding:6px">Log in</a>`;
 
 function applyHeaderCta(tpl) {
   let html = tpl;
@@ -288,11 +292,21 @@ ${ANALYTICS}${CHAT}
 ${helmet}
 <style>${COMPONENT_CSS}
 [data-hdr-drawer]{display:none}
-html[data-nav-open] [data-hdr-drawer]{display:block}</style>
+html[data-nav-open] [data-hdr-drawer]{display:block}
+/* 2026-10-02: the header (logo, 7 links, Log in, phone, Second Opinion button) needs ~1,260px.
+   Between 1025 and 1279px the button was cut off, so those widths use the menu drawer too. */
+@media (min-width:1025px) and (max-width:1279px){
+  [data-hdr-bar]{padding-left:20px!important;padding-right:20px!important;gap:16px!important}
+  [data-hdr-nav],[data-hdr-actions]{display:none!important}
+  [data-hdr-toggle]{display:flex!important}
+  html[data-nav-open] [data-hdr-drawer]{display:block!important}
+}</style>
 </head>
 <body>
 ${body}
 ${NAV_SCRIPT}
+${MOBILE_BAR}
+${LEAD_SCRIPT}
 </body>
 </html>
 `;
