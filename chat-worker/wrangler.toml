@@ -13,7 +13,7 @@ MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = "600"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
-DIGEST_TO = "support@deepthought.marketing"
+DIGEST_TO = "shajan@deepthought.marketing"
 DIGEST_FROM = "DeepThought Chat <chat@deepthought.marketing>"
 
 [observability]
