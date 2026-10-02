@@ -51,7 +51,7 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | Date | Decision | Why |
 |---|---|---|
 | 2026-10-01 | **Keep the look and feel consistent** across the whole site: the current blue-to-cyan-on-white system (Plus Jakarta Sans for headings, Inter for body). No site-wide restyle. | Consistency; a restyle touches ~3,400 pages. |
-| 2026-10-01 | Clean, light design: **no dark backgrounds.** | Brand direction. |
+| 2026-10-01 | Clean, light design: **no dark backgrounds.** Exceptions: the homepage hero's dark navy panel and the chat assistant's navy header stay as they are (decided 2026-10-01). | Brand direction; the hero is the existing signature look. |
 | 2026-10-01 | meetlofi.com is **inspiration** for the feel of new work inside the current system: modeled on, never copied. | Brand direction. |
 | 2026-09-14 | Visual separation from Factor42's design system (tokens, component names) is **parked**. | Not worth the risk yet. |
 | — | Mobile first: most visitors are owners on phones. | Audience. |
@@ -81,5 +81,4 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 
 ## Open items
 
-- Two dark elements break "no dark backgrounds": the dark navy band on the homepage, and the chat assistant's header. Awaiting OK to make them light.
 - Chat assistant: waiting on the three GitHub secrets (`ANTHROPIC_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`).
