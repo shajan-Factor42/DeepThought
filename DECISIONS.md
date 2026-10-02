@@ -78,6 +78,7 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | 2026-09-27 | IndexNow pings Bing and others on every deploy (key file in `overrides/`). | Faster indexing and AI search. |
 | 2026-09-28 | Favicons and share image live in `build/static/`. Blog posts can set their own header and share image. | — |
 | 2026-10-01 | All pushes to `main` go through the website chat with a pre-launch check and Shajan's OK. | One final check. |
+| 2026-10-01 | Exception: updates to DECISIONS.md alone may be pushed without asking first. | They don't change what visitors see. |
 
 ## Open items
 
