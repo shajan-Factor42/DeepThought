@@ -71,6 +71,8 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | 2026-10-02 | **HVAC landing page** `hvac-marketing-atlanta.html` (SEO chat): first trade page, Atlanta + Gwinnett, Service schema with 7 Gwinnett cities. Linked from the footer on every page, the Gwinnett county page and the home services post. | Best trade by search volume, click value and year-round demand. |
 | 2026-10-02 | Guide pages' call-to-action button is "Get a free Second Opinion" (was "Book a demo"). | Matches the form-first decision. |
 | 2026-10-02 | Copy kept as is: "Same results, much lower cost" and "A real person reviews it, not a robot". | Shajan's call. |
+| 2026-10-04 | **About page stays indexed** with the site.zip copy. "Pricing should be published" reworded to "Pricing should be simple"; the "We're hiring" box became a **"Here's our story"** link to `our-story.html`. | Retired pricing claim; no open roles. |
+| 2026-10-04 | **`our-story.html`**: how DeepThought started + founder **Shajan Thomas, Founder & CEO**, with photo inline in the story. **Noindex** (Shajan's request), linked only from About. No Factor42 mention. | Founder story without putting it in search results. |
 | 2026-10-02 | Header uses the menu drawer below **1280px** (was 1024px). | With the Second Opinion button, phone and Log in, the header needs ~1,260px; the button was cut off on smaller laptops. |
 | 2026-10-02 | On phones the chat bubble sits above the sticky Call / Second Opinion bar. | They overlapped. |
 | 2026-10-01 | CRO chat never pushes to GitHub. It prepares changes and hands them to the website chat, which reviews and pushes. | Shajan's rule. |

@@ -1,9 +1,12 @@
 /**
- * about.mjs — the About page (2026-10-04).
+ * about.mjs — the About page fixes and the "Our story" page (2026-10-04).
  *
- * Replaces the site.zip About copy, which still said "Pricing should be published" and
- * advertised open roles. The new page tells how DeepThought started and introduces the
- * founder, Shajan Thomas, with his photo. Noindex by Shajan's request.
+ * about.html keeps the site.zip copy (indexed), with two fixes: the retired "Pricing should be
+ * published" value is reworded, and the old "We're hiring" box becomes a "Here's our story"
+ * link to our-story.html.
+ *
+ * our-story.html (noindex, by Shajan's request) is built from the same template: how
+ * DeepThought started and the founder, Shajan Thomas, with his photo.
  *
  * The photo lives at build/static/founder-shajan-thomas.jpg. Until that file exists the page
  * shows his initials instead, so the build never ships a broken image.
@@ -21,8 +24,8 @@ const photo = HAS_PHOTO
   : `<div aria-hidden="true" style="width:100%; aspect-ratio:1/1; border-radius:20px; background:var(--f42-gradient-brand); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-size:72px; font-weight:800">ST</div>`;
 
 const BODY = `<section style="max-width:900px; margin:0 auto; padding:88px 40px 32px">
-  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)">About us</div>
-  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; text-wrap:pretty">Professional advertising for local businesses, without the agency bill</h1>
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--text-muted)"><a href="about.html" style="color:inherit; text-decoration:none">About us</a> · Our story</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; margin:18px 0 0; text-wrap:pretty">Here's our story</h1>
 </section>
 
 <section style="max-width:900px; margin:0 auto; padding:24px 40px 56px">
@@ -71,18 +74,36 @@ const BODY = `<section style="max-width:900px; margin:0 auto; padding:88px 40px 
   </div>
 </section>`;
 
-/** Swap the site.zip About sections (hero through the hiring block) for the new page. */
-export function aboutPage(html) {
+/** our-story.html: swap the site.zip About sections (hero through the hiring block) for the story. */
+export function ourStoryPage(html) {
   const start = html.indexOf('<section style="max-width:900px; margin:0 auto; padding:88px 40px 56px">');
   const roles = html.indexOf("See open roles");
   const end = roles === -1 ? -1 : html.indexOf("</section>", roles);
-  if (start === -1 || end === -1) throw new Error("about: page sections not found — site.zip changed");
+  if (start === -1 || end === -1) throw new Error("our-story: page sections not found — site.zip changed");
   return html.slice(0, start) + BODY + html.slice(end + "</section>".length);
+}
+
+/** about.html: keep the page, fix the retired pricing value, and turn the hiring box into the story link. */
+export function aboutPage(html) {
+  const swap = (from, to, label) => {
+    if (!html.includes(from)) throw new Error(`about: ${label} not found — site.zip changed`);
+    html = html.replace(from, to);
+  };
+  swap(">Pricing should be published</div>", ">Pricing should be simple</div>", "pricing value");
+  swap(">We're hiring</h2>", ">Here's our story</h2>", "hiring heading");
+  swap("Media, engineering, and customer roles. If you've run campaigns at scale and think most of the work should be automated, we should talk.",
+    "How DeepThought started, and why our founder, Shajan Thomas, built it.", "hiring text");
+  const label = html.indexOf("See open roles");
+  const href = label === -1 ? -1 : html.lastIndexOf('href="contact.html"', label);
+  if (href === -1 || label - href > 1500) throw new Error("about: hiring button not found — site.zip changed");
+  html = html.slice(0, href) + 'href="our-story.html"' + html.slice(href + 'href="contact.html"'.length);
+  swap("See open roles", "Read our story", "hiring button label");
+  return html;
 }
 
 export function aboutJsonLd(site) {
   return {
-    "@context": "https://schema.org", "@type": "AboutPage", url: `${site}/about.html`,
+    "@context": "https://schema.org", "@type": "AboutPage", url: `${site}/our-story.html`,
     mainEntity: { "@id": `${site}/#organization` },
     about: {
       "@type": "Person", name: FOUNDER.name, jobTitle: FOUNDER.title,
