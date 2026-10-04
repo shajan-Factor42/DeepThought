@@ -26,21 +26,21 @@ const BODY = `<section style="max-width:900px; margin:0 auto; padding:88px 40px 
 </section>
 
 <section style="max-width:900px; margin:0 auto; padding:24px 40px 56px">
-  <div style="display:flex; flex-wrap:wrap; gap:40px; align-items:flex-start">
-    <figure style="flex:0 0 260px; max-width:260px; margin:0">
+  <div style="font-size:17px; line-height:1.7; color:var(--text-body)">
+    <h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.02em; margin:0 0 20px; color:var(--text-heading)">How DeepThought started</h2>
+    <figure class="dt-founder" style="float:left; width:220px; margin:6px 28px 12px 0">
       ${photo}
-      <figcaption style="margin-top:16px">
-        <div style="font-family:var(--font-display); font-size:20px; font-weight:800; color:var(--text-heading)">${FOUNDER.name}</div>
-        <div style="font-size:15px; color:var(--text-muted); margin-top:4px">${FOUNDER.title}, DeepThought</div>
+      <figcaption style="margin-top:12px; line-height:1.4">
+        <div style="font-family:var(--font-display); font-size:18px; font-weight:800; color:var(--text-heading)">${FOUNDER.name}</div>
+        <div style="font-size:14px; color:var(--text-muted); margin-top:2px">${FOUNDER.title}, DeepThought</div>
       </figcaption>
     </figure>
-    <div style="flex:1 1 360px; font-size:17px; line-height:1.7; color:var(--text-body)">
-      <h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.02em; margin:0 0 16px; color:var(--text-heading)">How DeepThought started</h2>
-      <p style="margin:0 0 16px">DeepThought started with a simple frustration. Shajan spent years behind the scenes in digital advertising, running campaigns for agencies and media companies. He saw the same thing again and again: small businesses paying agency retainers, with too little of their budget reaching actual customers.</p>
-      <p style="margin:0 0 16px">So he built DeepThought to give local businesses the same professional advertising, all in one place, at a fraction of the cost. Our AI recommends the channels, budget and audiences and drafts the ads. Our team runs the media. You approve; we run it.</p>
-      <p style="margin:0">DeepThought is based in Gwinnett County, Georgia, and serves businesses across the US.</p>
-    </div>
+    <p style="margin:0 0 16px">DeepThought started with a simple frustration. Shajan spent years behind the scenes in digital advertising, running campaigns for agencies and media companies. He saw the same thing again and again: small businesses paying agency retainers, with too little of their budget reaching actual customers.</p>
+    <p style="margin:0 0 16px">So he built DeepThought to give local businesses the same professional advertising, all in one place, at a fraction of the cost. Our AI recommends the channels, budget and audiences and drafts the ads. Our team runs the media. You approve; we run it.</p>
+    <p style="margin:0">DeepThought is based in Gwinnett County, Georgia, and serves businesses across the US.</p>
+    <div style="clear:both"></div>
   </div>
+  <style>@media (max-width:620px){.dt-founder{width:140px !important; margin:4px 18px 8px 0 !important}}</style>
 </section>
 
 <section style="max-width:900px; margin:0 auto; padding:8px 40px 56px">
