@@ -26,6 +26,7 @@ import { pathToFileURL } from "node:url";
 import { render, templateFrom, findBlock } from "./dc.mjs";
 import { loadShell, page, SITE, BASE_SCOPE, esc } from "./shell.mjs";
 import { leadSection, secondOpinionPage, afterHero, heroCta } from "./leads.mjs";
+import { aboutPage, aboutJsonLd } from "./about.mjs";
 
 const args = process.argv.slice(2);
 const arg = (n, d) => { const i = args.indexOf("--" + n); return i === -1 ? d : args[i + 1]; };
@@ -117,7 +118,9 @@ const PAGES = [
   { file: "solutions-agencies.html", title: "For Agencies | DeepThought",
     description: "White-label campaign fulfilment across every channel, in your clients' own ad accounts." },
 
-  { file: "about.html", title: "About | DeepThought", description: "Who builds Deep Thought and why." },
+  // About (2026-10-04): founder story + photo, noindex by Shajan's request. See about.mjs.
+  { file: "about.html", title: "About DeepThought | Founder Shajan Thomas", description: "How DeepThought started: founder Shajan Thomas built a done-for-you advertising service so local businesses get professional ads at a fraction of the cost.",
+    transform: aboutPage, noindex: true },
   { file: "case-studies.html", title: "Case Studies | DeepThought", description: "How local businesses run campaigns with Deep Thought." },
   { file: "media-kit.html", title: "Media Kit | DeepThought", description: "Brand assets, logos and product screenshots." },
   { file: "contact.html", title: "Contact | DeepThought", description: "Talk to Deep Thought about your market and your budget." },
@@ -235,6 +238,8 @@ for (const def of PAGES) {
       },
     });
   }
+
+  if (def.file === "about.html") jsonld.push(aboutJsonLd(SITE));
 
   // The home page and FAQ page carry the canonical question set, from one source, so the
   // visible text and the schema cannot disagree — the mismatch faq-sync.mjs existed to police.
