@@ -94,6 +94,9 @@ for (const post of posts) {
   const scope = { ...BASE_SCOPE, ...post, ...NAV, ...CTA, related: relatedFor(post), counties: countiesFor(post.slug) };
   let body = render(POST_TPL, scope, partials);
   if (body.includes("{{")) holes++;
+  // A <table> can't sit inside the template's <p>; lift table blocks out into a scrolling div.
+  body = body.replace(/<p\b[^>]*>\s*<span data-tbl style="([^"]*)">([\s\S]*?<\/table>)<\/span>\s*<\/p>/g,
+    (m, st, t) => `<div style="${st}; margin:0 0 22px">${t}</div>`);
 
   // Header image: placed between the byline and the stat card.
   if (post.image) {

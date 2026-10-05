@@ -108,6 +108,18 @@ function inline(text) {
     .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, h) => `<a href="${esc(h)}" style="color:var(--color-accent)">${t}</a>`);
 }
 
+// Pipe tables in blog posts (added 2026-10-05; guides have their own copy in render-guides.mjs).
+const TH = "text-align:left; padding:12px 14px; font-size:14px; font-weight:700; line-height:1.4; color:var(--text-heading); background:var(--f42-slate-100, #f1f5f9); border-bottom:1px solid var(--f42-slate-200, #e2e8f0)";
+const TD = "text-align:left; vertical-align:top; padding:12px 14px; font-size:15px; line-height:1.55; color:var(--text-body); border-bottom:1px solid var(--f42-slate-200, #e2e8f0)";
+function tableHtml(chunk) {
+  const rows = chunk.split(/\r?\n/).map((l) => l.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim()));
+  const [head, sep, ...body] = rows;
+  if (!sep || !sep.every((c) => /^:?-{3,}:?$/.test(c))) throw new Error("blog table: second row must be |---|---|");
+  const th = head.map((c) => `<th style="${TH}">${inline(c)}</th>`).join("");
+  const tr = body.map((r) => `<tr>${r.map((c, i) => `<td style="${TD}${i === 0 ? "; font-weight:600" : ""}">${inline(c)}</td>`).join("")}</tr>`).join("");
+  return `<span data-tbl style="display:block; overflow-x:auto; margin:4px 0"><table style="width:100%; border-collapse:collapse; min-width:600px"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></span>`;
+}
+
 /** Markdown body -> the [{h, p:[...]}] shape the Blog Post template loops over. */
 export function parseBody(md) {
   const sections = [];
@@ -125,6 +137,11 @@ export function parseBody(md) {
 
     const h3 = /^###\s+(.*)$/.exec(chunk);
     if (h3) { current.p.push(`<strong>${inline(h3[1].trim())}</strong>`); continue; }
+
+    if (/^\|/.test(chunk) && chunk.split(/\r?\n/).every((l) => l.trim().startsWith("|"))) {
+      current.p.push(tableHtml(chunk));
+      continue;
+    }
 
     if (/^[-*]\s+/.test(chunk)) {
       const items = chunk.split(/\r?\n/).filter((l) => /^[-*]\s+/.test(l))

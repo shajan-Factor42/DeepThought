@@ -37,3 +37,5 @@ It is the wrong answer if what you actually need is someone to tell you what you
 Under $2,000 a month in media: execution platform, no question — a retainer would eat everything. From $2,000 to $30,000: execution platform for the running of it, plus occasional paid strategic help when a real question comes up. Above $30,000: build a small in-house team, and consider an agency for brand and creative.
 
 The mistake is not choosing wrong. It is staying in a model you outgrew three years ago.
+
+For the full side-by-side, with what each option costs, the skills it assumes and what it takes to switch, read [in-house vs agency marketing: how a small business should choose](blog-agency-vs-in-house-marketing.html).

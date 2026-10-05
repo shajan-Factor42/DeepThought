@@ -71,7 +71,7 @@ The question to ask of any quote: **how much of this money reaches a customer?**
 
 ## Who should run it? Four options compared
 
-Every small business ends up in one of four places. None is right for everyone.
+Every small business ends up in one of four places. None is right for everyone. For the deeper version with costs, see [in-house vs agency marketing](blog-agency-vs-in-house-marketing.html).
 
 | Option | What you pay | What you get | Best for |
 |---|---|---|---|
