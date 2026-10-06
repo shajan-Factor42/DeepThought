@@ -37,10 +37,12 @@ export function leadForm(endpoint, place, { heading = "Get your free Second Opin
   <p style="font-size:15px; line-height:1.55; color:var(--text-body); margin:0 0 20px">${esc(intro)}</p>
   <label for="${id}-name" style="${LABEL}">Your name</label>
   <input id="${id}-name" type="text" name="name" autocomplete="name" required placeholder="Jordan Reyes" style="${INPUT}">
-  <label for="${id}-phone" style="${LABEL}">Phone</label>
+  <label for="${id}-phone" style="${LABEL}">Phone <span style="font-weight:500; color:var(--text-muted)">(US)</span></label>
   <input id="${id}-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" required placeholder="(404) 555-0142" style="${INPUT}">
   <label for="${id}-biz" style="${LABEL}">Business or trade</label>
   <input id="${id}-biz" type="text" name="business" autocomplete="organization" required placeholder="e.g. Reyes Plumbing, Lawrenceville" style="${INPUT}">
+  <label for="${id}-email" style="${LABEL}">Email <span style="font-weight:500; color:var(--text-muted)">(optional)</span></label>
+  <input id="${id}-email" type="email" name="email" autocomplete="email" inputmode="email" placeholder="you@yourbusiness.com" style="${INPUT}">
   <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0">
   <button type="submit" style="width:100%; height:52px; border:0; border-radius:12px; background:var(--f42-gradient-button); color:#fff; font-family:var(--font-body); font-size:16.5px; font-weight:700; cursor:pointer; box-shadow:0 10px 24px rgba(0,102,255,0.22)">Send it. It's free</button>
   <p class="dt-lead-status" role="status" aria-live="polite" style="font-size:14px; color:#B42318; margin:10px 0 0; min-height:1px"></p>
@@ -87,6 +89,26 @@ export const MOBILE_BAR = `<style>
 export const LEAD_SCRIPT = `<script>
 (function(){
   function dl(o){window.dataLayer=window.dataLayer||[];window.dataLayer.push(o)}
+  var LS={get:function(k){try{return JSON.parse(localStorage.getItem(k)||"null")}catch(x){return null}},
+          set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(x){}}};
+  // Where did this visitor come from? Kept for 90 days: the first visit, and the latest visit that carried an ad tag.
+  function tags(){var q={};try{new URLSearchParams(location.search).forEach(function(val,k){if(/^utm_|^gclid$|^gbraid$|^wbraid$|^fbclid$|^msclkid$|^ttclid$|^li_fat_id$/.test(k))q[k]=val.slice(0,100)})}catch(x){}return q}
+  function extRef(){var r=document.referrer||"";try{return r&&new URL(r).hostname!==location.hostname?r:""}catch(x){return ""}}
+  var now=Date.now(),t=tags(),hasTags=Object.keys(t).length>0,ref=extRef();
+  var ft=LS.get("dt_ft");if(!ft||now-ft.ts>7776e6){ft={ts:now,page:location.pathname,ref:ref,tags:t};LS.set("dt_ft",ft)}
+  if(hasTags||ref){LS.set("dt_lt",{ts:now,page:location.pathname,ref:ref,tags:t})}
+  function label(x){if(!x)return "Unknown";var g=x.tags||{},s=(g.utm_source||"").toLowerCase(),m=(g.utm_medium||"").toLowerCase();
+    if(g.gclid||g.gbraid||g.wbraid)return "Google Ads";if(g.msclkid)return "Microsoft Ads";if(g.ttclid)return "TikTok ad";if(g.li_fat_id)return "LinkedIn ad";
+    if(s)return s+(m?" / "+m:"")+(g.utm_campaign?" ("+g.utm_campaign+")":"");
+    if(g.fbclid)return "Facebook / Instagram";
+    var h="";try{h=x.ref?new URL(x.ref).hostname.replace(/^www\\./,""):""}catch(e){}
+    if(!h)return "Direct (typed, bookmark or app)";
+    var map=[[/google\\./,"Google search"],[/bing\\./,"Bing search"],[/duckduckgo/,"DuckDuckGo"],[/yahoo\\./,"Yahoo search"],
+      [/chatgpt|openai/,"ChatGPT"],[/perplexity/,"Perplexity"],[/claude\\.ai/,"Claude"],[/gemini\\.google|copilot/,"AI assistant"],
+      [/facebook|fb\\.|messenger/,"Facebook"],[/instagram/,"Instagram"],[/linkedin|lnkd/,"LinkedIn"],[/t\\.co$|twitter|x\\.com/,"X"],
+      [/tiktok/,"TikTok"],[/youtube|youtu\\.be/,"YouTube"],[/nextdoor/,"Nextdoor"],[/reddit/,"Reddit"]];
+    for(var i=0;i<map.length;i++)if(map[i][0].test(h))return map[i][1];return h}
+  function usPhone(raw){var d=raw.replace(/\\D/g,"");if(d.length===11&&d[0]==="1")d=d.slice(1);return /^[2-9]\\d{2}[2-9]\\d{6}$/.test(d)?d:""}
   document.addEventListener("click",function(e){
     var a=e.target.closest&&e.target.closest("a");if(!a)return;
     var h=a.getAttribute("href")||"";
@@ -100,10 +122,16 @@ export const LEAD_SCRIPT = `<script>
     var st=f.querySelector(".dt-lead-status"),b=f.querySelector("button");
     var v=function(n){return(f.elements[n]&&f.elements[n].value||"").trim()};
     if(v("website"))return;
-    if(!v("name")||!v("business")||v("phone").replace(/\\D/g,"").length<10){st.textContent="Please add your name, business and a 10-digit phone number.";return}
+    if(!v("name")||!v("business")){st.textContent="Please add your name and your business or trade.";return}
+    var ph=usPhone(v("phone"));
+    if(!ph){st.textContent="Please enter a US phone number with area code, like (404) 555-0142.";f.elements.phone.focus();return}
+    var em=v("email");if(em&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(em)){st.textContent="That email doesn't look right. Fix it or leave it blank.";f.elements.email.focus();return}
     b.disabled=true;b.textContent="Sending\\u2026";st.textContent="";
-    var q={};try{new URLSearchParams(location.search).forEach(function(val,k){if(/^utm_|^gclid$|^fbclid$/.test(k))q[k]=val})}catch(x){}
-    var d={name:v("name"),phone:v("phone"),business:v("business"),page:location.pathname,place:f.getAttribute("data-place"),referrer:document.referrer,utm:JSON.stringify(q)};
+    var lt=LS.get("dt_lt")||ft,tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(x){}
+    var d={name:v("name"),phone:"("+ph.slice(0,3)+") "+ph.slice(3,6)+"-"+ph.slice(6),email:em,business:v("business"),
+      page:location.pathname,place:f.getAttribute("data-place"),referrer:document.referrer,utm:JSON.stringify(t),
+      source:label(lt),first_source:label(ft),first_page:ft.page,first_seen:new Date(ft.ts).toISOString().slice(0,10),
+      timezone:tz,language:navigator.language||""};
     var ep=f.getAttribute("data-endpoint"),p;
     if(ep){p=fetch(ep,{method:"POST",mode:"no-cors",body:new URLSearchParams(d)})}
     else{var fd=new FormData();fd.append("access_key",f.getAttribute("data-w3f"));fd.append("subject","New Second Opinion request: "+d.business);fd.append("from_name","DeepThought website");
