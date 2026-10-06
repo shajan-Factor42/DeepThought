@@ -74,8 +74,11 @@ jobs:
         working-directory: chat-worker
         run: |
           set -e
-          npx --yes wrangler@4 deploy
-          printf '%s' "$ANTHROPIC_API_KEY" | npx --yes wrangler@4 secret put ANTHROPIC_API_KEY
+          # Show wrangler's own error message on the run page if a step fails.
+          run() { if ! "$@" > out.log 2>&1; then cat out.log; echo "::error::$(grep -E 'ERROR|\[ERROR\]|✘|error' out.log | head -3 | tr '\n' ' ' | cut -c1-600)"; exit 1; fi; cat out.log; }
+          run npx --yes wrangler@4 deploy
+          grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' out.log | head -1 | sed 's/^/::notice::Chat relay URL: /'
+          printf '%s' "$ANTHROPIC_API_KEY" > key.txt; run sh -c 'npx --yes wrangler@4 secret put ANTHROPIC_API_KEY < key.txt'; rm -f key.txt
           if [ -n "$RESEND_API_KEY" ]; then
             printf '%s' "$RESEND_API_KEY" | npx --yes wrangler@4 secret put RESEND_API_KEY
           else
