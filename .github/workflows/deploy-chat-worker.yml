@@ -74,6 +74,8 @@ jobs:
         working-directory: chat-worker
         run: |
           set -e
+          # Pasted secrets sometimes carry a stray space or line break; wrangler rejects that.
+          export CLOUDFLARE_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID//[[:space:]]/}" CLOUDFLARE_API_TOKEN="${CLOUDFLARE_API_TOKEN//[[:space:]]/}"
           # Show wrangler's own error message on the run page if a step fails.
           run() { if ! "$@" > out.log 2>&1; then cat out.log; echo "::error::$(grep -E 'ERROR|\[ERROR\]|✘|error' out.log | head -3 | tr '\n' ' ' | cut -c1-600)"; exit 1; fi; cat out.log; }
           run npx --yes wrangler@4 deploy
