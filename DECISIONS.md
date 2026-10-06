@@ -97,4 +97,4 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 
 ## Open items
 
-- Chat assistant: waiting on the three GitHub secrets (`ANTHROPIC_API_KEY`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`).
+- Chat assistant: relay deployed 2026-10-06 at `https://deepthought-chat.shajan.workers.dev`; bubble goes live when `chat.endpoint` is pushed.

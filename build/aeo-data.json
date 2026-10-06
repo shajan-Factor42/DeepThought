@@ -1,6 +1,6 @@
 {
   "chat": {
-    "endpoint": "",
+    "endpoint": "https://deepthought-chat.shajan.workers.dev/chat",
     "note": "URL of the chat relay (chat-worker/), e.g. https://deepthought-chat.<account>.workers.dev/chat. Empty = chat bubble off."
   },
   "site": "https://deepthought.marketing",
