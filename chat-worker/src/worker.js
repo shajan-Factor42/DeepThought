@@ -233,7 +233,19 @@ export default {
     const c = cors(origin, env);
 
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: c.headers });
-    if (url.pathname === "/health") return text("ok", 200, c.headers);
+    if (url.pathname === "/health" && url.searchParams.get("check") !== "1") return text("ok", 200, c.headers);
+    if (url.pathname === "/health") {
+      // Setup check: one tiny Anthropic call. Reports the status and error type only, never the key.
+      if (limited(request.headers.get("CF-Connecting-IP") || "unknown")) return text("slow down", 429, c.headers);
+      const lines = [`key set: ${env.ANTHROPIC_API_KEY ? "yes (" + String(env.ANTHROPIC_API_KEY).length + " chars, starts " + String(env.ANTHROPIC_API_KEY).slice(0, 7) + ")" : "NO"}`, `model: ${env.MODEL}`];
+      try { await systemPrompt(env); lines.push("knowledge: ok"); } catch (e) { lines.push("knowledge: " + e.message); }
+      const r = await fetch("https://api.anthropic.com/v1/messages", { method: "POST",
+        headers: { "x-api-key": String(env.ANTHROPIC_API_KEY || "").trim(), "anthropic-version": "2023-06-01", "content-type": "application/json" },
+        body: JSON.stringify({ model: env.MODEL, max_tokens: 1, messages: [{ role: "user", content: "hi" }] }) });
+      let detail = ""; try { const j = await r.json(); detail = j.error ? `${j.error.type}: ${j.error.message}` : "ok"; } catch {}
+      lines.push(`anthropic: ${r.status} ${detail}`.slice(0, 400));
+      return text(lines.join("\n"), 200, c.headers);
+    }
     if (url.pathname === "/event" && request.method === "POST") {
       if (!c.ok) return text("Forbidden", 403, c.headers);
       if (limited(request.headers.get("CF-Connecting-IP") || "unknown")) return text("", 429, c.headers);
@@ -265,7 +277,7 @@ export default {
     const upstream = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        "x-api-key": env.ANTHROPIC_API_KEY,
+        "x-api-key": String(env.ANTHROPIC_API_KEY || "").trim(),
         "anthropic-version": "2023-06-01",
         "content-type": "application/json",
       },
