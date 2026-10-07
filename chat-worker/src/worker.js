@@ -40,7 +40,12 @@ function limited(key) {
 }
 
 // Pasted secrets can carry stray spaces or line breaks; keys never contain whitespace.
-const apiKey = (env) => String(env.ANTHROPIC_API_KEY || "").replace(/\s+/g, "");
+// If a whole example command was pasted, pick the key out of it.
+const apiKey = (env) => {
+  const raw = String(env.ANTHROPIC_API_KEY || "");
+  const m = raw.match(/sk-ant-[A-Za-z0-9_-]{20,}/);
+  return m ? m[0] : raw.replace(/\s+/g, "");
+};
 
 let cache = { at: 0, prompt: "" };
 async function systemPrompt(env) {
