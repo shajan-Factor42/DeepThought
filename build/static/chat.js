@@ -69,6 +69,11 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
 @media (max-width:767px){#dtc-btn{bottom:88px}}\
 @media (max-width:520px){#dtc-panel{right:0;bottom:0;width:100vw;max-width:100vw;height:100%;max-height:100%;border-radius:0}\
 #dtc-btn{right:16px;bottom:88px;width:56px;height:56px}html[data-dtc-open] #dtc-btn{display:none}}\
+#dtc-tip{position:fixed;right:92px;bottom:30px;z-index:2147483000;display:none;align-items:center;gap:6px;background:#fff;color:#0A0F1E;\
+border:1px solid rgba(0,102,255,.25);border-radius:14px;border-bottom-right-radius:4px;box-shadow:0 10px 30px rgba(10,15,30,.15);padding:9px 8px 9px 14px;\
+font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;font-weight:600;cursor:pointer}\
+#dtc-tip.show{display:flex}#dtc-tip button{background:none;border:0;color:#64748b;font-size:18px;line-height:1;cursor:pointer;padding:2px 6px}\
+@media (max-width:767px){#dtc-tip{bottom:98px;right:84px}}html[data-dtc-open] #dtc-tip{display:none}\
 @media (prefers-reduced-motion:reduce){#dtc-btn{transition:none}.dtc-dots i{animation:none;opacity:.6}}";
 
   function el(tag, attrs, html) {
@@ -129,13 +134,15 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
       }
     }
 
-    function open() {
+    function open(auto) {
+      hideTip();
+      try { sessionStorage.setItem(KEY + "-pop", "1"); } catch (e) {}
       panel.classList.add("open");
       document.documentElement.setAttribute("data-dtc-open", "");
       btn.setAttribute("aria-expanded", "true");
       render();
-      setTimeout(function () { input.focus(); }, 50);
-      track("chat_open", { chat_page: location.pathname });
+      if (auto !== true) setTimeout(function () { input.focus(); }, 50);
+      track(auto === true ? "chat_auto_open" : "chat_open", { chat_page: location.pathname });
     }
     function close() {
       panel.classList.remove("open");
@@ -144,6 +151,25 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;color:#334155;bo
       btn.focus();
     }
     btn.onclick = function () { panel.classList.contains("open") ? close() : open(); };
+
+    // Nudge once per visit, 5 seconds after the page opened: on desktop the chat opens in the corner;
+    // on phones (where the chat is full screen) only a small "Questions? Ask me here" bubble shows.
+    // Never on the form / thank-you pages, never while someone is typing, never again once dismissed.
+    var tip = el("div", { id: "dtc-tip", role: "button", tabindex: "0", "aria-label": "Open chat" }, 'Questions? Ask me here <button type="button" aria-label="Dismiss">×</button>');
+    document.body.appendChild(tip);
+    function hideTip() { tip.classList.remove("show"); }
+    tip.onclick = function (e) { if (e.target.tagName === "BUTTON") { hideTip(); return; } open(); };
+    tip.onkeydown = function (e) { if (e.key === "Enter") open(); };
+    function nudge() {
+      var seen; try { seen = sessionStorage.getItem(KEY + "-pop"); } catch (e) { seen = "1"; }
+      if (seen || panel.classList.contains("open") || /second-opinion|thank-you/.test(location.pathname)) return;
+      var a = document.activeElement;
+      if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+      try { sessionStorage.setItem(KEY + "-pop", "1"); } catch (e) {}
+      if (window.matchMedia("(max-width:520px)").matches) { tip.classList.add("show"); track("chat_teaser_shown", { chat_page: location.pathname }); }
+      else open(true);
+    }
+    setTimeout(nudge, Math.max(0, 5000 - (window.performance && performance.now ? performance.now() : 0)));
     panel.querySelector("#dtc-x").onclick = close;
     document.addEventListener("keydown", function (e) { if (e.key === "Escape" && panel.classList.contains("open")) close(); });
     log.addEventListener("click", function (e) {
