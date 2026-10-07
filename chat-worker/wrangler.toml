@@ -11,6 +11,8 @@ ALLOWED_ORIGINS = "https://deepthought.marketing,https://www.deepthought.marketi
 # Cheapest, fastest current model. Swap for claude-sonnet-5-5 if answers need more depth.
 MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = "600"
+# Call-back details taken in the chat go to the same Apps Script as the website form (sheet + email).
+LEADS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzi0ujRc26plP0yuO0CxXS43GAKB5Rw8NW4t3WaUsnuLvXnefTXmYxGZ7ZUOSjAPjoq/exec"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"

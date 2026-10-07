@@ -80,6 +80,7 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | 2026-10-01 | CRO chat never pushes to GitHub. It prepares changes and hands them to the website chat, which reviews and pushes. | Shajan's rule. |
 | 2026-09-29 | Pillar page: `digital-marketing-for-small-business.html`. Blog posts link to it. | Topic cluster for SEO. |
 | 2026-10-01 | **Website chat assistant**: custom Claude-powered bot (Haiku 4.5) via a Cloudflare Worker relay, not Tidio/Crisp/Intercom. Knowledge rebuilt from `aeo-data.json` and `llms.txt` on every deploy. Off until `chat.endpoint` is set. | Cheapest to run, follows approved wording. |
+| 2026-10-06 | **Chat takes call-back details.** When a visitor wants to talk, the bot offers to call now (770-299-9583) or takes name, US phone, business (email optional) and sends them to the same lead sheet + email as the Second Opinion form, marked "chat" / "Website chat". One lead per conversation; non-US numbers are refused. The daily digest lists these chats first. | Shajan: interested visitors shouldn't have to leave the chat to be called back. |
 | 2026-10-01 | **Chat conversations are logged** for 90 days (Cloudflare KV, no IP address) and a **daily digest email** of yesterday's chats goes out via Resend, booking clicks first. Privacy policy and chat footer say so. Digest goes to shajan@deepthought.marketing. | Learn what visitors ask; catch wrong answers. |
 
 ## Technical
