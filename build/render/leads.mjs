@@ -46,7 +46,7 @@ export function leadForm(endpoint, place, { heading = "Get your free Second Opin
   <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0">
   <button type="submit" style="width:100%; height:52px; border:0; border-radius:12px; background:var(--f42-gradient-button); color:#fff; font-family:var(--font-body); font-size:16.5px; font-weight:700; cursor:pointer; box-shadow:0 10px 24px rgba(0,102,255,0.22)">Send it. It's free</button>
   <p class="dt-lead-status" role="status" aria-live="polite" style="font-size:14px; color:#B42318; margin:10px 0 0; min-height:1px"></p>
-  <p style="font-size:13.5px; line-height:1.55; color:var(--text-muted); margin:12px 0 0">We reply within one business day. Rather talk now? Call <a href="${TEL}" style="color:var(--color-accent); font-weight:600">${PHONE}</a> or <a href="book-a-demo.html" style="color:var(--color-accent)">pick a time</a>.</p>
+  <p style="font-size:13.5px; line-height:1.55; color:var(--text-muted); margin:12px 0 0">We reply within 24 hours. Rather talk now? Call <a href="${TEL}" style="color:var(--color-accent); font-weight:600">${PHONE}</a> or <a href="book-a-demo.html" style="color:var(--color-accent)">pick a time</a>.</p>
 </form>`;
 }
 

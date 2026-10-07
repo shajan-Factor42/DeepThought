@@ -840,6 +840,25 @@
       ],
       "min": 1,
       "note": "2026-09-28 retired prompt claim on local-service steps (flagged by the SEO chat's daily scan)"
+    },
+    {
+      "from": "within one business day",
+      "to": "within 24 hours",
+      "min": 5,
+      "note": "2026-10-06: call-back promise is 24 hours (Shajan)."
+    },
+    {
+      "from": ">One business day</div>",
+      "to": ">Within 24 hours</div>",
+      "note": "2026-10-06: contact / second-opinion sidebar heading."
+    },
+    {
+      "from": "We answer within a business day.",
+      "to": "We answer within 24 hours.",
+      "files": [
+        "faq.html"
+      ],
+      "note": "2026-10-06: 24-hour promise."
     }
   ],
   "bannedClaims": [

@@ -54,7 +54,7 @@ function doPost(e) {
       row('Time zone', esc_(tz)) +
       '</table>' +
       '<p><a href="https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit">Open the leads sheet</a></p>' +
-      '<p>We promise a reply within one business day.</p>'
+      '<p>We promise a call back within 24 hours.</p>'
   });
   return out_('ok');
 }
