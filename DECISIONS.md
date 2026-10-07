@@ -100,4 +100,4 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 
 ## Open items
 
-- Chat assistant: relay deployed 2026-10-06 at `https://deepthought-chat.shajan.workers.dev`; bubble goes live when `chat.endpoint` is pushed.
+- Chat assistant: **live 2026-10-06** (relay `https://deepthought-chat.shajan.workers.dev`; setup check at `/health?check=1`). Anthropic key must be workspace-scoped.
