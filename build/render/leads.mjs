@@ -73,6 +73,11 @@ export const MOBILE_BAR = `<style>
 .dt-lead.dt-card{padding:28px !important}
 /* responsive.css zeroes side padding on anything with max-width inside a section; win it back */
 @media (max-width:767px){section[style] form.dt-lead.dt-card[style]{padding:22px 18px !important}}
+/* Same cause: the home hero's text block sat flush against the navy panel's edges on phones and tablets. */
+@media (max-width:900px){section[style] [style*="border-radius:28px; overflow:hidden"] > div[style*="max-width:820px"]{padding:56px 28px 48px !important}}
+@media (max-width:620px){section[style] [style*="border-radius:28px; overflow:hidden"] > div[style*="max-width:820px"]{padding:44px 22px 36px !important}
+  section[style] [style*="border-radius:28px; overflow:hidden"] > div[style*="max-width:820px"] a{flex:1 1 100% !important}
+  section[style] [style*="border-radius:28px; overflow:hidden"] > div[style*="max-width:820px"] a .ds-btn{width:100% !important; white-space:normal !important; text-align:center; padding-left:12px !important; padding-right:12px !important; font-size:16px !important}}
 @media (max-width:767px){
   .dt-mbar{display:flex; gap:10px; position:fixed; left:0; right:0; bottom:0; z-index:60; padding:10px 12px calc(10px + env(safe-area-inset-bottom,0px)); background:rgba(255,255,255,0.97); border-top:1px solid var(--border-subtle); box-shadow:0 -6px 20px rgba(15,40,90,0.08)}
   .dt-mbar a{flex:1; display:flex; align-items:center; justify-content:center; height:48px; border-radius:12px; font-family:var(--font-body); font-size:15px; font-weight:700; text-decoration:none; white-space:nowrap}
