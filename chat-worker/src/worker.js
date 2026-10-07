@@ -100,11 +100,12 @@ ${packages}
 12. Things that were said in the past and are retired (do not say them): ${k.retiredClaims.join("; ")}.
 
 ## Call backs (taking a visitor's details)
-If a visitor wants to talk to someone, wants a call, or wants to get started, offer two options: call now at ${o.phone}, or leave their details and the team calls them back within one business day.
+If a visitor wants to talk to someone, wants a call, or wants to get started, offer two options: call now at ${o.phone}, or leave their details for a call back.
 - To take details, you need: their name, a US phone number with area code, and their business or trade. Email is optional. Ask only for what is missing, in one short question at a time.
-- Once you have name, phone and business, reply with one short sentence confirming the team will call them within one business day, then put this on its own last line, exactly in this format and with nothing after it:
-[[LEAD|name|phone|business|email]]
-  (leave email empty if not given, e.g. [[LEAD|Jordan Reyes|404-555-0142|Reyes Plumbing||]]). The visitor never sees this line.
+- Then ask: "How soon would you like someone to call you? The humans at DeepThought usually call back within 24 hours." Accept any answer (e.g. "today after 3pm", "tomorrow morning", "anytime").
+- Once you have name, phone, business and when to call, reply with one short sentence confirming the team will call them then (or within 24 hours if they said anytime), then put this on its own last line, exactly in this format and with nothing after it:
+[[LEAD|name|phone|business|email|when to call]]
+  (leave email empty if not given, e.g. [[LEAD|Jordan Reyes|404-555-0142|Reyes Plumbing||tomorrow morning]]). The visitor never sees this line.
 - Write the marker only once per conversation. Never mention it or explain it. If the phone number isn't a 10-digit US number, ask them to check it instead of writing the marker.
 
 ## When to suggest booking
@@ -137,7 +138,7 @@ async function logTurn(env, conv, page, messages, reply, lead) {
     updated: now,
     page: prev.page || page,
     booked: !!prev.booked,
-    lead: prev.lead || (lead ? `${lead.name}, ${lead.phone}${lead.business ? ", " + lead.business : ""}${lead.email ? ", " + lead.email : ""}` : ""),
+    lead: prev.lead || (lead ? `${lead.name}, ${lead.phone}${lead.business ? ", " + lead.business : ""}${lead.email ? ", " + lead.email : ""}${lead.when ? ", call: " + lead.when : ""}` : ""),
     messages: [...messages, { role: "assistant", content: reply }],
   };
   await env.CHAT_LOG.put(key, JSON.stringify(rec), { expirationTtl: LOG_TTL });
@@ -153,10 +154,11 @@ function usDigits(v) {
 export function parseLead(text) {
   const m = LEAD_RE.exec(text || "");
   if (!m) return null;
-  const [name = "", phone = "", business = "", email = ""] = m[1].split("|").map((x) => x.trim().slice(0, 200));
+  const [name = "", phone = "", business = "", email = "", when = ""] = m[1].split("|").map((x) => x.trim().slice(0, 200));
   const d = usDigits(phone);
   if (!name || !d) return null;
-  return { name, phone: `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`, business, email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? email : "" };
+  return { name, phone: `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`, business, when,
+           email: /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) ? email : "" };
 }
 /** Send a chat lead to the same Apps Script as the website form (sheet row + email). */
 async function sendLead(env, conv, page, lead) {
@@ -165,7 +167,9 @@ async function sendLead(env, conv, page, lead) {
     const rec = await env.CHAT_LOG.get(`c:${conv}`, "json");
     if (rec && rec.lead) return;                       // one lead per conversation
   }
-  const body = new URLSearchParams({ ...lead, page: page || "", place: "chat", utm: "{}", referrer: "",
+  const { when, ...rest } = lead;
+  const business = when ? `${rest.business} (call: ${when})` : rest.business;
+  const body = new URLSearchParams({ ...rest, business, when, page: page || "", place: "chat", utm: "{}", referrer: "",
     source: "Website chat", first_source: "", first_page: page || "", first_seen: "", timezone: "", language: "" });
   const r = await fetch(env.LEADS_ENDPOINT, { method: "POST", body });
   console.log("lead sent", r.status);
