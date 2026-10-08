@@ -62,6 +62,7 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 | Date | Decision | Why |
 |---|---|---|
 | 2026-09-26 | Homepage title: **"AI Paid Media Platform for Small Business \| DeepThought"** (SEO chat's pick over CRO chat's). | Search intent. |
+| 2026-10-08 | **Title and description length limits (SEO chat).** Titles max 60 characters (the " \| DeepThought" suffix drops if longer); descriptions max 160 (trimmed at a sentence or word). County and state templates shortened; 13 blog posts got a shorter `seoTitle`. About lede now says plainly who we are and where. "Rewrites the actual ads" retired (our team refreshes the ads) and added to bannedClaims. TikTok added to `sameAs`. | Google cuts titles at ~60 and descriptions at ~160; 3,100+ pages were over. Clear entity definition for Google and AI answers. |
 | 2026-09-26 | County page titles: `Digital Marketing in {Place}, {State} \| DeepThought`. | Shorter, clearer. |
 | 2026-09-26 | Book a demo uses a **Google Calendar booking link and embed**, not a form. "Pick a time. Get a straight answer." | Fewer steps to a call. |
 | — | ~~Header CTA "Launch your Campaigns" points to the app at https://deepthought.adops.rocks/.~~ Superseded 2026-10-01 (below). | Primary product link. |
