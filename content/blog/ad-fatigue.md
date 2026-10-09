@@ -40,3 +40,5 @@ Have three to five variants in rotation and retire the weakest every few weeks. 
 Fatigue is predictable, so treat it as maintenance rather than an emergency. New creative on a fixed monthly cadence, whether or not the numbers have started to slip.
 
 Businesses that do this run flat cost per lead for years. Businesses that wait for the numbers to hurt pay a premium every time they react.
+
+For the full version, with the four numbers to watch, a quick check to rule out other causes and a refresh schedule by channel, read [why your ad creative stops working, and what to do about it](blog-creative-fatigue.html).
