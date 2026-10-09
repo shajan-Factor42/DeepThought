@@ -73,7 +73,7 @@ HVAC marketing in Georgia follows the thermometer, and the budget should too. (F
 
 **Winter (November to February)** brings the second peak. The first real cold snap sends people searching for "furnace repair" and "heat pump not heating." Many Gwinnett homes run heat pumps, so it pays to bid on those exact terms.
 
-**Spring and fall** are the quiet seasons, and the best time to sell. Tune-ups, maintenance plans and system replacements are cheaper to advertise when competitors pull back. Facebook and Instagram work well here, along with retargeting to past visitors.
+**Spring and fall** are the quiet seasons, and the best time to sell. Tune-ups, maintenance plans and system replacements are cheaper to advertise when competitors pull back. Facebook and Instagram work well here, along with retargeting to past visitors. Swap in new ads each season, because a small local audience tires of the same ad quickly. Here is [how to tell when your ads have worn out](blog-creative-fatigue.html).
 
 ## What does a plumbing campaign look like?
 

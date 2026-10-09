@@ -99,6 +99,7 @@ Ask these before you sign with anyone, including us:
 3. **Do you separate emergency, replacement and maintenance campaigns?** One campaign for everything wastes money.
 4. **How do you track calls?** Most HVAC leads are phone calls. If calls aren't tracked, the reports are guesses.
 5. **What happens in the first 30 days?** You should hear a specific plan, not "we'll learn as we go".
+6. **How often do you change the ads themselves?** Ads wear out with the same homeowners, so new creative should go in every season. Here is [why ad creative stops working](blog-creative-fatigue.html).
 
 For the full list, see [seven questions before you let anyone touch your ad budget](blog-seven-questions-before-hiring.html).
 

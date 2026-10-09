@@ -38,3 +38,5 @@ A complete asset set per channel, verified before launch, is one of the highest-
 Retargeting first — people who already know you, where a glance is enough to trigger recall. Then cheap geographic presence alongside a channel that does the persuading.
 
 Used as a standalone lead generator it disappoints almost every time, and no amount of creative craft changes that.
+
+Retargeting audiences are small, so the same banners wear out fast. See [how often to refresh ad creative](blog-creative-fatigue.html) by channel.

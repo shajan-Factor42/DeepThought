@@ -120,6 +120,8 @@ Clicks and impressions are easy to report and easy to inflate. Watch the numbers
 
 If a report can't tell you what you paid for each new customer, ask for one that can.
 
+If cost per lead creeps up for weeks while nothing else has changed, the ads themselves may be worn out. See [why ad creative stops working, and what to do about it](blog-creative-fatigue.html).
+
 ## A simple plan to start this month
 
 1. **Fix your Google Business Profile.** Correct hours, phone number, service area, photos and categories. It's free and it feeds the map results.

@@ -40,3 +40,5 @@ And stop over-producing. A clean phone video with clear audio frequently outperf
 Knowing which offers your market responds to, what your actual differentiator is, and which claims you can make honestly. The platform optimizes toward whatever you give it — it cannot tell you what to say.
 
 That is the remaining craft, and it is the part worth spending time on.
+
+Creative also wears out. When the same people see the same ad too often, they stop responding and costs creep up. Here is [how to spot ad fatigue and how often to refresh](blog-creative-fatigue.html).

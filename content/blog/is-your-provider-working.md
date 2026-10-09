@@ -45,3 +45,5 @@ Hours or a day is healthy. A week means you are in a queue, and everything urgen
 A polished report. Fast replies to emails. A friendly account manager. Impressive-sounding platform jargon. Attending your meetings.
 
 All pleasant, none predictive. Judge the four above and be indifferent to the rest.
+
+One more quick check: ask when the ads themselves were last changed. If it has been more than two months, read [why ad creative stops working](blog-creative-fatigue.html).
