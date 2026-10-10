@@ -5,13 +5,13 @@
   },
   "site": "https://deepthought.marketing",
   "organization": {
-    "name": "DeepThought",
+    "name": "Deep Thought Marketing",
     "legalName": "Deep Thought Digital Marketing",
     "alternateName": [
       "Deep Thought",
-      "Deep Thought Digital Marketing",
-      "Deep Thought Marketing",
-      "DeepThought Marketing"
+      "DeepThought",
+      "DeepThought Marketing",
+      "Deep Thought Digital Marketing"
     ],
     "email": "Support@deepthought.marketing",
     "telephone": "+1-770-299-9583",
@@ -436,7 +436,7 @@
     },
     {
       "from": "DeepThought is the paid media execution platform powered by an AI engine that takes you from idea to a live, expert, multi-channel campaign in under 60 seconds. You direct; Deep Thought executes.",
-      "to": "DeepThought’s AI picks your channels, budget and audience, writes your ads, and reports results in plain English. Our team buys the media and manages every campaign across Google, Facebook, streaming TV and more. You approve; we run it.",
+      "to": "Deep Thought Marketing’s AI picks your channels, budget and audience, writes your ads, and reports results in plain English. Our team buys the media and manages every campaign across Google, Facebook, streaming TV and more. You approve; we run it.",
       "files": [
         "index.html"
       ],
@@ -918,8 +918,8 @@
       "why": "pricing wording is 'a fraction of the cost' everywhere (decided 2026-09-27)"
     },
     {
-      "pattern": "Deep\\s+Thought(?! Digital Marketing)(?! Marketing\")(?!\")",
-      "why": "Brand is written DeepThought (one word) everywhere, 2026-09-29. Only the legal entity name and the schema alternateName list keep two words."
+      "pattern": "(?<![@/.\\w-])DeepThought(?![.\\w-])(?!\")(?! Marketing\")",
+      "why": "Brand is written \"Deep Thought Marketing\" (short form \"Deep Thought\"), decided 2026-10-09. One-word \"DeepThought\" survives only in URLs, handles and the schema alternateName list."
     },
     {
       "pattern": "pricing should be published|rewrites the actual ads",

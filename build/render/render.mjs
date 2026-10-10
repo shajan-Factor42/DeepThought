@@ -86,22 +86,23 @@ await new Promise((resolve, reject) => {
 
 /* ---------- 3b. brand spelling ---------- */
 
-// The brand is written "DeepThought" (one word) everywhere a visitor or search engine reads it
-// (decided 2026-09-29). Two exceptions stay as they are: the legal entity name "Deep Thought
-// Digital Marketing" (legalName, privacy and terms), and the schema alternateName list, which
-// exists so searches for the two-word spelling still match us. verify.mjs fails the build if a
-// two-word "Deep Thought" is left anywhere else.
+// The brand is "Deep Thought Marketing", short form "Deep Thought" (decided 2026-10-09,
+// superseding the one-word "DeepThought" of 2026-09-29). Templates and content still say
+// "DeepThought" in many places, so every standalone one-word spelling becomes "Deep Thought".
+// Left alone: URLs, handles and emails (deepthought.marketing, @DeepThought.Marketing), and the
+// schema alternateName list, which keeps the old spellings on purpose so searches for them still
+// match us. verify.mjs fails the build if a standalone "DeepThought" is left anywhere else.
 {
   let fixed = 0, pages = 0;
   for (const f of (await readdir(OUT)).filter((f) => f.endsWith(".html"))) {
     const path = join(OUT, f);
     const html = await readFile(path, "utf8");
     let n = 0;
-    const out = html.replace(/("alternateName":\[[^\]]*\]|Deep Thought Digital Marketing)|Deep\s+Thought/g,
-      (m, keep) => (keep ? keep : (n++, "DeepThought")));
+    const out = html.replace(/("alternateName":\[[^\]]*\])|(?<![@\/.\w-])DeepThought(?![.\w-])/g,
+      (m, keep) => (keep ? keep : (n++, "Deep Thought")));
     if (n) { await writeFile(path, out, "utf8"); fixed += n; pages++; }
   }
-  console.log(`brand: ${fixed} "Deep Thought" -> "DeepThought" on ${pages} page(s)`);
+  console.log(`brand: ${fixed} "DeepThought" -> "Deep Thought" on ${pages} page(s)`);
 }
 
 /* ---------- 4. one sitemap, generated from what shipped ---------- */

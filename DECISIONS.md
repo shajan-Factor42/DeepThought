@@ -14,7 +14,9 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 
 | Date | Decision | Why |
 |---|---|---|
-| 2026-09-29 | Brand is written **DeepThought** (one word) everywhere. Only the legal name "Deep Thought Digital Marketing" and the schema `alternateName` list keep two words. Enforced by a verify gate. | One consistent name for people, search engines and AI. |
+| 2026-10-09 | Brand is **Deep Thought Marketing**; short form **Deep Thought** (two words) in running copy. Full name in the home title, schema `name`, `og:site_name`, logo text and copyright. One-word "DeepThought" survives only in URLs, handles and the schema `alternateName` list. Enforced by the build's brand pass and a verify gate. | Shajan: match what people search ("deep thought marketing") and the domain. Supersedes 2026-09-29. |
+| 2026-10-09 | Logo wordmark carries the real name as hidden text ("Deep Thought Marketing"); the "deepth" + ring + "ught" pieces are hidden from screen readers and crawlers. | It read as "deepth ught". |
+| 2026-09-29 | ~~Brand is written **DeepThought** (one word) everywhere. Only the legal name "Deep Thought Digital Marketing" and the schema `alternateName` list keep two words. Enforced by a verify gate.~~ Superseded 2026-10-09. | One consistent name for people, search engines and AI. |
 | 2026-09-26 | Legal entity on Terms and Privacy: **Deep Thought Digital Marketing**. | Registered name. |
 | 2026-09-14 | Factor42 is not mentioned on the site, in copy or schema. The white-label relationship is not cited publicly. | The two brands read as unconnected. |
 | 2026-09-26 | Hero headline: **"Better ads. Fraction of the cost."** Slogan is the same. | Supersedes "Half the agency bill" (2026-09-25). |
@@ -61,7 +63,8 @@ SEO and CRO chats recommend; changes reach `main` only through the website chat,
 
 | Date | Decision | Why |
 |---|---|---|
-| 2026-09-26 | Homepage title: **"AI Paid Media Platform for Small Business \| DeepThought"** (SEO chat's pick over CRO chat's). | Search intent. |
+| 2026-10-09 | Homepage title: **"Deep Thought Marketing \| AI Ad Management for Small Business"** (brand first). Page title suffix is now " \| Deep Thought". | Brand search. Supersedes 2026-09-26. |
+| 2026-09-26 | ~~Homepage title: **"AI Paid Media Platform for Small Business \| DeepThought"**~~ Superseded 2026-10-09. (SEO chat's pick over CRO chat's). | Search intent. |
 | 2026-10-08 | **Title and description length limits (SEO chat).** Titles max 60 characters (the " \| DeepThought" suffix drops if longer); descriptions max 160 (trimmed at a sentence or word). County and state templates shortened; 13 blog posts got a shorter `seoTitle`. About lede now says plainly who we are and where. "Rewrites the actual ads" retired (our team refreshes the ads) and added to bannedClaims. TikTok added to `sameAs`. | Google cuts titles at ~60 and descriptions at ~160; 3,100+ pages were over. Clear entity definition for Google and AI answers. |
 | 2026-09-26 | County page titles: `Digital Marketing in {Place}, {State} \| DeepThought`. | Shorter, clearer. |
 | 2026-09-26 | Book a demo uses a **Google Calendar booking link and embed**, not a form. "Pick a time. Get a straight answer." | Fewer steps to a call. |

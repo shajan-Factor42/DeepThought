@@ -88,7 +88,7 @@ const SERVING_STATES = ["GA", "FL"].map((ab) => {
 const LEADS_EP = (aeo.leads && aeo.leads.endpoint) || "";
 
 const PAGES = [
-  { file: "index.html", title: "AI Paid Media Platform for Small Business | DeepThought",
+  { file: "index.html", title: "Deep Thought Marketing | AI Ad Management for Small Business",
     description: "AI-powered ad management for local businesses. Google, Facebook, streaming TV and more, run for a fraction of the cost of an agency.",
     acc: { count: 4, open: "open", toggle: "toggle", sign: "sign" },
     scope: { showLogos: false, heroHasMedia: true, gridColumns: "repeat(3, 1fr)",

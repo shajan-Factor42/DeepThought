@@ -175,8 +175,22 @@ const DEMO_DRAWER =
   `\n        <a href="book-a-demo.html" style="display:block; margin-top:10px; text-align:center; font-size:15px; font-weight:600; color:var(--f42-primary-blue); text-decoration:none; padding:8px">Book a call</a>` +
   `\n        <a href="${APP_URL}" style="display:block; margin-top:2px; text-align:center; font-size:14px; color:var(--text-muted); text-decoration:none; padding:6px">Log in</a>`;
 
+/**
+ * Logo (2026-10-09). The wordmark is "deepth" + an SVG ring + "ught", and the ring was labelled
+ * "o", so crawlers and screen readers read the brand as "deepth ught" or "deepth o ught". The
+ * visual pieces are hidden from assistive tech and a visually hidden text node carries the real
+ * name. Applied to the header and footer wordmarks; throws if the markup moves.
+ */
+const BRAND_LABEL = '<span style="position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0">Deep Thought Marketing</span>';
+function applyLogoLabel(tpl, where) {
+  const re = /(<a href="index\.html" style="display:flex; align-items:baseline;[^"]*")>(\s*)<span>deepth<\/span>([\s\S]*?)aria-label="o">([\s\S]*?)<span>ught<\/span>/;
+  if (!re.test(tpl)) throw new Error(`${where}: logo wordmark not found — site.zip changed`);
+  return tpl.replace(re, (m, open, ws, mid, svgBody) =>
+    `${open.replace('style="', 'style="position:relative; ')} aria-label="Deep Thought Marketing home">${ws}${BRAND_LABEL}${ws}<span aria-hidden="true">deepth</span>${mid}aria-hidden="true" focusable="false">${svgBody}<span aria-hidden="true">ught</span>`);
+}
+
 function applyHeaderCta(tpl) {
-  let html = tpl;
+  let html = applyLogoLabel(tpl, "SiteHeader");
 
   const signIn = '<a href="contact.html" style="font-size:14.5px; font-weight:600; color:var(--f42-primary-blue); text-decoration:none; white-space:nowrap">Sign in</a>';
   if (!html.includes(signIn)) throw new Error("SiteHeader: Sign in link not found — site.zip changed");
@@ -202,7 +216,7 @@ function applyHeaderCta(tpl) {
  * uses the canonical name from aeo-data.json.
  */
 function applyFooter(tpl) {
-  let html = tpl;
+  let html = applyLogoLabel(tpl, "SiteFooter");
   const ga = '<a href="georgia-counties.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Georgia counties</a>';
   if (!html.includes(ga)) throw new Error("SiteFooter: Georgia counties link not found — site.zip changed");
   html = html.replace(ga, ga + '\n      <a href="digital-marketing-gwinnett-county-ga.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Gwinnett County, GA</a>');
@@ -216,7 +230,7 @@ function applyFooter(tpl) {
 
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");
-  html = html.replace(copy, `© ${new Date().getFullYear()} ${esc((AEO.organization || {}).name || "DeepThought")}. All rights reserved.`);
+  html = html.replace(copy, `© ${new Date().getFullYear()} ${esc((AEO.organization || {}).name || "Deep Thought Marketing")}. All rights reserved.`);
 
   // Terms and Privacy pointed at "#" until 2026-09-26. They now go to the pages that
   // render-legal.mjs builds from content/legal/.
@@ -262,7 +276,10 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
   // of a description. A title over 60 drops its "| DeepThought" suffix (the brand is already in
   // the URL and the result's site name). A description over 160 is cut at the last sentence or
   // word boundary that fits. Pages that set their own short copy are untouched.
-  if (title && title.length > 60 && / \| DeepThought$/.test(title)) title = title.replace(/ \| DeepThought$/, "");
+  // 2026-10-09: brand is "Deep Thought Marketing" (short form "Deep Thought"). Titles still carry
+  // the old one-word suffix in their sources, so normalise it here, before the length check.
+  if (title) title = title.replace(/ \| DeepThought$/, " | Deep Thought");
+  if (title && title.length > 60 && / \| Deep Thought$/.test(title)) title = title.replace(/ \| Deep Thought$/, "");
   if (description && description.length > 160) {
     const cut = description.slice(0, 160);
     const end = Math.max(cut.lastIndexOf(". "), cut.lastIndexOf("? "));
@@ -292,7 +309,7 @@ export function page({ title, description, canonical, jsonld, body, helmet, noin
 <meta property="og:description" content="${esc(description)}">
 <meta property="og:type" content="${ogType}">
 <meta property="og:url" content="${canonical}">
-<meta property="og:site_name" content="DeepThought">
+<meta property="og:site_name" content="${esc((AEO.organization || {}).name || "Deep Thought Marketing")}">
 <meta property="og:image" content="${image ? `${SITE}/${image}` : `${SITE}/og-image.png`}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
