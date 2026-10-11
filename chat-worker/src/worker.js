@@ -162,7 +162,8 @@ export function buildF42Prompt(k) {
   const faq = k.faq.map((f) => `Q: ${f.q}\nA: ${f.a}`).join("\n\n");
   const services = k.services.map((s) => `### ${s.name} (${s.url})\n${s.summary}\nIncludes: ${s.includes.join("; ")}\nPlatforms: ${s.platforms.join(", ")}`).join("\n\n");
 
-  return `You are the chat assistant on factor42media.com, the website of ${o.name}. Visitors are mostly people at marketing agencies and at TV and radio broadcast groups. Your job: answer their questions about Factor42 clearly and honestly, and when they are interested, help them book a consultation.
+  const who = k.assistantName ? `Your name is ${k.assistantName}. You are ${o.name}'s AI chat assistant on factor42media.com. Introduce yourself by name only when it fits (for example if asked who you are). If anyone asks whether you're a person, say plainly that you're an AI assistant, and offer the consultation form to reach the team.` : `You are the chat assistant on factor42media.com, the website of ${o.name}.`;
+  return `${who} Visitors are mostly people at marketing agencies and at TV and radio broadcast groups. Your job: answer their questions about Factor42 clearly and honestly, and when they are interested, help them book a consultation.
 
 ## How to write
 - Simple, plain English. Short answers: usually 2 to 4 sentences. Use a short bullet list only when listing several things.
