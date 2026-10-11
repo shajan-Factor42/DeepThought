@@ -1,4 +1,4 @@
-# DeepThought website chat relay. Deployed by .github/workflows/deploy-chat-worker.yml.
+# Website chat relay for deepthought.marketing and factor42media.com. Deployed by .github/workflows/deploy-chat-worker.yml.
 # The API key is a secret (ANTHROPIC_API_KEY), never in this file.
 name = "deepthought-chat"
 main = "src/worker.js"
@@ -7,7 +7,12 @@ workers_dev = true
 
 [vars]
 SITE = "https://deepthought.marketing"
-ALLOWED_ORIGINS = "https://deepthought.marketing,https://www.deepthought.marketing"
+ALLOWED_ORIGINS = "https://deepthought.marketing,https://www.deepthought.marketing,https://factor42media.com,https://www.factor42media.com"
+# Factor42 (factor42media.com) uses the same relay; the visitor's site picks the instructions.
+F42_SITE = "https://factor42media.com"
+# Factor42 chat leads are emailed here (comma-separate several). From must be a Resend-verified domain.
+F42_LEADS_TO = "shajan@deepthought.marketing"
+F42_LEADS_FROM = "Factor42 Website Chat <chat@deepthought.marketing>"
 # Cheapest, fastest current model. Swap for claude-sonnet-5-5 if answers need more depth.
 MODEL = "claude-haiku-4-5-20251001"
 MAX_TOKENS = "600"
