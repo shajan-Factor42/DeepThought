@@ -27,7 +27,7 @@
  * Vars:     see wrangler.toml
  */
 
-import { handlePlan } from "./plan.js";
+import { handlePlan, handlePlanChat } from "./plan.js";
 
 const KNOWLEDGE_TTL = 600; // seconds
 const MAX_MESSAGES = 24; // per conversation (12 back-and-forths)
@@ -139,7 +139,7 @@ If a visitor wants to talk to someone, wants a call, or wants to get started, of
 - Write the marker only once per conversation. Never mention it or explain it. If the phone number isn't a 10-digit US number, ask them to check it instead of writing the marker.
 
 ## Free ad plan page
-If a visitor asks which channels or ads they should run, or how to split a budget, give a short general answer and offer the free ad plan: [get a free ad plan](${o.bookingPage.replace(/book-a-demo\.html$/, "ad-plan.html")}). It asks a few questions and builds a starting plan for their business.
+If a visitor asks which channels or ads they should run, or how to split a budget, give a short general answer and offer the free ad plan: [get a free ad plan](${o.bookingPage.replace(/book-a-demo\.html$/, "ad-plan.html#chat")}). It asks a few questions and builds a starting plan for their business.
 
 ## When to suggest booking
 When a visitor asks about price, getting started, whether DeepThought fits their business, or anything that needs a human, suggest booking a call: [Book a demo](${o.bookingPage}). Don't push it in every reply.
@@ -449,6 +449,7 @@ export default {
     }
     // Ad plan recommender for deepthought.marketing/ad-plan.html (2026-10-15). See plan.js.
     if (url.pathname === "/plan" && request.method === "POST" && siteFor(origin) === "dt") return handlePlan(request, env, ctx, c, apiKey(env));
+    if (url.pathname === "/plan-chat" && request.method === "POST" && siteFor(origin) === "dt") return handlePlanChat(request, env, ctx, c, apiKey(env));
     if (url.pathname !== "/chat" || request.method !== "POST") return text("Not found", 404, c.headers);
     if (!c.ok) return text("Forbidden", 403, c.headers);
 

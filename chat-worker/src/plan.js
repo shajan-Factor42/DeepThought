@@ -257,3 +257,97 @@ export async function handlePlan(request, env, ctx, c, key) {
   ctx.waitUntil(Promise.all(work.map((p) => Promise.resolve(p).catch((e) => console.error("plan side", e.message)))));
   return json({ ok: true, plan, emailed: !!env.RESEND_API_KEY });
 }
+
+/* ------------------------------------------------------------------------------------------
+ * Chat mode for the ad plan page (2026-10-15). Instead of the form, the visitor chats; the AI
+ * gathers the same answers. POST /plan-chat { messages, fields } -> { reply, fields, ready }.
+ * The worker decides "ready" with readInput() (the same check /plan uses), not the model. When
+ * ready, the page posts the fields to /plan exactly like the form does.
+ * ---------------------------------------------------------------------------------------- */
+const CHAT_RATE = { limit: 40, windowMs: 10 * 60 * 1000 };
+const chatHits = new Map();
+function chatLimited(ip) {
+  const now = Date.now();
+  const list = (chatHits.get(ip) || []).filter((t) => now - t < CHAT_RATE.windowMs);
+  list.push(now); chatHits.set(ip, list);
+  if (chatHits.size > 5000) chatHits.clear();
+  return list.length > CHAT_RATE.limit;
+}
+const FIELD_KEYS = ["business", "trade", "location", "radius", "goal", "budget", "current", "notes", "name", "phone", "email"];
+
+export function buildPlanChatPrompt() {
+  const opt = (k) => OPTIONS[k].map((o) => `"${o}"`).join(", ");
+  return `You are Deep Thought Marketing's friendly assistant on the free ad plan page of deepthought.marketing. Your only job here is to collect a few details in a short, natural chat so we can build the visitor a free starting ad plan. Do NOT give the plan or recommend channels yourself; the plan is built automatically once you have everything.
+
+## What you need (ask for one or two things at a time, in this order)
+1. business: the business name
+2. trade: what the business does (e.g. "Plumbing", "Dental practice")
+3. location: the town or ZIP code they are based in
+4. radius: how far they serve. One of: ${opt("radius")}
+5. goal: their main goal. One of: ${opt("goal")}
+6. budget: their rough monthly AD budget (their own ad spend). One of: ${opt("budget")}
+7. current: what they run today, zero or more of: ${opt("current")}
+8. notes: anything else worth knowing (optional; don't push for it)
+9. name, phone (a US number with area code) and email: say these are so we can send them the plan.
+
+## How to talk
+- Short, warm, plain English. One or two sentences per reply, then the next question. No exclamation marks, no emojis.
+- Map loose answers onto the options yourself ("about two grand" -> "$1,000 to $2,500"; "around Atlanta" -> "My whole metro area" if that fits). If an answer is unclear, ask once more, briefly.
+- If they ask a side question, answer in one sentence and come back to the next missing detail.
+- Never quote Deep Thought's prices or fees, never promise results.
+- If the phone number isn't a 10-digit US number, ask them to check it. If they don't want to give contact details, explain the plan is shown on the page and emailed, so we need an email and phone; they can also call 770-299-9583.
+- When everything (1 to 7 and 9) is collected, reply only with a one-line thank-you saying you're building their plan now.
+
+## Output
+Reply with ONLY a JSON object:
+{"reply": "what you say to the visitor", "fields": {every field you know so far, using the exact option text for radius, goal, budget and each item of current (an array)}}`;
+}
+
+/** The /plan-chat route. */
+export async function handlePlanChat(request, env, ctx, c, key) {
+  const json = (o, status = 200) => new Response(JSON.stringify(o), { status, headers: { ...c.headers, "Content-Type": "application/json" } });
+  if (!c.ok) return json({ error: "Forbidden" }, 403);
+  if (chatLimited(request.headers.get("CF-Connecting-IP") || "unknown"))
+    return json({ error: "That's a lot of messages in a short time. Please try again in a few minutes, or call us at 770-299-9583." }, 429);
+  let b; try { b = await request.json(); } catch { return json({ error: "Something went wrong. Please try again." }, 400); }
+  const messages = (Array.isArray(b.messages) ? b.messages : []).slice(-30)
+    .filter((m) => m && (m.role === "user" || m.role === "assistant") && typeof m.content === "string" && m.content.trim())
+    .map((m) => ({ role: m.role, content: m.content.slice(0, 600) }));
+  if (!messages.length || messages[messages.length - 1].role !== "user") return json({ error: "Something went wrong. Please try again." }, 400);
+  while (messages[0] && messages[0].role !== "user") messages.shift();
+  const known = {};
+  for (const k of FIELD_KEYS) if (b.fields && b.fields[k] != null && b.fields[k] !== "") known[k] = b.fields[k];
+
+  let out;
+  try {
+    const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+      body: JSON.stringify({
+        model: env.MODEL, max_tokens: 500, temperature: 0.3,
+        system: buildPlanChatPrompt() + `\n\n## Collected so far\n${JSON.stringify(known)}`,
+        messages: [...messages, { role: "assistant", content: "{" }],
+      }),
+    });
+    if (!r.ok) throw new Error(`anthropic ${r.status}`);
+    const j = await r.json();
+    const raw = "{" + (j.content || []).map((x) => x.text || "").join("");
+    out = JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+  } catch (e) {
+    console.error("plan-chat", e.message);
+    return json({ error: "Sorry, I couldn't answer just now. You can use the form instead, or call 770-299-9583." }, 502);
+  }
+
+  // Merge: keep what we had, take anything new the model found. Only known keys, only strings/arrays.
+  const fields = { ...known };
+  for (const k of FIELD_KEYS) {
+    const v = out.fields && out.fields[k];
+    if (k === "current") { if (Array.isArray(v) && v.length) fields.current = v.map(String).slice(0, 8); }
+    else if (typeof v === "string" && v.trim()) fields[k] = v.trim().slice(0, k === "notes" ? 400 : 120);
+  }
+  const check = readInput({ ...fields, current: fields.current || [] });
+  const ready = !check.error && !check.spam;
+  const reply = String(out.reply || "").slice(0, 600) ||
+    (ready ? "Thanks, building your plan now." : "Could you tell me a bit more?");
+  return json({ reply: ready ? "Thanks, that's everything. Building your plan now." : reply, fields, ready });
+}

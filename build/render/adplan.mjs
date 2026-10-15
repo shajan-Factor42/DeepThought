@@ -59,6 +59,15 @@ function formHtml(endpoint) {
 </form>`;
 }
 
+function chatHtml(endpoint) {
+  return `<div id="ap-chat" class="ap-card" data-endpoint="${esc(endpoint)}" role="tabpanel" aria-labelledby="ap-tab-chat" hidden>
+  <div id="ap-log" class="ap-log" aria-live="polite"></div>
+  <p id="ap-got" class="ap-got"></p>
+  <form id="ap-chat-form" class="ap-chat-form"><textarea id="ap-in" rows="1" maxlength="600" placeholder="Type your answer…" aria-label="Your answer"></textarea><button type="submit" id="ap-send">Send</button></form>
+  <p style="font-size:12.5px; line-height:1.5; color:var(--text-muted); margin:10px 0 0">AI assistant. We'll email you the plan, and someone from our team may call to see if you have questions. <a href="privacy.html" style="color:inherit">Privacy</a>.</p>
+</div>`;
+}
+
 const CSS = `<style>
 .ap-wrap{max-width:1180px; margin:0 auto; padding:72px 40px 96px}
 .ap-cols{display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:32px; align-items:start}
@@ -86,6 +95,24 @@ const CSS = `<style>
 .ap-rep h3{font-family:var(--font-display); font-size:20px; font-weight:800; color:var(--text-heading); margin:28px 0 10px}
 .ap-rep ol,.ap-rep ul{padding-left:22px; line-height:1.6; color:var(--text-body); margin:0}
 .ap-rep li{margin:0 0 6px}
+.ap-tabs{display:inline-flex; gap:4px; padding:4px; margin:0 0 16px; border-radius:12px; background:var(--f42-bg, #F0F4FF); border:1px solid var(--border-subtle)}
+.ap-tabs button{border:0; background:transparent; padding:10px 16px; border-radius:9px; font-family:var(--font-body); font-size:15px; font-weight:600; color:var(--text-body); cursor:pointer}
+.ap-tabs button[aria-selected=true]{background:var(--f42-white); color:var(--f42-primary-blue, #0066FF); box-shadow:0 2px 8px rgba(15,40,90,0.08)}
+.ap-tabs button:focus-visible{outline:2px solid #00B4D8}
+.ap-log{display:flex; flex-direction:column; gap:10px; min-height:220px; max-height:440px; overflow-y:auto; padding:4px 2px 8px}
+.ap-m{max-width:85%; padding:11px 14px; border-radius:14px; font-size:15.5px; line-height:1.55; white-space:pre-wrap; word-wrap:break-word}
+.ap-a{align-self:flex-start; background:var(--f42-bg, #F0F4FF); color:var(--text-body); border-bottom-left-radius:4px}
+.ap-u{align-self:flex-end; background:var(--f42-primary-blue, #0066FF); color:#fff; border-bottom-right-radius:4px}
+.ap-got{font-size:13px; color:var(--text-muted); margin:8px 0 0; min-height:1px}
+.ap-chat-form{display:flex; gap:8px; margin-top:12px}
+.ap-chat-form textarea{flex:1; min-width:0; border:1px solid var(--border-subtle); border-radius:12px; padding:12px 14px; font-family:var(--font-body); font-size:16px; resize:none; max-height:120px; color:var(--text-heading)}
+.ap-chat-form textarea:focus{outline:2px solid rgba(0,102,255,.35); border-color:#0066FF}
+.ap-chat-form button{border:0; border-radius:12px; padding:0 18px; background:var(--f42-gradient-button); color:#fff; font-weight:700; font-family:var(--font-body); font-size:15px; cursor:pointer}
+.ap-chat-form button:disabled{opacity:.6; cursor:default}
+.ap-dots{display:inline-flex; gap:4px}.ap-dots i{width:6px; height:6px; border-radius:50%; background:#94a3b8; animation:apb 1s infinite}
+.ap-dots i:nth-child(2){animation-delay:.15s}.ap-dots i:nth-child(3){animation-delay:.3s}
+@keyframes apb{0%,80%,100%{opacity:.3}40%{opacity:1}}
+html[data-ap-chat] #dtc-btn,html[data-ap-chat] #dtc-tip,html[data-ap-chat] #dtc-panel{display:none !important}
 .ap-spin{display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,.5); border-top-color:#fff; border-radius:50%; animation:apspin .8s linear infinite; vertical-align:-3px; margin-right:8px}
 @keyframes apspin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.ap-spin{animation:none}}
@@ -111,14 +138,51 @@ const SCRIPT = `<script>
     if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(v("email"))){st.textContent="Please enter an email address so we can send you the plan.";f.elements.email.focus();return}
     var d={};["business","trade","location","radius","goal","budget","notes","name","phone","email","website"].forEach(function(n){d[n]=v(n)});
     d.current=[].slice.call(f.querySelectorAll('input[name=current]:checked')).map(function(x){return x.value});
+    st.textContent="";b.disabled=true;b.innerHTML='<span class="ap-spin" aria-hidden="true"></span>Building your plan\u2026 about 15 seconds';
+    build(d,"form",function(msg){b.disabled=false;b.textContent="Build my free ad plan";st.textContent=msg});
+  });
+  // Both modes end here: post the answers to /plan, then show the report.
+  function build(d,mode,fail){
     var info=window.dtLeadInfo?window.dtLeadInfo():{};for(var k in info)d[k]=info[k];
     d.page=location.pathname;
-    st.textContent="";b.disabled=true;b.innerHTML='<span class="ap-spin" aria-hidden="true"></span>Building your plan\\u2026 about 15 seconds';
     fetch(f.getAttribute("data-endpoint"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
       .then(function(r){return r.json().then(function(j){if(!r.ok||!j.plan)throw new Error(j.error||"");return j})})
-      .then(function(j){show(j,d);dl({event:"form_conversion",form:"ad_plan"});dl({event:"ad_plan_generated",ad_budget:d.budget,goal:d.goal})})
-      .catch(function(x){b.disabled=false;b.textContent="Build my free ad plan";st.textContent=(x&&x.message)||"That didn't go through. Please call us at 770-299-9583."});
-  });
+      .then(function(j){show(j,d);dl({event:"form_conversion",form:"ad_plan"});dl({event:"ad_plan_generated",ad_budget:d.budget,goal:d.goal,mode:mode})})
+      .catch(function(x){fail((x&&x.message)||"That didn't go through. Please call us at 770-299-9583.")});
+  }
+
+  // Tabs: form or chat. ad-plan.html#chat opens straight into chat (the site chat links there).
+  var tf=document.getElementById("ap-tab-form"),tc=document.getElementById("ap-tab-chat"),cp=document.getElementById("ap-chat");
+  function tab(chat){if(chat)document.documentElement.setAttribute("data-ap-chat","");else document.documentElement.removeAttribute("data-ap-chat");tf.setAttribute("aria-selected",!chat);tc.setAttribute("aria-selected",chat);f.hidden=chat;cp.hidden=!chat;
+    if(chat){startChat();setTimeout(function(){inp.focus({preventScroll:true})},50)}}
+  tf.onclick=function(){tab(false)};tc.onclick=function(){tab(true);dl({event:"ad_plan_chat_open"})};
+
+  // Chat mode: the AI asks for the same answers; the worker says when everything is in.
+  var log=document.getElementById("ap-log"),inp=document.getElementById("ap-in"),send=document.getElementById("ap-send"),
+      got=document.getElementById("ap-got"),cf=document.getElementById("ap-chat-form");
+  var msgs=[],fields={},busy=false,begun=false;
+  var HELLO="Hi, I'll ask a few quick questions and then build your free ad plan. To start, what's your business called, and what does it do?";
+  function bubble(role,t){var m=document.createElement("div");m.className="ap-m "+(role==="user"?"ap-u":"ap-a");m.textContent=t;log.appendChild(m);log.scrollTop=log.scrollHeight;return m}
+  function startChat(){if(begun)return;begun=true;bubble("assistant",HELLO);msgs.push({role:"assistant",content:HELLO})}
+  var LABELS={business:"Business",trade:"Does",location:"Area",radius:"Serves",goal:"Goal",budget:"Ad budget",name:"Name",phone:"Phone",email:"Email"};
+  function showGot(){var a=[];for(var k in LABELS)if(fields[k])a.push(LABELS[k]+": "+fields[k]);got.textContent=a.length?"Got so far \u2014 "+a.join(" \u00b7 "):""}
+  inp.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&!ev.shiftKey){ev.preventDefault();cf.requestSubmit?cf.requestSubmit():cf.onsubmit(ev)}});
+  inp.addEventListener("input",function(){inp.style.height="auto";inp.style.height=Math.min(inp.scrollHeight,120)+"px"});
+  cf.onsubmit=function(ev){ev.preventDefault();var t=inp.value.trim();if(!t||busy)return;
+    if(!started){started=true;dl({event:"ad_plan_start",mode:"chat"})}
+    busy=true;send.disabled=true;inp.value="";inp.style.height="auto";bubble("user",t);msgs.push({role:"user",content:t});
+    var w=bubble("assistant","");w.innerHTML='<span class="ap-dots" aria-label="Typing"><i></i><i></i><i></i></span>';
+    fetch(cp.getAttribute("data-endpoint"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:msgs,fields:fields})})
+      .then(function(r){return r.json().then(function(j){if(!r.ok||!j.reply)throw new Error(j.error||"");return j})})
+      .then(function(j){fields=j.fields||fields;w.textContent=j.reply;msgs.push({role:"assistant",content:j.reply});showGot();
+        if(j.ready){w.innerHTML=e(j.reply)+' <span class="ap-dots" aria-hidden="true"><i></i><i></i><i></i></span>';
+          var d={};for(var k in fields)d[k]=fields[k];d.current=fields.current||[];
+          build(d,"chat",function(msg){w.textContent=j.reply;bubble("assistant",msg+" You can correct it here.");msgs.push({role:"assistant",content:msg});busy=false;send.disabled=false})}
+        else{busy=false;send.disabled=false;inp.focus({preventScroll:true})}})
+      .catch(function(x){w.textContent=(x&&x.message)||"Sorry, that didn't go through. You can use the form instead, or call 770-299-9583.";msgs.pop();busy=false;send.disabled=false});
+  };
+  if(location.hash==="#chat")tab(true);
+
   function show(j,d){
     var p=j.plan,h='<p style="font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--color-accent, #0066FF); margin:0 0 10px">Your free ad plan</p>'+
       '<h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.02em; line-height:1.15; color:var(--text-heading); margin:0 0 12px">'+e(d.business)+'</h2>'+
@@ -134,7 +198,7 @@ const SCRIPT = `<script>
       '<div style="display:flex; flex-wrap:wrap; gap:10px"><a href="second-opinion.html" data-lead-cta="ad-plan" style="display:inline-flex; align-items:center; height:48px; padding:0 20px; border-radius:12px; background:var(--f42-gradient-button); color:#fff; font-weight:700; text-decoration:none">Get a free Second Opinion</a>'+
       '<a href="tel:+17702999583" style="display:inline-flex; align-items:center; height:48px; padding:0 20px; border-radius:12px; border:1.5px solid var(--f42-primary-blue, #0066FF); color:var(--f42-primary-blue, #0066FF); font-weight:700; text-decoration:none">Call 770-299-9583</a></div></div>'+
       '<p style="font-size:13px; line-height:1.5; color:var(--text-muted); margin:18px 0 0">'+(j.emailed?'We also emailed this plan to '+e(d.email)+'. ':'')+'This is a starting suggestion based on what you told us, made with the help of AI. It is not a quote or a promise of results.</p>';
-    out.innerHTML=h;f.style.display="none";out.style.display="block";
+    out.innerHTML=h;f.style.display="none";cp.hidden=true;document.querySelector(".ap-tabs").style.display="none";out.style.display="block";
     var top=out.getBoundingClientRect().top+window.pageYOffset-90;window.scrollTo({top:top,behavior:"smooth"});out.focus({preventScroll:true});
   }
 })();
@@ -144,11 +208,17 @@ const BODY = (endpoint) => `${CSS}
 <section style="max-width:1180px; margin:0 auto; padding:72px 40px 0">
   <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--color-accent)">Free ad plan</div>
   <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; color:var(--text-heading); margin:16px 0 0; max-width:820px; text-wrap:pretty">Get a free ad plan for your business</h1>
-  <p style="font-size:19px; line-height:1.6; color:var(--text-body); max-width:720px; margin:20px 0 0">Answer a few quick questions. You'll get a starting plan on this page: which ad channels fit your business, how to split your ad budget, and what to do in the first month. We'll email you a copy too.</p>
+  <p style="font-size:19px; line-height:1.6; color:var(--text-body); max-width:720px; margin:20px 0 0">Answer a few quick questions, or just chat with our AI. You'll get a starting plan on this page: which ad channels fit your business, how to split your ad budget, and what to do in the first month. We'll email you a copy too.</p>
 </section>
 <section class="ap-wrap" style="max-width:1180px; margin:0 auto">
   <div class="ap-cols">
-    <div>${formHtml(endpoint)}<div id="ap-report" class="ap-card ap-rep" tabindex="-1" style="display:none; outline:none"></div></div>
+    <div>
+      <div class="ap-tabs" role="tablist" aria-label="How would you like to answer?">
+        <button type="button" role="tab" id="ap-tab-form" aria-selected="true" aria-controls="ap-form">Answer questions</button>
+        <button type="button" role="tab" id="ap-tab-chat" aria-selected="false" aria-controls="ap-chat">Chat instead</button>
+      </div>
+      ${chatHtml(endpoint.replace(/\/plan$/, "/plan-chat"))}
+      ${formHtml(endpoint)}<div id="ap-report" class="ap-card ap-rep" tabindex="-1" style="display:none; outline:none"></div></div>
     <aside class="ap-side ap-card" style="box-shadow:none">
       <h3>What you'll get</h3>
       <ul>
