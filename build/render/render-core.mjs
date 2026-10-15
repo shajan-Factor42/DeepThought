@@ -26,6 +26,7 @@ import { pathToFileURL } from "node:url";
 import { render, templateFrom, findBlock } from "./dc.mjs";
 import { loadShell, page, SITE, BASE_SCOPE, esc } from "./shell.mjs";
 import { leadSection, secondOpinionPage, afterHero, heroCta } from "./leads.mjs";
+import { adPlanPage } from "./adplan.mjs";
 import { aboutPage, ourStoryPage, aboutJsonLd } from "./about.mjs";
 
 const args = process.argv.slice(2);
@@ -86,6 +87,8 @@ const SERVING_STATES = ["GA", "FL"].map((ab) => {
 });
 
 const LEADS_EP = (aeo.leads && aeo.leads.endpoint) || "";
+// Ad plan page posts to the chat relay's /plan route (same Worker as the chat).
+const PLAN_EP = ((aeo.chat && aeo.chat.endpoint) || "").replace(/\/chat$/, "/plan");
 
 const PAGES = [
   { file: "index.html", title: "Deep Thought Marketing | AI Ad Management for Small Business",
@@ -133,6 +136,10 @@ const PAGES = [
   { file: "second-opinion.html", src: "contact.html", title: "Free Second Opinion on Your Marketing | DeepThought",
     description: "Send three details and a real person reviews your ads and calls you back with a plain-English answer on what's working and what it should cost. Free, no contract.",
     transform: (b) => secondOpinionPage(b, LEADS_EP) },
+  // Free ad plan (2026-10-15): questions in, a starting channel mix out, from the chat relay's /plan route.
+  { file: "ad-plan.html", src: "contact.html", title: "Free Ad Plan for Your Business | Deep Thought",
+    description: "Answer a few questions and get a free starting ad plan: which channels fit your business, how to split your ad budget and what to do first.",
+    transform: (b) => adPlanPage(b, PLAN_EP) },
   { file: "thank-you.html", title: "Thank You | DeepThought", description: "We'll be in touch shortly.", noindex: true },
 ];
 

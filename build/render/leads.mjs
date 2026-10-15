@@ -113,6 +113,9 @@ export const LEAD_SCRIPT = `<script>
       [/facebook|fb\\.|messenger/,"Facebook"],[/instagram/,"Instagram"],[/linkedin|lnkd/,"LinkedIn"],[/t\\.co$|twitter|x\\.com/,"X"],
       [/tiktok/,"TikTok"],[/youtube|youtu\\.be/,"YouTube"],[/nextdoor/,"Nextdoor"],[/reddit/,"Reddit"]];
     for(var i=0;i<map.length;i++)if(map[i][0].test(h))return map[i][1];return h}
+  // Shared with the ad plan page (adplan.mjs): how this visitor found us, for the lead sheet.
+  window.dtLeadInfo=function(){var lt=LS.get("dt_lt")||ft,tz="";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||""}catch(x){}
+    return {source:label(lt),first_source:label(ft),first_page:ft.page,first_seen:new Date(ft.ts).toISOString().slice(0,10),timezone:tz,language:navigator.language||"",utm:JSON.stringify(t),referrer:document.referrer}};
   function usPhone(raw){var d=raw.replace(/\\D/g,"");if(d.length===11&&d[0]==="1")d=d.slice(1);return /^[2-9]\\d{2}[2-9]\\d{6}$/.test(d)?d:""}
   document.addEventListener("click",function(e){
     var a=e.target.closest&&e.target.closest("a");if(!a)return;
