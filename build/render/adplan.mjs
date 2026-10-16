@@ -1,5 +1,5 @@
 /**
- * adplan.mjs — the free ad plan page, ad-plan.html (2026-10-15).
+ * adplan.mjs — the digital media plan builder, digital-media-plan-builder.html (2026-10-15).
  *
  * A visitor answers a few questions (business, area, goal, ad budget, what they run today, and
  * where to send the plan). The chat relay's /plan route (chat-worker/src/plan.js) asks Claude
@@ -34,7 +34,7 @@ const select = (name, list, id) => `<select id="${id}" name="${name}" required s
 function formHtml(endpoint) {
   const chips = PLAN_OPTIONS.current.map((o, i) =>
     `<label class="ap-chip"><input type="checkbox" name="current" value="${esc(o)}" id="ap-c${i}"><span>${esc(o)}</span></label>`).join("");
-  return `<form id="ap-form" class="ap-card" data-endpoint="${esc(endpoint)}" novalidate>
+  return `<form id="ap-form" class="ap-card" data-endpoint="${esc(endpoint)}" role="tabpanel" aria-labelledby="ap-tab-form" novalidate hidden>
   <h2 class="ap-h2">About your business</h2>
   <div class="ap-grid">
     ${field('Business name', `<input name="business" autocomplete="organization" required placeholder="e.g. Reyes Plumbing" style="${INPUT}">`)}
@@ -53,14 +53,14 @@ function formHtml(endpoint) {
     ${field('Email', `<input name="email" type="email" inputmode="email" autocomplete="email" required placeholder="you@yourbusiness.com" style="${INPUT}">`, ' style="grid-column:1/-1"')}
   </div>
   <input type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute; left:-9999px; width:1px; height:1px; opacity:0">
-  <button type="submit" class="ap-btn">Build my free ad plan</button>
+  <button type="submit" class="ap-btn">Build my free media plan</button>
   <p class="ap-status" role="status" aria-live="polite"></p>
   <p style="font-size:13px; line-height:1.5; color:var(--text-muted); margin:10px 0 0">We'll email you the plan, and someone from our team may call to see if you have questions. No spam, and we never share your details. <a href="privacy.html" style="color:inherit">Privacy</a>.</p>
 </form>`;
 }
 
 function chatHtml(endpoint) {
-  return `<div id="ap-chat" class="ap-card" data-endpoint="${esc(endpoint)}" role="tabpanel" aria-labelledby="ap-tab-chat" hidden>
+  return `<div id="ap-chat" class="ap-card" data-endpoint="${esc(endpoint)}" role="tabpanel" aria-labelledby="ap-tab-chat">
   <div id="ap-log" class="ap-log" aria-live="polite"></div>
   <p id="ap-got" class="ap-got"></p>
   <form id="ap-chat-form" class="ap-chat-form"><textarea id="ap-in" rows="1" maxlength="600" placeholder="Type your answer…" aria-label="Your answer"></textarea><button type="submit" id="ap-send">Send</button></form>
@@ -139,7 +139,7 @@ const SCRIPT = `<script>
     var d={};["business","trade","location","radius","goal","budget","notes","name","phone","email","website"].forEach(function(n){d[n]=v(n)});
     d.current=[].slice.call(f.querySelectorAll('input[name=current]:checked')).map(function(x){return x.value});
     st.textContent="";b.disabled=true;b.innerHTML='<span class="ap-spin" aria-hidden="true"></span>Building your plan\u2026 about 15 seconds';
-    build(d,"form",function(msg){b.disabled=false;b.textContent="Build my free ad plan";st.textContent=msg});
+    build(d,"form",function(msg){b.disabled=false;b.textContent="Build my free media plan";st.textContent=msg});
   });
   // Both modes end here: post the answers to /plan, then show the report.
   function build(d,mode,fail){
@@ -151,17 +151,17 @@ const SCRIPT = `<script>
       .catch(function(x){fail((x&&x.message)||"That didn't go through. Please call us at 770-299-9583.")});
   }
 
-  // Tabs: form or chat. ad-plan.html#chat opens straight into chat (the site chat links there).
+  // Tabs: chat ("Ask Deep Thought", the default) or the form. #form opens the form.
   var tf=document.getElementById("ap-tab-form"),tc=document.getElementById("ap-tab-chat"),cp=document.getElementById("ap-chat");
   function tab(chat){if(chat)document.documentElement.setAttribute("data-ap-chat","");else document.documentElement.removeAttribute("data-ap-chat");tf.setAttribute("aria-selected",!chat);tc.setAttribute("aria-selected",chat);f.hidden=chat;cp.hidden=!chat;
-    if(chat){startChat();setTimeout(function(){inp.focus({preventScroll:true})},50)}}
-  tf.onclick=function(){tab(false)};tc.onclick=function(){tab(true);dl({event:"ad_plan_chat_open"})};
+    if(chat)startChat()}
+  tf.onclick=function(){tab(false);dl({event:"ad_plan_form_open"})};tc.onclick=function(){tab(true);setTimeout(function(){inp.focus({preventScroll:true})},50)};
 
   // Chat mode: the AI asks for the same answers; the worker says when everything is in.
   var log=document.getElementById("ap-log"),inp=document.getElementById("ap-in"),send=document.getElementById("ap-send"),
       got=document.getElementById("ap-got"),cf=document.getElementById("ap-chat-form");
   var msgs=[],fields={},busy=false,begun=false;
-  var HELLO="Hi, I'll ask a few quick questions and then build your free ad plan. To start, what's your business called, and what does it do?";
+  var HELLO="Hi, I'm Deep Thought. I'll ask a few quick questions and then build your free digital media plan. To start, what's your business called, and what does it do?";
   function bubble(role,t){var m=document.createElement("div");m.className="ap-m "+(role==="user"?"ap-u":"ap-a");m.textContent=t;log.appendChild(m);log.scrollTop=log.scrollHeight;return m}
   function startChat(){if(begun)return;begun=true;bubble("assistant",HELLO);msgs.push({role:"assistant",content:HELLO})}
   var LABELS={business:"Business",trade:"Does",location:"Area",radius:"Serves",goal:"Goal",budget:"Ad budget",name:"Name",phone:"Phone",email:"Email"};
@@ -181,10 +181,10 @@ const SCRIPT = `<script>
         else{busy=false;send.disabled=false;inp.focus({preventScroll:true})}})
       .catch(function(x){w.textContent=(x&&x.message)||"Sorry, that didn't go through. You can use the form instead, or call 770-299-9583.";msgs.pop();busy=false;send.disabled=false});
   };
-  if(location.hash==="#chat")tab(true);
+  tab(location.hash!=="#form");
 
   function show(j,d){
-    var p=j.plan,h='<p style="font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--color-accent, #0066FF); margin:0 0 10px">Your free ad plan</p>'+
+    var p=j.plan,h='<p style="font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--color-accent, #0066FF); margin:0 0 10px">Your free digital media plan</p>'+
       '<h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.02em; line-height:1.15; color:var(--text-heading); margin:0 0 12px">'+e(d.business)+'</h2>'+
       '<p style="font-size:17px; line-height:1.6; color:var(--text-body); margin:0 0 22px">'+e(p.headline)+'</p>'+
       '<h3 style="margin-top:0">How to split your monthly ad budget</h3><p style="font-size:14px; color:var(--text-muted); margin:-4px 0 8px">'+e(d.budget)+' a month, your own ad spend</p>'+
@@ -206,16 +206,16 @@ const SCRIPT = `<script>
 
 const BODY = (endpoint) => `${CSS}
 <section style="max-width:1180px; margin:0 auto; padding:72px 40px 0">
-  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--color-accent)">Free ad plan</div>
-  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; color:var(--text-heading); margin:16px 0 0; max-width:820px; text-wrap:pretty">Get a free ad plan for your business</h1>
-  <p style="font-size:19px; line-height:1.6; color:var(--text-body); max-width:720px; margin:20px 0 0">Answer a few quick questions, or just chat with our AI. You'll get a starting plan on this page: which ad channels fit your business, how to split your ad budget, and what to do in the first month. We'll email you a copy too.</p>
+  <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--color-accent)">Digital media plan builder</div>
+  <h1 style="font-family:var(--font-display); font-size:52px; font-weight:800; letter-spacing:-0.035em; line-height:1.05; color:var(--text-heading); margin:16px 0 0; max-width:820px; text-wrap:pretty">Get a free digital media plan for your business</h1>
+  <p style="font-size:19px; line-height:1.6; color:var(--text-body); max-width:720px; margin:20px 0 0">Tell Deep Thought about your business in a quick chat, or fill in a short form. You'll get a starting plan on this page: which ad channels fit your business, how to split your ad budget, and what to do in the first month. We'll email you a copy too.</p>
 </section>
 <section class="ap-wrap" style="max-width:1180px; margin:0 auto">
   <div class="ap-cols">
     <div>
       <div class="ap-tabs" role="tablist" aria-label="How would you like to answer?">
-        <button type="button" role="tab" id="ap-tab-form" aria-selected="true" aria-controls="ap-form">Answer questions</button>
-        <button type="button" role="tab" id="ap-tab-chat" aria-selected="false" aria-controls="ap-chat">Chat instead</button>
+        <button type="button" role="tab" id="ap-tab-chat" aria-selected="true" aria-controls="ap-chat">Ask Deep Thought</button>
+        <button type="button" role="tab" id="ap-tab-form" aria-selected="false" aria-controls="ap-form">Fill in a form</button>
       </div>
       ${chatHtml(endpoint.replace(/\/plan$/, "/plan-chat"))}
       ${formHtml(endpoint)}<div id="ap-report" class="ap-card ap-rep" tabindex="-1" style="display:none; outline:none"></div></div>
@@ -238,7 +238,7 @@ const BODY = (endpoint) => `${CSS}
 </section>
 ${SCRIPT}`;
 
-/** ad-plan.html from the contact template: keep header and footer, replace everything between. */
+/** digital-media-plan-builder.html from the contact template: keep header and footer, replace everything between. */
 export function adPlanPage(html, endpoint) {
   const s0 = html.indexOf("<section");
   const foot = html.lastIndexOf("<footer");

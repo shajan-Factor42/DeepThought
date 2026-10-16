@@ -162,7 +162,7 @@ font-family:Inter,system-ui,-apple-system,'Segoe UI',sans-serif;font-size:14px;f
     tip.onkeydown = function (e) { if (e.key === "Enter") open(); };
     function nudge() {
       var seen; try { seen = sessionStorage.getItem(KEY + "-pop"); } catch (e) { seen = "1"; }
-      if (seen || panel.classList.contains("open") || /second-opinion|thank-you|ad-plan/.test(location.pathname)) return;
+      if (seen || panel.classList.contains("open") || /second-opinion|thank-you|ad-plan|media-plan-builder/.test(location.pathname)) return;
       var a = document.activeElement;
       if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
       try { sessionStorage.setItem(KEY + "-pop", "1"); } catch (e) {}

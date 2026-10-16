@@ -1,5 +1,5 @@
 /**
- * Ad plan recommender (added 2026-10-15). POST /plan from deepthought.marketing/ad-plan.html.
+ * Ad plan recommender (added 2026-10-15). POST /plan from deepthought.marketing/digital-media-plan-builder.html.
  *
  * The visitor answers a few questions (contact details plus business, area, goal, ad budget and
  * what they run today). Claude picks a starting mix from the 22 products in chat-knowledge.json
@@ -164,7 +164,7 @@ export function planEmailHtml(plan, input, site, forOwner = false) {
         .map(([k, v]) => `<tr><td style="color:#64748b;padding:2px 14px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join("")}
     </table>` : "";
   return `<div style="font-family:Inter,Arial,sans-serif;max-width:640px;margin:0 auto;color:#334155">
-  <h2 style="color:#0A0F1E;margin:0 0 6px">${forOwner ? `New ad plan request: ${esc(input.business)}` : `Your starting ad plan, ${esc(input.name.split(" ")[0])}`}</h2>
+  <h2 style="color:#0A0F1E;margin:0 0 6px">${forOwner ? `New media plan request: ${esc(input.business)}` : `Your digital media plan, ${esc(input.name.split(" ")[0])}`}</h2>
   ${facts}
   <p style="font-size:16px;line-height:1.55;margin:0 0 14px">${esc(plan.headline)}</p>
   <p style="font-size:13px;color:#64748b;margin:0 0 4px">How to split your monthly ad budget (${esc(input.budget)}):</p>
@@ -239,7 +239,7 @@ export async function handlePlan(request, env, ctx, c, key) {
     const body = new URLSearchParams({
       name: input.name, phone: input.phone, email: input.email,
       business: `${input.business} (${input.trade}; ad plan: ${mix})`.slice(0, 290),
-      page: meta.page || "/ad-plan.html", place: "ad-plan", utm: meta.utm || "{}", referrer: meta.referrer || "",
+      page: meta.page || "/digital-media-plan-builder.html", place: "ad-plan", utm: meta.utm || "{}", referrer: meta.referrer || "",
       source: meta.source || "", first_source: meta.first_source || "", first_page: meta.first_page || "",
       first_seen: meta.first_seen || "", timezone: meta.timezone || "", language: meta.language || "",
     });
@@ -247,9 +247,9 @@ export async function handlePlan(request, env, ctx, c, key) {
   }
   const from = env.PLAN_FROM || "Deep Thought Marketing <plans@deepthought.marketing>";
   const replyTo = env.PLAN_REPLY_TO || "shajan@deepthought.marketing";
-  work.push(resend(env, { from, to: [input.email], reply_to: replyTo, subject: `Your ad plan for ${input.business}`, html: planEmailHtml(plan, input, site) }));
+  work.push(resend(env, { from, to: [input.email], reply_to: replyTo, subject: `Your digital media plan for ${input.business}`, html: planEmailHtml(plan, input, site) }));
   const notify = (env.PLAN_NOTIFY_TO || env.DIGEST_TO || "").split(",").map((x) => x.trim()).filter(Boolean);
-  if (notify.length) work.push(resend(env, { from, to: notify, reply_to: input.email, subject: `New ad plan: ${input.business} (${input.trade}, ${input.location})`, html: planEmailHtml(plan, input, site, true) }));
+  if (notify.length) work.push(resend(env, { from, to: notify, reply_to: input.email, subject: `New media plan: ${input.business} (${input.trade}, ${input.location})`, html: planEmailHtml(plan, input, site, true) }));
   if (env.CHAT_LOG) {
     const d = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(new Date()).replace(/-/g, "");
     work.push(env.CHAT_LOG.put(`p:${d}-${Math.random().toString(36).slice(2, 12)}`, JSON.stringify({ at: new Date().toISOString(), input, meta, plan }), { expirationTtl: 90 * 24 * 3600 }));
@@ -277,7 +277,7 @@ const FIELD_KEYS = ["business", "trade", "location", "radius", "goal", "budget",
 
 export function buildPlanChatPrompt() {
   const opt = (k) => OPTIONS[k].map((o) => `"${o}"`).join(", ");
-  return `You are Deep Thought Marketing's friendly assistant on the free ad plan page of deepthought.marketing. Your only job here is to collect a few details in a short, natural chat so we can build the visitor a free starting ad plan. Do NOT give the plan or recommend channels yourself; the plan is built automatically once you have everything.
+  return `You are Deep Thought, Deep Thought Marketing's assistant on the digital media plan builder page of deepthought.marketing. Your only job here is to collect a few details in a short, natural chat so we can build the visitor a free starting digital media plan. Do NOT give the plan or recommend channels yourself; the plan is built automatically once you have everything.
 
 ## What you need (ask for one or two things at a time, in this order)
 1. business: the business name

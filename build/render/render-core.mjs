@@ -136,9 +136,10 @@ const PAGES = [
   { file: "second-opinion.html", src: "contact.html", title: "Free Second Opinion on Your Marketing | DeepThought",
     description: "Send three details and a real person reviews your ads and calls you back with a plain-English answer on what's working and what it should cost. Free, no contract.",
     transform: (b) => secondOpinionPage(b, LEADS_EP) },
-  // Free ad plan (2026-10-15): questions in, a starting channel mix out, from the chat relay's /plan route.
-  { file: "ad-plan.html", src: "contact.html", title: "Free Ad Plan for Your Business | Deep Thought",
-    description: "Answer a few questions and get a free starting ad plan: which channels fit your business, how to split your ad budget and what to do first.",
+  // Digital media plan builder (2026-10-15): chat ("Ask Deep Thought") or form in, a starting channel
+  // mix out, from the chat relay's /plan-chat and /plan routes. (Briefly live as ad-plan.html on 2026-10-15; that address was retired.)
+  { file: "digital-media-plan-builder.html", src: "contact.html", title: "Free Digital Media Plan Builder | Deep Thought",
+    description: "Ask Deep Thought about your business and get a free starting digital media plan: which ad channels fit, how to split your budget and what to do first.",
     transform: (b) => adPlanPage(b, PLAN_EP) },
   { file: "thank-you.html", title: "Thank You | DeepThought", description: "We'll be in touch shortly.", noindex: true },
 ];

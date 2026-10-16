@@ -227,8 +227,8 @@ function applyFooter(tpl) {
   html = html.replace(allSolutions, allSolutions + '\n      <a href="digital-marketing-for-small-business.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Digital marketing for small business</a>'
     // HVAC landing page (2026-10-02, SEO chat): first trade page, linked sitewide like the pillar.
     + '\n      <a href="hvac-marketing-atlanta.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">HVAC marketing</a>'
-    // Free ad plan page (2026-10-15).
-    + '\n      <a href="ad-plan.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Free ad plan</a>');
+    // Digital media plan builder (2026-10-15).
+    + '\n      <a href="digital-media-plan-builder.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Media plan builder</a>');
 
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");
