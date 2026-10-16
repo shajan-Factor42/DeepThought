@@ -71,8 +71,6 @@ export function leadSection(endpoint, place) {
 export const MOBILE_BAR = `<style>
 .dt-mbar{display:none}
 .dt-lead.dt-card{padding:28px !important}
-/* Home hero: "Get a FREE media plan" (2026-10-15) gets a cyan outline so it stands out on the navy panel. */
-a[data-lead-cta="hero-media-plan"] .ds-btn{border:1.5px solid #7DD3FC !important; background:rgba(125,211,252,0.10) !important}
 /* responsive.css zeroes side padding on anything with max-width inside a section; win it back */
 @media (max-width:767px){section[style] form.dt-lead.dt-card[style]{padding:22px 18px !important}}
 /* Same cause: the home hero's text block sat flush against the navy panel's edges on phones and tablets. */
@@ -181,11 +179,12 @@ export function secondOpinionPage(html, endpoint) {
 /** Home hero: the main button becomes the Second Opinion (the form), not "Book a free demo". */
 export function heroCta(html) {
   // The label is set later by the copy rewrite in aeo-data.json (">Try DeepThought now</span>" ->
-  // ">Get a free Second Opinion</span>"); here we only point the button at the form.
+  // ">Get a FREE media plan</span>"); here we only point the button at the media plan builder.
+  // (2026-10-15: the blue main button is the media plan; the Second Opinion is the second button.)
   const t = html.indexOf(">Try DeepThought now<");
   const a = t === -1 ? -1 : Math.max(html.lastIndexOf('<a href="book-a-demo.html"', t), -1);
   if (t === -1 || a === -1 || t - a > 1500) throw new Error("index: hero demo button not found — site.zip changed");
-  html = html.slice(0, a) + '<a href="#second-opinion" data-lead-cta="hero"' + html.slice(a + '<a href="book-a-demo.html"'.length);
+  html = html.slice(0, a) + '<a href="digital-media-plan-builder.html" data-lead-cta="hero-media-plan"' + html.slice(a + '<a href="book-a-demo.html"'.length);
   return html;
 }
 
