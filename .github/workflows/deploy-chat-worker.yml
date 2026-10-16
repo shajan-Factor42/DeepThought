@@ -5,7 +5,7 @@ name: Deploy chat relay (Cloudflare Worker)
 #   CLOUDFLARE_ACCOUNT_ID  (Cloudflare dashboard → Workers & Pages → Account ID, right side)
 #   ANTHROPIC_API_KEY      (console.anthropic.com → API Keys)
 #   RESEND_API_KEY         (optional; resend.com → API Keys) turns on the daily chat digest email
-#   PLANNER_PRICING        (optional; JSON) media plan builder prices, fees and minimums, kept private
+#   PLANNER_PRICING        (optional; JSON) overrides the media plan prices in chat-worker/src/catalog.js
 # Until the first three exist, the job skips instead of failing.
 
 on:
@@ -83,13 +83,13 @@ jobs:
           run npx --yes wrangler@4 deploy
           grep -Eo 'https://[a-z0-9.-]+\.workers\.dev' out.log | head -1 | sed 's/^/::notice::Chat relay URL: /'
           printf '%s' "$ANTHROPIC_API_KEY" > key.txt; run sh -c 'npx --yes wrangler@4 secret put ANTHROPIC_API_KEY < key.txt'; rm -f key.txt
-          # Media plan builder pricing (private: prices, fees, minimums). Kept out of this public repo.
+          # Optional media plan pricing override (same JSON as PRICING in catalog.js).
           if [ -n "$PLANNER_PRICING" ]; then
             if printf '%s' "$PLANNER_PRICING" | jq -e 'type=="object"' >/dev/null 2>&1; then
               printf '%s' "$PLANNER_PRICING" > pricing.txt; run sh -c 'npx --yes wrangler@4 secret put PLANNER_PRICING < pricing.txt'; rm -f pricing.txt
             else echo "::error::PLANNER_PRICING is not valid JSON. Paste the whole file contents, including the { }."; exit 1; fi
           else
-            echo "::notice::PLANNER_PRICING not set: media plans have no dollar minimums or forecasts."
+            echo "PLANNER_PRICING not set: media plans use the prices in catalog.js."
           fi
           if [ -n "$RESEND_API_KEY" ]; then
             printf '%s' "$RESEND_API_KEY" | npx --yes wrangler@4 secret put RESEND_API_KEY

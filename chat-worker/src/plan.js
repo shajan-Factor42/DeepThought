@@ -5,7 +5,7 @@
  * The visitor gives contact details, their business, area, goal, monthly ad budget (a number) and
  * what they run today. Claude picks and explains a starting mix from CHANNELS (catalog.js). This
  * file, not the model, does the money:
- *   - drops channels whose share of the budget is below their minimum (PLANNER_PRICING secret),
+ *   - drops channels whose share of the budget is below their minimum (PRICING in catalog.js),
  *   - under $500 total: one channel that fits, plus advice to raise the budget,
  *   - splits the visitor's own budget in dollars and forecasts impressions (CPM) or views (CPV),
  *   - strips any dollar figure the model writes itself (it must never quote our prices),
@@ -13,7 +13,7 @@
  * rates), and logs it in CHAT_LOG for 90 days (key p:<YYYYMMDD>-<random>).
  *
  * Vars (wrangler.toml): SITE, MODEL, LEADS_ENDPOINT, PLAN_FROM, PLAN_REPLY_TO, PLAN_NOTIFY_TO.
- * Secrets: ANTHROPIC_API_KEY, RESEND_API_KEY, PLANNER_PRICING.
+ * Secrets: ANTHROPIC_API_KEY, RESEND_API_KEY (PLANNER_PRICING optional, overrides PRICING).
  */
 import { CHANNELS, pricing } from "./catalog.js";
 

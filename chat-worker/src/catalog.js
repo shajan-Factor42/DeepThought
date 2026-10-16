@@ -1,14 +1,14 @@
 /**
  * Media plan builder channel list (2026-10-16), from Shajan's DeepThought_Pricing.xlsx plus Local
- * Services Ads, Yelp Ads and ChatGPT ads (added by Shajan).
+ * Services Ads, Yelp Ads and ChatGPT ads (added by Shajan; $500 minimum assumed for those three).
  *
- * PUBLIC on purpose: this repo is public, so only names and descriptions live here. Prices, fees
- * and minimums are private and come from the Worker secret PLANNER_PRICING (JSON keyed by id):
- *   budget-based: {"fee": 0.XX, "min": NNN}   fee = our share of the budget (never shown to visitors)
- *   CPM:          {"cpm": N.NN, "min": NNN}    retail price per 1,000 impressions
- *   CPV:          {"cpv": 0.NN, "min": NNN}    retail price per view
- * To change a price or minimum, update the PLANNER_PRICING secret in GitHub and re-run the
- * "Deploy chat relay" workflow. To add a channel, add it here and in the secret.
+ * Prices live in PRICING below (Shajan, 2026-10-16: no need to keep them secret). Keyed by channel id:
+ *   budget-based: { fee, min }  fee = our share of the budget (shown only in Shajan's copy of the plan)
+ *   CPM:          { cpm, min }  retail price per 1,000 impressions
+ *   CPV:          { cpv, min }  retail price per view
+ *   min = minimum retail budget per month; a channel below it is not recommended.
+ * To change a price, edit PRICING and push. Optional override: a PLANNER_PRICING Worker secret with
+ * the same JSON shape replaces PRICING without a code change.
  */
 export const CHANNELS = [
   { id: "search", name: "Google and Bing search ads", desc: "Paid ads on Google and Bing search results that reach people at the moment they're searching for a product or service the advertiser offers, paid per click or per lead. Best for advertisers who want to capture existing demand and drive calls, leads, store visits or sales, rather than build awareness with people who aren't looking yet." },
@@ -35,7 +35,33 @@ export const CHANNELS = [
   { id: "sports_ott", name: "Sports streaming TV ads", desc: "Streaming video ads that run during sports coverage and sports programming on streaming services and league and network apps, on TVs, phones, tablets and computers. Best for advertisers whose customers follow sports, such as auto dealers, restaurants, bars, home services and local retailers, who want high-attention placements around games people watch live, usually at a premium price." },
 ];
 
-/** Private numbers from the PLANNER_PRICING secret, or {} if it isn't set (plans still work, without forecasts or minimums). */
+export const PRICING = {
+  search: {fee: 0.15, min: 500},
+  lsa: {fee: 0.2, min: 500},
+  social: {fee: 0.15, min: 500},
+  tiktok: {fee: 0.2, min: 500},
+  nextdoor: {fee: 0.2, min: 500},
+  linkedin: {fee: 0.2, min: 500},
+  yelp: {fee: 0.2, min: 500},
+  chatgpt: {fee: 0.2, min: 500},
+  display: {cpm: 5.6, min: 200},
+  addr_display: {cpm: 6.9, min: 300},
+  dooh_display: {cpm: 18, min: 200},
+  dooh_video: {cpm: 26, min: 200},
+  youtube: {cpv: 0.1, min: 300},
+  preroll: {cpm: 12.6, min: 250},
+  audio: {cpm: 20, min: 200},
+  addr_audio: {cpm: 22, min: 250},
+  geofencing: {cpm: 6, min: 250},
+  prime: {cpm: 45, min: 1000},
+  twitch: {cpm: 25, min: 1000},
+  ott: {cpm: 22.4, min: 1000},
+  premium_ott: {cpm: 55, min: 1000},
+  sports_ott: {cpm: 32, min: 1000},
+};
+
+/** PRICING, or the PLANNER_PRICING secret if one is set. */
 export function pricing(env) {
-  try { return JSON.parse(env.PLANNER_PRICING || "{}") || {}; } catch (e) { console.error("PLANNER_PRICING is not valid JSON"); return {}; }
+  if (!env.PLANNER_PRICING) return PRICING;
+  try { return JSON.parse(env.PLANNER_PRICING) || PRICING; } catch (e) { console.error("PLANNER_PRICING is not valid JSON; using PRICING"); return PRICING; }
 }
