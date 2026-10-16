@@ -445,11 +445,11 @@
     },
     {
       "from": ">Try DeepThought now</span></a>\n            <a href=\"book-a-demo.html\" style=\"text-decoration:none\">",
-      "to": ">Try DeepThought now</span></a>\n            <a href=\"product.html\" style=\"text-decoration:none\">",
+      "to": ">Try DeepThought now</span></a>\n            <a href=\"digital-media-plan-builder.html\" data-lead-cta=\"hero-media-plan\" style=\"text-decoration:none\">",
       "files": [
         "index.html"
       ],
-      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero secondary button → product",
+      "note": "2026-09-26 claim cleanup: retired prompt-to-campaign / 60-second / rate-card / own-accounts / media-included / 30+ channels copy — hero secondary button → product; 2026-10-15: now the media plan builder (Get a FREE media plan)",
       "min": 1
     },
     {
@@ -463,7 +463,7 @@
     },
     {
       "from": "background:rgba(255,255,255,0.06); color:#fff\">Book a demo</span></a>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:36px; margin-top:56px",
-      "to": "background:rgba(255,255,255,0.06); color:#fff\">See how it works</span></a>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:36px; margin-top:56px",
+      "to": "background:rgba(255,255,255,0.06); color:#fff\">Get a FREE media plan</span></a>\n          </div>\n          <div style=\"display:flex; align-items:center; gap:36px; margin-top:56px",
       "files": [
         "index.html"
       ],
@@ -777,8 +777,8 @@
       "min": 1
     },
     {
-      "from": "See how it works</span></a>\n          </div>",
-      "to": "See how it works</span></a>\n          </div>\n          <div style=\"font-size:14px; color:rgba(255,255,255,0.66); margin-top:20px\">Month-to-month · Based in Gwinnett County, GA · <a href=\"tel:+17702999583\" style=\"color:inherit; text-decoration:none\">770-299-9583</a></div>",
+      "from": "Get a FREE media plan</span></a>\n          </div>",
+      "to": "Get a FREE media plan</span></a>\n          </div>\n          <div style=\"font-size:14px; color:rgba(255,255,255,0.66); margin-top:20px\">Month-to-month · Based in Gwinnett County, GA · <a href=\"tel:+17702999583\" style=\"color:inherit; text-decoration:none\">770-299-9583</a></div>",
       "files": [
         "index.html"
       ],

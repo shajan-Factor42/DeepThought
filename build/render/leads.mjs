@@ -71,6 +71,8 @@ export function leadSection(endpoint, place) {
 export const MOBILE_BAR = `<style>
 .dt-mbar{display:none}
 .dt-lead.dt-card{padding:28px !important}
+/* Home hero: "Get a FREE media plan" (2026-10-15) gets a cyan outline so it stands out on the navy panel. */
+a[data-lead-cta="hero-media-plan"] .ds-btn{border:1.5px solid #7DD3FC !important; background:rgba(125,211,252,0.10) !important}
 /* responsive.css zeroes side padding on anything with max-width inside a section; win it back */
 @media (max-width:767px){section[style] form.dt-lead.dt-card[style]{padding:22px 18px !important}}
 /* Same cause: the home hero's text block sat flush against the navy panel's edges on phones and tablets. */
