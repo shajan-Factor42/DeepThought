@@ -98,6 +98,7 @@ ${list}
 - Roughly: under ${money(1500)} -> 1 or 2 channels; up to ${money(5000)} -> 2 to 3; above that -> 3 to 5.
 - Catch demand before creating it: for service businesses whose customers search when they need help (home services, legal, medical, dental, auto repair...), lead with search ads, and Local Services Ads where the trade is eligible.
 - Match channels to the business: Nextdoor for neighbourhood services; LinkedIn only for selling to other businesses; Yelp for restaurants, home services, beauty and auto; TikTok and Twitch for younger audiences with video; Amazon Prime Video for consumer brands and Amazon sellers; geofencing for physical locations, events or competitor locations; streaming TV, YouTube, pre-roll and digital billboards when the goal is awareness or the budget is larger.
+- "firstMonth", "watch", "headline" and "note" must only talk about the channels you recommend. Don't mention a channel you didn't include (for example no search keywords if search isn't in the plan, no cost per click for display).
 - If they already run something, say whether to keep it, fix it or replace it. A Google Business Profile is free; mention keeping it complete if relevant, but it is not one of the channels.
 - "share" is the percentage of THEIR monthly ad budget for each channel; whole numbers adding up to 100. Order channels from most to least important.
 
@@ -192,7 +193,10 @@ export function parsePlan(raw, budget, price) {
   const list = (v, n) => (Array.isArray(v) ? v : []).map(noDollars).filter(Boolean).slice(0, n);
   let note = noDollars(j.note);
   if (a.low) note = `A budget under ${money(LOW_BUDGET)} a month is usually too small for steady results; we'd suggest at least ${money(LOW_BUDGET)}. ` + (a.channels.length ? "If you'd like to start smaller, this is the one channel that fits." : "At this budget there isn't a channel we'd recommend yet.");
+  const finalIds = a.channels.map((c) => c.id).sort().join(",");
+  const changed = finalIds !== picks.map((c) => c.id).sort().join(",");
   return {
+    changed,
     headline: noDollars(j.headline) || "A starting media plan built around your goal and area.",
     budget, low: a.low,
     channels: a.channels.map((c) => ({ ...c, why: c.why || "The channel that fits your budget and goal best." })),
@@ -204,7 +208,8 @@ export function parsePlan(raw, budget, price) {
 
 /** What the visitor sees (page + email): no fees, rates or minimums. */
 export function publicPlan(plan) {
-  return { ...plan, channels: plan.channels.map(({ id, name, share, dollars, forecast, unit, why, kind }) => ({ id, name, share, dollars, forecast, unit, why, kind })) };
+  const { changed, ...rest } = plan;
+  return { ...rest, channels: rest.channels.map(({ id, name, share, dollars, forecast, unit, why, kind }) => ({ id, name, share, dollars, forecast, unit, why, kind })) };
 }
 
 const esc = (v) => String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -259,6 +264,50 @@ async function askClaude(env, key, price, input, extra = "") {
   return "{" + (j.content || []).map((b) => b.text || "").join("");
 }
 
+/**
+ * When minimums or a low budget changed the line-up, the model's first write-up talks about the
+ * wrong channels. Ask it to rewrite the text for the final channels only (2026-10-16).
+ */
+export function buildRewritePrompt() {
+  return `You are Deep Thought Marketing's media planner. The channel mix below is FINAL; it was adjusted to fit the budget and each channel's minimum. Write the plan text for exactly these channels.
+
+Rules: only talk about the channels listed; don't mention any other channel or tactic that belongs to another channel (no search keywords unless search is listed, no cost per click for impression-based channels). Plain, friendly English, no jargon, no exclamation marks, no emojis. Never write dollar amounts, prices, fees or rates, never promise results, never give timeframes in days or weeks, never invent statistics. Write the company as "Deep Thought" if you mention it.
+
+Reply with ONLY a JSON object:
+{"headline": "one sentence summing up the plan for this business",
+ "channels": [{"id": "channel id", "why": "one or two sentences on why this fits them"}],
+ "firstMonth": ["3 or 4 short, concrete steps for these channels"],
+ "watch": ["3 numbers to watch for these channels, each with a few words on why"],
+ "note": "one sentence: a caveat or tip specific to them"}`;
+}
+
+async function rewritePlan(env, key, input, plan) {
+  if (!plan.channels.length) return plan;
+  const mix = plan.channels.map((c) => `- id "${c.id}": ${c.name}, ${c.share}% of the budget. ${(CHANNELS.find((x) => x.id === c.id) || {}).desc || ""}`).join("\n");
+  const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
+    body: JSON.stringify({
+      model: env.MODEL, max_tokens: 1000, temperature: 0.3, system: buildRewritePrompt(),
+      messages: [{ role: "user", content: `${planUserMessage(input)}\n\nFinal channels:\n${mix}` }, { role: "assistant", content: "{" }],
+    }),
+  });
+  if (!r.ok) throw new Error(`anthropic ${r.status}`);
+  const j0 = await r.json();
+  const raw = "{" + (j0.content || []).map((b) => b.text || "").join("");
+  const j = JSON.parse(raw.match(/\{[\s\S]*\}/)[0]);
+  const why = new Map((Array.isArray(j.channels) ? j.channels : []).map((c) => [String(c && c.id || "").toLowerCase(), noDollars(c && c.why)]));
+  const list = (v, n, old) => { const x = (Array.isArray(v) ? v : []).map(noDollars).filter(Boolean).slice(0, n); return x.length ? x : old; };
+  return {
+    ...plan,
+    headline: noDollars(j.headline) || plan.headline,
+    channels: plan.channels.map((c) => ({ ...c, why: why.get(c.id) || c.why })),
+    firstMonth: list(j.firstMonth, 4, []),
+    watch: list(j.watch, 3, []),
+    note: plan.low ? plan.note : (noDollars(j.note) || ""),
+  };
+}
+
 async function resend(env, msg) {
   if (!env.RESEND_API_KEY) return;
   const r = await fetch(env.RESEND_URL || "https://api.resend.com/emails", {
@@ -290,6 +339,12 @@ export async function handlePlan(request, env, ctx, c, key) {
   } catch (e) {
     console.error("plan", e.message);
     return json({ error: "We couldn't build your plan just now. Please call us at 770-299-9583, or try again in a minute." }, 502);
+  }
+  // The line-up changed (minimums or a low budget): rewrite the text so it matches the final channels.
+  // If the rewrite fails, keep the per-channel reasons but drop steps that may name other channels.
+  if (plan.changed) {
+    try { plan = await rewritePlan(env, key, input, plan); }
+    catch (e) { console.error("plan rewrite", e.message); plan = { ...plan, firstMonth: [], watch: [] }; }
   }
 
   const site = env.SITE || "https://deepthought.marketing";
