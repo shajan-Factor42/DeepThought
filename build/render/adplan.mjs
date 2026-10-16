@@ -17,7 +17,6 @@ export const PLAN_OPTIONS = {
   radius: ["Just my town", "About 10 miles", "About 25 miles", "My whole metro area", "My whole state", "Nationwide or online"],
   goal: ["More phone calls", "More booked appointments", "More quote requests or leads", "More store or showroom visits",
     "More online sales", "Get known in my area"],
-  budget: ["Under $1,000", "$1,000 to $2,500", "$2,500 to $5,000", "$5,000 to $10,000", "Over $10,000", "Not sure yet"],
   current: ["Google Search ads", "Google Business Profile", "Facebook or Instagram ads", "Local Services Ads", "Nextdoor",
     "Email marketing", "An agency runs my ads", "Nothing yet"],
 };
@@ -42,7 +41,7 @@ function formHtml(endpoint) {
     ${field('Town or ZIP code', `<input name="location" autocomplete="address-level2" required placeholder="e.g. Lawrenceville, GA" style="${INPUT}">`)}
     ${field('How far do you serve?', select("radius", PLAN_OPTIONS.radius, "ap-radius"))}
     ${field('Main goal', select("goal", PLAN_OPTIONS.goal, "ap-goal"))}
-    ${field('Monthly ad budget', select("budget", PLAN_OPTIONS.budget, "ap-budget"))}
+    ${field('Monthly ad budget', `<div style="position:relative"><span aria-hidden="true" style="position:absolute; left:14px; top:13px; font-size:16px; color:var(--text-muted)">$</span><input name="budget" type="text" inputmode="numeric" required placeholder="e.g. 2,000" aria-label="Monthly ad budget in dollars" style="${INPUT}; padding-left:28px"></div>`)}
   </div>
   <fieldset class="ap-fs"><legend style="${LABEL}">What do you run today? <span style="font-weight:500; color:var(--text-muted)">(pick any)</span></legend><div class="ap-chips">${chips}</div></fieldset>
   ${field('Anything else we should know? <span style="font-weight:500; color:var(--text-muted)">(optional)</span>', `<textarea name="notes" maxlength="400" rows="3" placeholder="e.g. Busy in winter, want more water heater jobs" style="${INPUT}; height:auto; padding:12px 14px; resize:vertical"></textarea>`)}
@@ -90,7 +89,8 @@ const CSS = `<style>
 .ap-ch{padding:14px 0; border-top:1px solid var(--border-subtle)}
 .ap-ch:first-child{border-top:0}
 .ap-ch b{font-family:var(--font-display); font-size:17px; color:var(--text-heading)}
-.ap-ch em{font-style:normal; float:right; font-weight:800; color:var(--f42-primary-blue, #0066FF)}
+.ap-ch .hd{display:flex; justify-content:space-between; align-items:baseline; gap:4px 12px; flex-wrap:wrap}
+.ap-ch em{font-style:normal; font-weight:800; color:var(--f42-primary-blue, #0066FF); white-space:nowrap}
 .ap-ch p{margin:0; font-size:15px; line-height:1.55; color:var(--text-body)}
 .ap-rep h3{font-family:var(--font-display); font-size:20px; font-weight:800; color:var(--text-heading); margin:28px 0 10px}
 .ap-rep ol,.ap-rep ul{padding-left:22px; line-height:1.6; color:var(--text-body); margin:0}
@@ -125,6 +125,9 @@ const SCRIPT = `<script>
   var f=document.getElementById("ap-form");if(!f)return;
   var out=document.getElementById("ap-report"),st=f.querySelector(".ap-status"),b=f.querySelector(".ap-btn");
   function dl(o){window.dataLayer=window.dataLayer||[];window.dataLayer.push(o)}
+  function money(n){return "$"+Math.round(n).toLocaleString("en-US")}
+  function num(v){var t=String(v||"").toLowerCase().replace(/,/g,""),m=t.match(/(\\d+(?:\\.\\d+)?)\\s*(k|thousand|grand)?/);return m?Math.round(parseFloat(m[1])*(m[2]?1000:1)):0}
+  function fc(c){return c.kind==="cpm"||c.kind==="cpv"?"About "+Math.round(c.forecast).toLocaleString("en-US")+" "+c.unit+" a month":c.kind==="budget"?"You pay for clicks or leads; we\u2019ll forecast those with you":""}
   function e(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
   function usPhone(raw){var d=raw.replace(/\\D/g,"");if(d.length===11&&d[0]==="1")d=d.slice(1);return /^[2-9]\\d{2}[2-9]\\d{6}$/.test(d)?d:""}
   var started=false;f.addEventListener("input",function(){if(!started){started=true;dl({event:"ad_plan_start"})}});
@@ -133,6 +136,7 @@ const SCRIPT = `<script>
     var v=function(n){return(f.elements[n]&&f.elements[n].value||"").trim()};
     if(v("website"))return;
     var miss=["business","trade","location","radius","goal","budget","name"].filter(function(n){return !v(n)});
+    if(!miss.length&&!num(v("budget"))){st.textContent="Please enter your monthly ad budget as a number, like 2000.";f.elements.budget.focus();return}
     if(miss.length){st.textContent="Please fill in every question above (only the last box is optional).";f.elements[miss[0]].focus();return}
     if(!usPhone(v("phone"))){st.textContent="Please enter a US phone number with area code, like (404) 555-0142.";f.elements.phone.focus();return}
     if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(v("email"))){st.textContent="Please enter an email address so we can send you the plan.";f.elements.email.focus();return}
@@ -147,7 +151,7 @@ const SCRIPT = `<script>
     d.page=location.pathname;
     fetch(f.getAttribute("data-endpoint"),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(d)})
       .then(function(r){return r.json().then(function(j){if(!r.ok||!j.plan)throw new Error(j.error||"");return j})})
-      .then(function(j){show(j,d);dl({event:"form_conversion",form:"ad_plan"});dl({event:"ad_plan_generated",ad_budget:d.budget,goal:d.goal,mode:mode})})
+      .then(function(j){show(j,d);dl({event:"form_conversion",form:"ad_plan"});dl({event:"ad_plan_generated",ad_budget:num(d.budget),goal:d.goal,mode:mode})})
       .catch(function(x){fail((x&&x.message)||"That didn't go through. Please call us at 770-299-9583.")});
   }
 
@@ -165,7 +169,7 @@ const SCRIPT = `<script>
   function bubble(role,t){var m=document.createElement("div");m.className="ap-m "+(role==="user"?"ap-u":"ap-a");m.textContent=t;log.appendChild(m);log.scrollTop=log.scrollHeight;return m}
   function startChat(){if(begun)return;begun=true;bubble("assistant",HELLO);msgs.push({role:"assistant",content:HELLO})}
   var LABELS={business:"Business",trade:"Does",location:"Area",radius:"Serves",goal:"Goal",budget:"Ad budget",name:"Name",phone:"Phone",email:"Email"};
-  function showGot(){var a=[];for(var k in LABELS)if(fields[k])a.push(LABELS[k]+": "+fields[k]);got.textContent=a.length?"Got so far \u2014 "+a.join(" \u00b7 "):""}
+  function showGot(){var a=[];for(var k in LABELS)if(fields[k])a.push(LABELS[k]+": "+(k==="budget"?money(fields[k])+"/mo":fields[k]));got.textContent=a.length?"Got so far \u2014 "+a.join(" \u00b7 "):""}
   inp.addEventListener("keydown",function(ev){if(ev.key==="Enter"&&!ev.shiftKey){ev.preventDefault();cf.requestSubmit?cf.requestSubmit():cf.onsubmit(ev)}});
   inp.addEventListener("input",function(){inp.style.height="auto";inp.style.height=Math.min(inp.scrollHeight,120)+"px"});
   cf.onsubmit=function(ev){ev.preventDefault();var t=inp.value.trim();if(!t||busy)return;
@@ -187,17 +191,18 @@ const SCRIPT = `<script>
     var p=j.plan,h='<p style="font-size:13px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--color-accent, #0066FF); margin:0 0 10px">Your free digital media plan</p>'+
       '<h2 style="font-family:var(--font-display); font-size:30px; font-weight:800; letter-spacing:-0.02em; line-height:1.15; color:var(--text-heading); margin:0 0 12px">'+e(d.business)+'</h2>'+
       '<p style="font-size:17px; line-height:1.6; color:var(--text-body); margin:0 0 22px">'+e(p.headline)+'</p>'+
-      '<h3 style="margin-top:0">How to split your monthly ad budget</h3><p style="font-size:14px; color:var(--text-muted); margin:-4px 0 8px">'+e(d.budget)+' a month, your own ad spend</p>'+
-      p.channels.map(function(c){return '<div class="ap-ch"><b>'+e(c.product)+'</b><em>'+c.share+'%</em><div class="ap-bar"><i style="width:'+c.share+'%"></i></div><p>'+e(c.why)+'</p></div>'}).join("")+
+      (p.low&&p.note?'<p style="background:#FFF7ED; border:1px solid #FED7AA; border-radius:12px; padding:14px 16px; margin:0 0 18px; line-height:1.55; color:#9A3412">'+e(p.note)+'</p>':'')+
+      (p.channels.length?'<h3 style="margin-top:0">How to split your '+money(p.budget)+' monthly ad budget</h3>'+
+      p.channels.map(function(c){return '<div class="ap-ch"><div class="hd"><b>'+e(c.name)+'</b><em>'+money(c.dollars)+'/mo <span style="font-weight:600; color:var(--text-muted)">\u00b7 '+c.share+'%</span></em></div><div class="ap-bar"><i style="width:'+c.share+'%"></i></div>'+(fc(c)?'<p style="font-weight:600; color:var(--text-heading); margin:0 0 4px">'+e(fc(c))+'</p>':'')+'<p>'+e(c.why)+'</p></div>'}).join(""):'')+
       (p.firstMonth.length?'<h3>Your first month</h3><ol>'+p.firstMonth.map(function(x){return'<li>'+e(x)+'</li>'}).join("")+'</ol>':'')+
       (p.watch.length?'<h3>Numbers to watch</h3><ul>'+p.watch.map(function(x){return'<li>'+e(x)+'</li>'}).join("")+'</ul>':'')+
-      (p.note?'<p style="background:var(--f42-bg, #F0F4FF); border-radius:12px; padding:14px 16px; margin:24px 0 0; line-height:1.55; color:var(--text-body)">'+e(p.note)+'</p>':'')+
+      (p.note&&!p.low?'<p style="background:var(--f42-bg, #F0F4FF); border-radius:12px; padding:14px 16px; margin:24px 0 0; line-height:1.55; color:var(--text-body)">'+e(p.note)+'</p>':'')+
       '<div style="margin:28px 0 0; padding:22px; border-radius:16px; border:1px solid var(--border-subtle); background:var(--f42-white)">'+
       '<p style="font-family:var(--font-display); font-size:19px; font-weight:800; color:var(--text-heading); margin:0 0 6px">Want us to run this for you?</p>'+
       '<p style="margin:0 0 14px; line-height:1.55; color:var(--text-body)">A real person will look at your plan and what you run today, and call you back within 24 hours with a straight answer.</p>'+
       '<div style="display:flex; flex-wrap:wrap; gap:10px"><a href="second-opinion.html" data-lead-cta="ad-plan" style="display:inline-flex; align-items:center; height:48px; padding:0 20px; border-radius:12px; background:var(--f42-gradient-button); color:#fff; font-weight:700; text-decoration:none">Get a free Second Opinion</a>'+
       '<a href="tel:+17702999583" style="display:inline-flex; align-items:center; height:48px; padding:0 20px; border-radius:12px; border:1.5px solid var(--f42-primary-blue, #0066FF); color:var(--f42-primary-blue, #0066FF); font-weight:700; text-decoration:none">Call 770-299-9583</a></div></div>'+
-      '<p style="font-size:13px; line-height:1.5; color:var(--text-muted); margin:18px 0 0">'+(j.emailed?'We also emailed this plan to '+e(d.email)+'. ':'')+'This is a starting suggestion based on what you told us, made with the help of AI. It is not a quote or a promise of results.</p>';
+      '<p style="font-size:13px; line-height:1.5; color:var(--text-muted); margin:18px 0 0">'+(j.emailed?'We also emailed this plan to '+e(d.email)+'. ':'')+'This is a starting suggestion based on what you told us, made with the help of AI. Forecasts are estimates, not guarantees, and this is not a quote or a promise of results.</p>';
     out.innerHTML=h;f.style.display="none";cp.hidden=true;document.querySelector(".ap-tabs").style.display="none";out.style.display="block";
     var top=out.getBoundingClientRect().top+window.pageYOffset-90;window.scrollTo({top:top,behavior:"smooth"});out.focus({preventScroll:true});
   }
@@ -223,7 +228,8 @@ const BODY = (endpoint) => `${CSS}
       <h3>What you'll get</h3>
       <ul>
         <li>The ad channels that fit your business and area, picked from the 22 we run, with a plain reason for each</li>
-        <li>How to split your own monthly ad budget, in percentages</li>
+        <li>How to split your monthly ad budget across channels, in dollars</li>
+        <li>A forecast of impressions or video views for each channel</li>
         <li>What to do in your first month</li>
         <li>The few numbers worth watching</li>
       </ul>

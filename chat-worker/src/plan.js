@@ -1,27 +1,41 @@
 /**
- * Ad plan recommender (added 2026-10-15). POST /plan from deepthought.marketing/digital-media-plan-builder.html.
+ * Media plan builder (added 2026-10-15; channel list and pricing 2026-10-16).
+ * POST /plan from deepthought.marketing/digital-media-plan-builder.html.
  *
- * The visitor answers a few questions (contact details plus business, area, goal, ad budget and
- * what they run today). Claude picks a starting mix from the 22 products in chat-knowledge.json
- * and returns structured JSON. This file then:
- *   - checks every channel is one of our real products and the shares add up to 100,
- *   - strips anything that looks like a dollar figure from the wording (no prices, ever),
- *   - sends the lead to the same Apps Script as the Second Opinion form (sheet row + email),
- *   - emails the plan to the visitor and a copy to Shajan through Resend,
- *   - logs it in CHAT_LOG for 90 days (key p:<YYYYMMDD>-<random>).
+ * The visitor gives contact details, their business, area, goal, monthly ad budget (a number) and
+ * what they run today. Claude picks and explains a starting mix from CHANNELS (catalog.js). This
+ * file, not the model, does the money:
+ *   - drops channels whose share of the budget is below their minimum (PLANNER_PRICING secret),
+ *   - under $500 total: one channel that fits, plus advice to raise the budget,
+ *   - splits the visitor's own budget in dollars and forecasts impressions (CPM) or views (CPV),
+ *   - strips any dollar figure the model writes itself (it must never quote our prices),
+ * then sends the lead to the lead sheet, emails the plan (visitor + Shajan's copy with fees and
+ * rates), and logs it in CHAT_LOG for 90 days (key p:<YYYYMMDD>-<random>).
  *
  * Vars (wrangler.toml): SITE, MODEL, LEADS_ENDPOINT, PLAN_FROM, PLAN_REPLY_TO, PLAN_NOTIFY_TO.
- * Secrets: ANTHROPIC_API_KEY, RESEND_API_KEY.
+ * Secrets: ANTHROPIC_API_KEY, RESEND_API_KEY, PLANNER_PRICING.
  */
+import { CHANNELS, pricing } from "./catalog.js";
 
 export const OPTIONS = {
   radius: ["Just my town", "About 10 miles", "About 25 miles", "My whole metro area", "My whole state", "Nationwide or online"],
   goal: ["More phone calls", "More booked appointments", "More quote requests or leads", "More store or showroom visits",
     "More online sales", "Get known in my area"],
-  budget: ["Under $1,000", "$1,000 to $2,500", "$2,500 to $5,000", "$5,000 to $10,000", "Over $10,000", "Not sure yet"],
   current: ["Google Search ads", "Google Business Profile", "Facebook or Instagram ads", "Local Services Ads", "Nextdoor",
     "Email marketing", "An agency runs my ads", "Nothing yet"],
 };
+export const LOW_BUDGET = 500; // below this total, one channel only and advice to raise the budget
+
+/** "$2,500", "2500", "2.5k", "about 2 grand" -> 2500. Returns 0 if no number. */
+export function readBudget(v) {
+  if (typeof v === "number") return isFinite(v) && v > 0 ? Math.round(v) : 0;
+  const t = String(v || "").toLowerCase().replace(/,/g, "");
+  const m = t.match(/(\d+(?:\.\d+)?)\s*(k|thousand|grand)?/);
+  if (!m) return 0;
+  const n = parseFloat(m[1]) * (m[2] ? 1000 : 1);
+  return isFinite(n) && n > 0 ? Math.round(n) : 0;
+}
+const money = (n) => "$" + Math.round(n).toLocaleString("en-US");
 
 const RATE = { limit: 4, windowMs: 10 * 60 * 1000 };
 const hits = new Map();
@@ -51,7 +65,7 @@ export function readInput(b) {
   const input = {
     name: s(b.name, 80), email: s(b.email, 120).toLowerCase(), business: s(b.business, 100), trade: s(b.trade, 80),
     location: s(b.location, 80), radius: pick(b.radius, OPTIONS.radius), goal: pick(b.goal, OPTIONS.goal),
-    budget: pick(b.budget, OPTIONS.budget),
+    budget: readBudget(b.budget),
     current: (Array.isArray(b.current) ? b.current : []).map((x) => pick(x, OPTIONS.current)).filter(Boolean).slice(0, 8),
     notes: s(b.notes, 400),
     phone: d ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : "",
@@ -60,36 +74,36 @@ export function readInput(b) {
   if (!d) return { error: "Please enter a US phone number with area code, like (404) 555-0142." };
   if (!EMAIL_RE.test(input.email)) return { error: "Please enter an email address so we can send you the plan." };
   if (!input.location) return { error: "Please tell us the town or ZIP code you serve." };
-  if (!input.goal || !input.budget || !input.radius) return { error: "Please answer the questions about your goal, area and budget." };
+  if (!input.goal || !input.radius) return { error: "Please answer the questions about your goal and how far you serve." };
+  if (!input.budget) return { error: "Please tell us roughly how much you'd like to spend on ads each month, in dollars." };
+  if (input.budget > 5000000) return { error: "Please check your monthly ad budget." };
   const meta = {};
   for (const k of ["page", "source", "first_source", "first_page", "first_seen", "timezone", "language", "utm", "referrer"]) meta[k] = s(b[k], 300);
   return { input, meta };
 }
 
-/** All 22 product names, flat, from chat-knowledge.json's grouped list. */
-export const productList = (k) => Object.values(k.products || {}).flat();
+export function buildPlanPrompt(price) {
+  const list = CHANNELS.map((c) => {
+    const p = price[c.id] || {};
+    return `- id "${c.id}": ${c.name}${p.min ? ` (minimum ${money(p.min)} a month)` : ""}. ${c.desc}`;
+  }).join("\n");
+  return `You are Deep Thought Marketing's media planner. A small or local business owner has answered a short questionnaire on deepthought.marketing. Recommend a sensible STARTING mix of advertising channels for their monthly ad budget, explained in plain English.
 
-export function buildPlanPrompt(k) {
-  const groups = Object.entries(k.products || {}).map(([g, list]) => `- ${g}: ${list.join(", ")}`).join("\n");
-  return `You are Deep Thought Marketing's ad planner. A small or local business owner has answered a short questionnaire on deepthought.marketing. Recommend a sensible STARTING mix of advertising products for them, explained in plain English.
-
-## Products you may recommend (use these exact names, nothing else)
-${groups}
+## Channels you may recommend (use the id exactly; nothing else)
+${list}
 
 ## How to choose
-- Number of products by monthly ad budget: Under $1,000 -> 1 or 2. $1,000 to $2,500 -> 2 or 3. $2,500 to $5,000 -> 3 or 4. $5,000 and up -> 3 to 5. "Not sure yet" -> plan as if $1,000 to $2,500 and say so in the note.
-- Catch demand before creating it. For service businesses whose customers search when they need help (home services, legal, medical, dental, auto repair, etc.), lead with Google Search ads, and Google Local Services Ads where the trade is eligible (home services, legal, many professional services).
-- Facebook and Instagram ads suit almost every local consumer business for staying in front of people before they need you; Nextdoor ads suit neighbourhood services (home services, pets, childcare, fitness, restaurants).
-- Retargeting only alongside a channel that sends website traffic.
-- Geofencing for businesses with a physical location, events, or nearby competitor locations.
-- Connected TV, YouTube, online video, streaming audio, podcast ads and postal direct mail only at $2,500 a month or more, or when the goal is "Get known in my area".
-- Performance Max and Shopping ads and Amazon ads only for businesses that sell products online (Amazon ads only if they sell on Amazon). LinkedIn ads only for businesses that sell to other businesses. Yelp ads for restaurants, home services, beauty and auto. Microsoft (Bing) Ads only as an add-on to Google Search at $2,500 and up.
-- If they already run something, say whether to keep it, fix it or replace it. A Google Business Profile is free; mention keeping it complete if relevant, but it is not one of the products.
-- "share" is the percentage of THEIR OWN monthly ad budget for each product. Shares are whole numbers, multiples of 5, and add up to 100. Put most of a small budget in the first product.
+- A channel only works if it gets at least its minimum. share x budget must be at least that channel's minimum, so fewer channels on smaller budgets.
+- If the total budget is under ${money(LOW_BUDGET)}: recommend exactly ONE channel that fits the budget and the goal (100%), and say in the note that a budget of at least ${money(LOW_BUDGET)} a month gives much more reliable results.
+- Roughly: under ${money(1500)} -> 1 or 2 channels; up to ${money(5000)} -> 2 to 3; above that -> 3 to 5.
+- Catch demand before creating it: for service businesses whose customers search when they need help (home services, legal, medical, dental, auto repair...), lead with search ads, and Local Services Ads where the trade is eligible.
+- Match channels to the business: Nextdoor for neighbourhood services; LinkedIn only for selling to other businesses; Yelp for restaurants, home services, beauty and auto; TikTok and Twitch for younger audiences with video; Amazon Prime Video for consumer brands and Amazon sellers; geofencing for physical locations, events or competitor locations; streaming TV, YouTube, pre-roll and digital billboards when the goal is awareness or the budget is larger.
+- If they already run something, say whether to keep it, fix it or replace it. A Google Business Profile is free; mention keeping it complete if relevant, but it is not one of the channels.
+- "share" is the percentage of THEIR monthly ad budget for each channel; whole numbers adding up to 100. Order channels from most to least important.
 
 ## Writing rules (never break these)
 - Plain, friendly English for a busy owner. No jargon, no hype, no exclamation marks, no emojis.
-- Never write a dollar amount, price, fee, cost per click, cost per lead or any number with a $ sign. Never mention what Deep Thought charges.
+- Never write dollar amounts, prices, fees, CPMs, cost per click or cost per lead; the budget split in dollars and the forecasts are added automatically. Never mention what Deep Thought charges.
 - Never promise results (leads, sales, rankings, returns) and never give timeframes in days or weeks for results or launch.
 - Never invent statistics, clients or case studies.
 - Write the company as "Deep Thought" if you mention it at all.
@@ -97,7 +111,7 @@ ${groups}
 ## Output
 Reply with ONLY a JSON object, no other text:
 {"headline": "one sentence summing up the plan for this business",
- "channels": [{"product": "exact product name", "share": 50, "why": "one or two sentences on why this fits them"}],
+ "channels": [{"id": "channel id", "share": 60, "why": "one or two sentences on why this fits them"}],
  "firstMonth": ["3 or 4 short, concrete steps for the first month"],
  "watch": ["3 numbers to watch, each with a few words on why"],
  "note": "one sentence: a caveat or tip specific to them"}`;
@@ -109,87 +123,134 @@ What the business does: ${i.trade}
 Town or ZIP: ${i.location}
 How far they serve: ${i.radius}
 Main goal: ${i.goal}
-Monthly ad budget: ${i.budget}
+Monthly ad budget: ${money(i.budget)}
 Running today: ${i.current.length ? i.current.join(", ") : "not given"}
 Anything else: ${i.notes || "nothing"}`;
 }
 
-// Drop any sentence that carries a dollar figure; the plan must never quote prices.
+// Drop any sentence that carries a dollar figure; the model must never quote prices (the code adds the budget split).
 const noDollars = (t) => s(t, 400).split(/(?<=[.!?])\s+/).filter((x) => !/\$\s?\d/.test(x)).join(" ").trim();
+const sig3 = (n) => { if (n < 1000) return Math.round(n / 10) * 10; const p = Math.pow(10, Math.floor(Math.log10(n)) - 2); return Math.round(n / p) * p; };
+
+/**
+ * Turn the model's ranked picks into a real plan for `budget`: enforce minimums (drop the
+ * lowest-ranked channel that falls short, re-split, repeat), dollars rounded to $10 adding up to
+ * the budget, and forecasts from the private rates.
+ */
+export function allocate(picks, budget, price) {
+  const min = (id) => (price[id] && price[id].min) || 0;
+  let list = picks.slice();
+  const low = budget < LOW_BUDGET;
+  if (low) {
+    const fit = list.find((c) => min(c.id) <= budget) ||
+      CHANNELS.filter((c) => price[c.id] && min(c.id) <= budget).sort((a, b) => min(a.id) - min(b.id)).map((c) => ({ id: c.id, share: 100, why: "" }))[0];
+    list = fit ? [{ ...fit, share: 100 }] : [];
+  } else {
+    for (;;) {
+      const tot = list.reduce((a, c) => a + (c.share || 1), 0) || 1;
+      const short = [...list].reverse().find((c) => (budget * (c.share || 1)) / tot < min(c.id));
+      if (!short) break;
+      list = list.filter((c) => c !== short);
+      if (!list.length) break;
+    }
+    if (!list.length) {
+      const fit = picks.find((c) => min(c.id) <= budget);
+      if (fit) list = [{ ...fit, share: 100 }];
+    }
+  }
+  const tot = list.reduce((a, c) => a + (c.share || 1), 0) || 1;
+  const out = list.map((c) => ({ ...c, dollars: Math.round((budget * (c.share || 1)) / tot / 10) * 10 }));
+  if (out.length) out[0].dollars += Math.round(budget) - out.reduce((a, c) => a + c.dollars, 0);
+  for (const c of out) {
+    const ch = CHANNELS.find((x) => x.id === c.id), p = price[c.id] || {};
+    c.name = ch.name;
+    c.share = Math.round((c.dollars / budget) * 100);
+    c.min = p.min || 0;
+    if (p.cpm) { c.kind = "cpm"; c.forecast = sig3((c.dollars / p.cpm) * 1000); c.unit = "impressions"; }
+    else if (p.cpv) { c.kind = "cpv"; c.forecast = sig3(c.dollars / p.cpv); c.unit = "video views"; }
+    else if (p.fee != null) { c.kind = "budget"; c.forecast = null; c.unit = ""; c.fee = p.fee; c.working = Math.round(c.dollars * (1 - p.fee)); }
+    else { c.kind = "unknown"; c.forecast = null; }
+    if (p.cpm) c.rate = p.cpm; if (p.cpv) c.rate = p.cpv;
+  }
+  return { channels: out, low, budget };
+}
 
 /** Parse and police Claude's JSON. Throws if nothing usable came back. */
-export function parsePlan(raw, products) {
+export function parsePlan(raw, budget, price) {
   const m = String(raw).match(/\{[\s\S]*\}/);
   if (!m) throw new Error("no JSON");
   const j = JSON.parse(m[0]);
-  const canon = new Map(products.map((p) => [p.toLowerCase(), p]));
+  const ids = new Set(CHANNELS.map((c) => c.id));
   const seen = new Set();
-  let channels = (Array.isArray(j.channels) ? j.channels : []).map((c) => ({
-    product: canon.get(String(c && c.product || "").toLowerCase().trim()),
+  const picks = (Array.isArray(j.channels) ? j.channels : []).map((c) => ({
+    id: String(c && (c.id || c.product) || "").trim().toLowerCase(),
     share: Math.max(0, Number(c && c.share) || 0),
     why: noDollars(c && c.why),
-  })).filter((c) => c.product && c.why && !seen.has(c.product) && seen.add(c.product)).slice(0, 5);
-  if (!channels.length) throw new Error("no valid channels");
-  // Shares: normalise to 100 in steps of 5, every product at least 5.
-  const total = channels.reduce((a, c) => a + c.share, 0) || channels.length;
-  channels.forEach((c) => { c.share = Math.max(5, Math.round(((c.share || 1) / total) * 20) * 5); });
-  let diff = 100 - channels.reduce((a, c) => a + c.share, 0);
-  channels.sort((a, b) => b.share - a.share);
-  while (diff !== 0) {
-    const c = diff > 0 ? channels[0] : channels.find((x) => x.share > 5) || channels[0];
-    c.share += diff > 0 ? 5 : -5; diff += diff > 0 ? -5 : 5;
-  }
+  })).filter((c) => ids.has(c.id) && c.why && !seen.has(c.id) && seen.add(c.id)).slice(0, 5);
+  if (!picks.length) throw new Error("no valid channels");
+  const a = allocate(picks, budget, price);
   const list = (v, n) => (Array.isArray(v) ? v : []).map(noDollars).filter(Boolean).slice(0, n);
+  let note = noDollars(j.note);
+  if (a.low) note = `A budget under ${money(LOW_BUDGET)} a month is usually too small for steady results; we'd suggest at least ${money(LOW_BUDGET)}. ` + (a.channels.length ? "If you'd like to start smaller, this is the one channel that fits." : "At this budget there isn't a channel we'd recommend yet.");
   return {
-    headline: noDollars(j.headline) || "A starting ad plan built around your goal and area.",
-    channels,
+    headline: noDollars(j.headline) || "A starting media plan built around your goal and area.",
+    budget, low: a.low,
+    channels: a.channels.map((c) => ({ ...c, why: c.why || "The channel that fits your budget and goal best." })),
     firstMonth: list(j.firstMonth, 4),
     watch: list(j.watch, 3),
-    note: noDollars(j.note),
+    note,
   };
+}
+
+/** What the visitor sees (page + email): no fees, rates or minimums. */
+export function publicPlan(plan) {
+  return { ...plan, channels: plan.channels.map(({ id, name, share, dollars, forecast, unit, why, kind }) => ({ id, name, share, dollars, forecast, unit, why, kind })) };
 }
 
 const esc = (v) => String(v ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
+const fmtN = (n) => Math.round(n).toLocaleString("en-US");
+export function forecastText(c) {
+  if (c.kind === "cpm" || c.kind === "cpv") return `About ${fmtN(c.forecast)} ${c.unit} a month`;
+  if (c.kind === "budget") return "You pay for clicks or leads; we'll forecast those with you";
+  return "";
+}
+
 export function planEmailHtml(plan, input, site, forOwner = false) {
-  const bars = plan.channels.map((c) => `
-    <tr><td style="padding:10px 0 2px;font-weight:700;color:#0A0F1E">${esc(c.product)}</td><td style="padding:10px 0 2px;text-align:right;font-weight:700;color:#0052CC">${c.share}%</td></tr>
+  const rows = plan.channels.map((c) => `
+    <tr><td style="padding:10px 0 2px;font-weight:700;color:#0A0F1E">${esc(c.name)}</td><td style="padding:10px 0 2px;text-align:right;font-weight:700;color:#0052CC;white-space:nowrap">${money(c.dollars)}/mo &middot; ${c.share}%</td></tr>
     <tr><td colspan="2"><div style="height:8px;border-radius:4px;background:#E6EEFF"><div style="height:8px;border-radius:4px;width:${c.share}%;background:linear-gradient(90deg,#0066FF,#00B4D8)"></div></div></td></tr>
-    <tr><td colspan="2" style="padding:6px 0 4px;color:#475569;font-size:14px;line-height:1.5">${esc(c.why)}</td></tr>`).join("");
+    <tr><td colspan="2" style="padding:6px 0 2px;color:#0A0F1E;font-size:13.5px;font-weight:600">${esc(forecastText(c))}</td></tr>
+    ${forOwner ? `<tr><td colspan="2" style="padding:0;color:#B45309;font-size:12.5px">Internal: ${c.kind === "budget" ? `fee ${Math.round(c.fee * 100)}%, working media ${money(c.working)}` : c.kind === "cpm" ? `CPM $${c.rate}` : c.kind === "cpv" ? `CPV $${c.rate}` : "no pricing"}; minimum ${money(c.min)}</td></tr>` : ""}
+    <tr><td colspan="2" style="padding:4px 0 4px;color:#475569;font-size:14px;line-height:1.5">${esc(c.why)}</td></tr>`).join("");
   const li = (a) => a.map((x) => `<li style="margin:0 0 6px">${esc(x)}</li>`).join("");
   const facts = forOwner ? `
     <table style="font-size:14px;margin:0 0 18px;color:#334155">
       ${[["Name", input.name], ["Phone", input.phone], ["Email", input.email], ["Business", `${input.business} (${input.trade})`], ["Area", `${input.location}, ${input.radius}`],
-        ["Goal", input.goal], ["Ad budget", input.budget], ["Running today", input.current.join(", ") || "-"], ["Notes", input.notes || "-"]]
+        ["Goal", input.goal], ["Ad budget", `${money(input.budget)} a month`], ["Running today", input.current.join(", ") || "-"], ["Notes", input.notes || "-"]]
         .map(([k, v]) => `<tr><td style="color:#64748b;padding:2px 14px 2px 0">${k}</td><td>${esc(v)}</td></tr>`).join("")}
     </table>` : "";
   return `<div style="font-family:Inter,Arial,sans-serif;max-width:640px;margin:0 auto;color:#334155">
   <h2 style="color:#0A0F1E;margin:0 0 6px">${forOwner ? `New media plan request: ${esc(input.business)}` : `Your digital media plan, ${esc(input.name.split(" ")[0])}`}</h2>
   ${facts}
   <p style="font-size:16px;line-height:1.55;margin:0 0 14px">${esc(plan.headline)}</p>
-  <p style="font-size:13px;color:#64748b;margin:0 0 4px">How to split your monthly ad budget (${esc(input.budget)}):</p>
-  <table style="width:100%;border-collapse:collapse">${bars}</table>
-  <h3 style="color:#0A0F1E;margin:22px 0 8px">Your first month</h3><ol style="padding-left:20px;line-height:1.55;margin:0">${li(plan.firstMonth)}</ol>
-  <h3 style="color:#0A0F1E;margin:22px 0 8px">Numbers to watch</h3><ul style="padding-left:20px;line-height:1.55;margin:0">${li(plan.watch)}</ul>
+  ${plan.channels.length ? `<p style="font-size:13px;color:#64748b;margin:0 0 4px">How to split your ${money(plan.budget)} monthly ad budget:</p>
+  <table style="width:100%;border-collapse:collapse">${rows}</table>` : ""}
+  ${plan.firstMonth.length ? `<h3 style="color:#0A0F1E;margin:22px 0 8px">Your first month</h3><ol style="padding-left:20px;line-height:1.55;margin:0">${li(plan.firstMonth)}</ol>` : ""}
+  ${plan.watch.length ? `<h3 style="color:#0A0F1E;margin:22px 0 8px">Numbers to watch</h3><ul style="padding-left:20px;line-height:1.55;margin:0">${li(plan.watch)}</ul>` : ""}
   ${plan.note ? `<p style="background:#F0F4FF;border-radius:10px;padding:12px 14px;margin:20px 0 0;line-height:1.5">${esc(plan.note)}</p>` : ""}
   ${forOwner ? "" : `<p style="margin:26px 0 10px;line-height:1.55">Want us to run this for you? A real person will look at your plan and your current ads, and call you back within 24 hours with a straight answer. Or call us now at <a href="tel:+17702999583">770-299-9583</a>.</p>
   <p><a href="${site}/second-opinion.html" style="display:inline-block;background:#0066FF;color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:10px">Get a free Second Opinion</a></p>`}
-  <p style="font-size:12px;color:#94a3b8;margin-top:24px">This plan is a starting suggestion based on what you told us, made with the help of AI. It is not a quote or a promise of results.${forOwner ? "" : " Reply to this email with any questions."}</p></div>`;
+  <p style="font-size:12px;color:#94a3b8;margin-top:24px">This plan is a starting suggestion based on what you told us, made with the help of AI. Forecasts are estimates, not guarantees, and this is not a quote or a promise of results.${forOwner ? "" : " Reply to this email with any questions."}</p></div>`;
 }
 
-async function knowledge(env) {
-  const res = await fetch(`${env.SITE}/chat-knowledge.json`, { cf: { cacheTtl: 600 } });
-  if (!res.ok) throw new Error(`knowledge ${res.status}`);
-  return res.json();
-}
-
-async function askClaude(env, key, k, input, extra = "") {
+async function askClaude(env, key, price, input, extra = "") {
   const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
     body: JSON.stringify({
       model: env.MODEL, max_tokens: 1400, temperature: 0.4,
-      system: buildPlanPrompt(k),
+      system: buildPlanPrompt(price),
       messages: [{ role: "user", content: planUserMessage(input) + extra }, { role: "assistant", content: "{" }],
     }),
   });
@@ -219,13 +280,12 @@ export async function handlePlan(request, env, ctx, c, key) {
   const { input, meta } = r;
 
   let plan;
+  const price = pricing(env);
   try {
-    const k = await knowledge(env);
-    const products = productList(k);
-    try { plan = parsePlan(await askClaude(env, key, k, input), products); }
+    try { plan = parsePlan(await askClaude(env, key, price, input), input.budget, price); }
     catch (e) {
       console.error("plan retry", e.message);
-      plan = parsePlan(await askClaude(env, key, k, input, "\n\n(Reply with valid JSON only, using exact product names from the list.)"), products);
+      plan = parsePlan(await askClaude(env, key, price, input, "\n\n(Reply with valid JSON only, using exact channel ids from the list.)"), input.budget, price);
     }
   } catch (e) {
     console.error("plan", e.message);
@@ -233,12 +293,12 @@ export async function handlePlan(request, env, ctx, c, key) {
   }
 
   const site = env.SITE || "https://deepthought.marketing";
-  const mix = plan.channels.map((x) => `${x.product} ${x.share}%`).join(", ");
+  const mix = plan.channels.map((x) => `${x.name} ${money(x.dollars)}`).join(", ") || "none (budget too low)";
   const work = [];
   if (env.LEADS_ENDPOINT) {
     const body = new URLSearchParams({
       name: input.name, phone: input.phone, email: input.email,
-      business: `${input.business} (${input.trade}; ad plan: ${mix})`.slice(0, 290),
+      business: `${input.business} (${input.trade}; ${money(input.budget)}/mo plan: ${mix})`.slice(0, 290),
       page: meta.page || "/digital-media-plan-builder.html", place: "ad-plan", utm: meta.utm || "{}", referrer: meta.referrer || "",
       source: meta.source || "", first_source: meta.first_source || "", first_page: meta.first_page || "",
       first_seen: meta.first_seen || "", timezone: meta.timezone || "", language: meta.language || "",
@@ -247,7 +307,7 @@ export async function handlePlan(request, env, ctx, c, key) {
   }
   const from = env.PLAN_FROM || "Deep Thought Marketing <plans@deepthought.marketing>";
   const replyTo = env.PLAN_REPLY_TO || "shajan@deepthought.marketing";
-  work.push(resend(env, { from, to: [input.email], reply_to: replyTo, subject: `Your digital media plan for ${input.business}`, html: planEmailHtml(plan, input, site) }));
+  work.push(resend(env, { from, to: [input.email], reply_to: replyTo, subject: `Your digital media plan for ${input.business}`, html: planEmailHtml(publicPlan(plan), input, site) }));
   const notify = (env.PLAN_NOTIFY_TO || env.DIGEST_TO || "").split(",").map((x) => x.trim()).filter(Boolean);
   if (notify.length) work.push(resend(env, { from, to: notify, reply_to: input.email, subject: `New media plan: ${input.business} (${input.trade}, ${input.location})`, html: planEmailHtml(plan, input, site, true) }));
   if (env.CHAT_LOG) {
@@ -255,7 +315,7 @@ export async function handlePlan(request, env, ctx, c, key) {
     work.push(env.CHAT_LOG.put(`p:${d}-${Math.random().toString(36).slice(2, 12)}`, JSON.stringify({ at: new Date().toISOString(), input, meta, plan }), { expirationTtl: 90 * 24 * 3600 }));
   }
   ctx.waitUntil(Promise.all(work.map((p) => Promise.resolve(p).catch((e) => console.error("plan side", e.message)))));
-  return json({ ok: true, plan, emailed: !!env.RESEND_API_KEY });
+  return json({ ok: true, plan: publicPlan(plan), emailed: !!env.RESEND_API_KEY });
 }
 
 /* ------------------------------------------------------------------------------------------
@@ -285,14 +345,14 @@ export function buildPlanChatPrompt() {
 3. location: the town or ZIP code they are based in
 4. radius: how far they serve. One of: ${opt("radius")}
 5. goal: their main goal. One of: ${opt("goal")}
-6. budget: their rough monthly AD budget (their own ad spend). One of: ${opt("budget")}
+6. budget: roughly how much they want to spend on ads each month, as a number of US dollars (e.g. 2000). If they're unsure, ask for their best guess.
 7. current: what they run today, zero or more of: ${opt("current")}
 8. notes: anything else worth knowing (optional; don't push for it)
 9. name, phone (a US number with area code) and email: say these are so we can send them the plan.
 
 ## How to talk
 - Short, warm, plain English. One or two sentences per reply, then the next question. No exclamation marks, no emojis.
-- Map loose answers onto the options yourself ("about two grand" -> "$1,000 to $2,500"; "around Atlanta" -> "My whole metro area" if that fits). If an answer is unclear, ask once more, briefly.
+- Map loose answers onto the options yourself ("about two grand" -> budget 2000; "around Atlanta" -> "My whole metro area" if that fits). If an answer is unclear, ask once more, briefly.
 - If they ask a side question, answer in one sentence and come back to the next missing detail.
 - Never quote Deep Thought's prices or fees, never promise results.
 - If the phone number isn't a 10-digit US number, ask them to check it. If they don't want to give contact details, explain the plan is shown on the page and emailed, so we need an email and phone; they can also call 770-299-9583.
@@ -300,7 +360,7 @@ export function buildPlanChatPrompt() {
 
 ## Output
 Reply with ONLY a JSON object:
-{"reply": "what you say to the visitor", "fields": {every field you know so far, using the exact option text for radius, goal, budget and each item of current (an array)}}`;
+{"reply": "what you say to the visitor", "fields": {every field you know so far, using the exact option text for radius, goal and each item of current (an array), and budget as a plain number}}`;
 }
 
 /** The /plan-chat route. */
@@ -343,6 +403,7 @@ export async function handlePlanChat(request, env, ctx, c, key) {
   for (const k of FIELD_KEYS) {
     const v = out.fields && out.fields[k];
     if (k === "current") { if (Array.isArray(v) && v.length) fields.current = v.map(String).slice(0, 8); }
+    else if (k === "budget") { if ((typeof v === "number" || typeof v === "string") && readBudget(v)) fields.budget = readBudget(v); }
     else if (typeof v === "string" && v.trim()) fields[k] = v.trim().slice(0, k === "notes" ? 400 : 120);
   }
   const check = readInput({ ...fields, current: fields.current || [] });
