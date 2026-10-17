@@ -83,3 +83,5 @@ Home and home improvement clicks averaged about $8.33 nationally in 2026, which 
 Two local things matter more than any of those averages. First, Gwinnett sits inside the Atlanta DMA. Unless your targeting is tight, you’re in the same auction as advertisers covering the entire metro, paying metro prices for clicks from people who are never driving to you. Build to the county and your actual service radius — Dacula, Lawrenceville, Buford, Suwanee, Duluth, Snellville — and your budget stays where your trucks go.
 
 Second, seasonality here is not subtle. A bid that looks perfectly reasonable in October will get a lot more expensive during the first serious July heat wave, when every AC in the county picks the same weekend to quit. Budget for the spike instead of discovering it.
+
+If you want to see how your own budget would split across channels, [build a free digital media plan](digital-media-plan-builder.html). It takes a few minutes and shows the split in dollars.

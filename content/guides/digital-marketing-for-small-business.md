@@ -131,4 +131,6 @@ If cost per lead creeps up for weeks while nothing else has changed, the ads the
 5. **Track calls and forms** from day one, so you can measure cost per customer.
 6. **Review after 30 days.** Keep what works, cut what doesn't, then add the next channel.
 
+Not sure which channel to start with? Our free [digital media plan builder](digital-media-plan-builder.html) asks a few questions about your business and suggests the channels that fit, with your budget split in dollars.
+
 For a deeper look at choosing a model by budget, read [In-house, agency, or platform: pick by budget, not by pitch](blog-pick-your-model.html). For streaming TV specifically, start with [What streaming TV advertising is and what it costs](blog-streaming-tv-what-it-costs.html).

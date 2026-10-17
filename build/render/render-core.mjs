@@ -26,7 +26,7 @@ import { pathToFileURL } from "node:url";
 import { render, templateFrom, findBlock } from "./dc.mjs";
 import { loadShell, page, SITE, BASE_SCOPE, esc } from "./shell.mjs";
 import { leadSection, secondOpinionPage, afterHero, heroCta } from "./leads.mjs";
-import { adPlanPage } from "./adplan.mjs";
+import { adPlanPage, AD_PLAN_FAQ } from "./adplan.mjs";
 import { aboutPage, ourStoryPage, aboutJsonLd } from "./about.mjs";
 
 const args = process.argv.slice(2);
@@ -257,6 +257,16 @@ for (const def of PAGES) {
     jsonld.push({
       "@context": "https://schema.org", "@type": "FAQPage",
       mainEntity: aeo.faq.map((f) => ({
+        "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
+      })),
+    });
+  }
+
+  // Media plan builder FAQ (SEO chat, 2026-10-17): same list as the visible questions on the page.
+  if (def.file === "digital-media-plan-builder.html") {
+    jsonld.push({
+      "@context": "https://schema.org", "@type": "FAQPage",
+      mainEntity: AD_PLAN_FAQ.map((f) => ({
         "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a },
       })),
     });

@@ -121,6 +121,8 @@ Whichever you pick, judge it on cost per customer after three months, not on how
 
 DeepThought is a done-for-you service. Our AI recommends the channels, budget and audiences and drafts the ads. Our team buys the media, launches the campaigns and manages them across 22 advertising products, and you get plain-English reports. It costs a fraction of a typical agency retainer, month to month.
 
+Want to see which channels would fit your business first? [Build a free digital media plan](digital-media-plan-builder.html) in a few minutes; it's a useful starting point whichever option you choose.
+
 If you need an agency to own your strategy, hire one. We'd rather tell you that than sell you the wrong thing. For the bigger picture of channels, costs and timing, read our guide to [what a full digital marketing setup includes](digital-marketing-for-small-business.html).
 
 ## Sources

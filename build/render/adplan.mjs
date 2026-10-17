@@ -209,6 +209,24 @@ const SCRIPT = `<script>
 })();
 </script>`;
 
+
+/** Questions shown on the page and sent as FAQPage schema (render-core.mjs), from this one list so
+ *  the visible text and the schema can't disagree. Added by the SEO chat, 2026-10-17. */
+export const AD_PLAN_FAQ = [
+  { q: "What is a digital media plan?",
+    a: "A digital media plan says where your advertising should run and how much to spend on each channel. It covers which channels fit your business, such as Google search ads, Facebook and Instagram, streaming TV or display ads, how to split your monthly budget between them, who to reach, and which numbers to watch so you know it is working." },
+  { q: "Is the media plan builder really free?",
+    a: "Yes. The plan is free, with no obligation and no credit card. You see it on this page and we email you a copy. Someone from our team may follow up to see if you want help running it, and you can simply say no." },
+  { q: "How does the builder choose my ad channels?",
+    a: "It looks at what you tell us: your type of business, the area you serve, your goal, your monthly ad budget and what you run today. It then picks the channels that fit from the 22 advertising products we run and gives a plain reason for each. The plan is built with the help of AI and checked against our rules, so it only suggests channels we actually run and the budget split always adds up." },
+  { q: "How is my ad budget split between channels?",
+    a: "The plan shows your monthly budget in dollars for each channel, with a forecast of impressions or video views where that applies. Some channels need a minimum spend to work well, so a smaller budget gets fewer channels done properly rather than many channels spread thin." },
+  { q: "Does the plan guarantee results?",
+    a: "No. The plan is a starting suggestion based on what you told us, and the forecasts are estimates, not promises. Results depend on your offer, your area, your website and how the campaigns are run and improved over time." },
+  { q: "What should I do with my plan?",
+    a: "Use it however helps you: run it yourself, share it with your current agency, or ask us to run it for you. If you would like a person to look at your current ads before you decide, ask for a free Second Opinion." },
+];
+
 const BODY = (endpoint) => `${CSS}
 <section style="max-width:1180px; margin:0 auto; padding:72px 40px 0">
   <div style="font-size:12.5px; font-weight:600; letter-spacing:0.18em; text-transform:uppercase; color:var(--color-accent)">Digital media plan builder</div>
@@ -240,6 +258,13 @@ const BODY = (endpoint) => `${CSS}
         <li>Want a person to look at it? Ask for a <a href="second-opinion.html" style="color:var(--color-accent); font-weight:600">free Second Opinion</a> or call <a href="tel:+17702999583" style="color:var(--color-accent); font-weight:600">770-299-9583</a></li>
       </ul>
     </aside>
+  </div>
+</section>
+<section style="max-width:1180px; margin:0 auto; padding:56px 40px 80px">
+  <h2 style="font-family:var(--font-display); font-size:32px; font-weight:800; letter-spacing:-0.02em; color:var(--text-heading); margin:0">Digital media plan questions</h2>
+  <div style="max-width:820px; margin-top:20px">
+    ${AD_PLAN_FAQ.map((f) => `<h3 style="font-family:var(--font-display); font-size:19px; font-weight:700; color:var(--text-heading); margin:24px 0 6px">${esc(f.q)}</h3>
+    <p style="font-size:16px; line-height:1.65; color:var(--text-body); margin:0">${esc(f.a).replace("free Second Opinion", '<a href="second-opinion.html" style="color:var(--color-accent); font-weight:600">free Second Opinion</a>')}</p>`).join("\n    ")}
   </div>
 </section>
 ${SCRIPT}`;

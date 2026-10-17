@@ -52,6 +52,7 @@ real estate, and multi-location brands.
 - [About](https://deepthought.marketing/about.html): company background
 - [FAQ](https://deepthought.marketing/faq.html): common questions
 - [Book a demo](https://deepthought.marketing/book-a-demo.html): talk to our team
+- [Digital media plan builder](https://deepthought.marketing/digital-media-plan-builder.html): free tool; answer a few questions (or chat) and get a starting digital media plan with recommended channels and a budget split in dollars
 
 ## Common questions
 
