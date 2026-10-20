@@ -53,7 +53,7 @@ In practice that means a short list of channels:
 - **Facebook, Instagram and Nextdoor** to stay in front of homeowners in your service area between emergencies.
 - **Retargeting** to bring back people who visited your site and didn't call, which matters most for big-ticket jobs like a roof or a new system.
 
-If you want the bigger picture of how these fit together for any small business, our [guide to digital marketing for small business](digital-marketing-for-small-business.html) covers it. This post is about what changes when you run a home services company here.
+If you want the bigger picture of how these fit together for any small business, our [guide to digital marketing for small business](digital-marketing-for-small-business.html) covers it. This post is about what changes when you run a home services company here. For how to split a contractor budget across those channels, trade by trade, see [digital marketing for contractors: where the budget should go](blog-digital-marketing-for-contractors.html).
 
 ## Why is Gwinnett County different for home services?
 
