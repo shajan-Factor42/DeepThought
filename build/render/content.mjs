@@ -120,6 +120,7 @@ function tableHtml(chunk) {
   return `<span data-tbl style="display:block; overflow-x:auto; margin:4px 0"><table style="width:100%; border-collapse:collapse; min-width:600px"><thead><tr>${th}</tr></thead><tbody>${tr}</tbody></table></span>`;
 }
 
+// Lists carry the paragraph type styles themselves: the template wraps each item in <p>, which the browser closes before a list (2026-10-22).
 /** Markdown body -> the [{h, p:[...]}] shape the Blog Post template loops over. */
 export function parseBody(md) {
   const sections = [];
@@ -146,7 +147,19 @@ export function parseBody(md) {
     if (/^[-*]\s+/.test(chunk)) {
       const items = chunk.split(/\r?\n/).filter((l) => /^[-*]\s+/.test(l))
         .map((l) => `<li style="margin:0 0 8px">${inline(l.replace(/^[-*]\s+/, ""))}</li>`).join("");
-      current.p.push(`<ul style="margin:0 0 16px; padding-left:22px">${items}</ul>`);
+      current.p.push(`<ul style="margin:0 0 18px; padding-left:22px; font-size:17.5px; line-height:1.78; color:var(--text-body)">${items}</ul>`);
+      continue;
+    }
+
+    // Numbered lists (added 2026-10-22): "1. ...", one item per line; a line without a number continues the item above.
+    if (/^\d+\.\s+/.test(chunk)) {
+      const list = [];
+      for (const l of chunk.split(/\r?\n/)) {
+        if (/^\d+\.\s+/.test(l)) list.push(l.replace(/^\d+\.\s+/, ""));
+        else if (list.length) list[list.length - 1] += " " + l.trim();
+      }
+      const items = list.map((t) => `<li style="margin:0 0 8px">${inline(t)}</li>`).join("");
+      current.p.push(`<ol style="margin:0 0 18px; padding-left:22px; font-size:17.5px; line-height:1.78; color:var(--text-body)">${items}</ol>`);
       continue;
     }
 

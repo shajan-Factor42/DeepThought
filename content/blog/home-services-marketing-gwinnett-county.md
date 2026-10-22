@@ -91,7 +91,7 @@ Spring and early summer are severe-weather season in north Georgia, and hail or 
 
 Roof replacements are a slow decision. Homeowners get several quotes, call their insurance company and talk to neighbors. So roofing campaigns need more than search ads: retargeting for the weeks people spend deciding, before-and-after photos on Facebook and Instagram, and a strong presence on Nextdoor, where neighbors ask each other who they used.
 
-Stay clear of anything that sounds like a storm chaser. Homeowners here have seen plenty of out-of-town crews after a big storm. Ads that lead with a local address, real reviews and named neighborhoods earn more trust than "free roof" promises.
+Stay clear of anything that sounds like a storm chaser. Homeowners here have seen plenty of out-of-town crews after a big storm. Ads that lead with a local address, real reviews and named neighborhoods earn more trust than "free roof" promises. Our guide to [digital marketing for roofing contractors](blog-digital-marketing-for-roofing-contractors.html) covers storm-season setup and which leads are worth paying for.
 
 ## What does an electrical campaign look like?
 

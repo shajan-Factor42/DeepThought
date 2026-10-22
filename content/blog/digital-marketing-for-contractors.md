@@ -65,7 +65,7 @@ Each trade has its own mix and its own busy season. A starting point:
 | **Landscaping** | Social + search | Spring and fall | Nextdoor and seasonal offers |
 | **Remodeling** | Search + retargeting | Late winter planning into spring | Streaming TV and email for long decisions |
 
-We go deeper on individual trades in our guides to [HVAC marketing in Atlanta](hvac-marketing-atlanta.html) and [home services marketing in Gwinnett County](blog-home-services-marketing-gwinnett-county.html).
+We go deeper on individual trades in our guides to [HVAC marketing in Atlanta](hvac-marketing-atlanta.html), [digital marketing for roofing contractors](blog-digital-marketing-for-roofing-contractors.html) and [home services marketing in Gwinnett County](blog-home-services-marketing-gwinnett-county.html).
 
 ## Where contractor ad budgets leak
 
