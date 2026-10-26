@@ -1,10 +1,10 @@
 ---
 title: "Privacy Policy"
 slug: privacy
-description: "How Deep Thought Digital Marketing collects, uses and protects information when you visit deepthought.marketing or contact us."
-updated: 2026-10-01
+description: "How Deep Thought Digital Marketing collects, uses and protects information when you visit deepthought.marketing, use our connector for Claude, or contact us."
+updated: 2026-10-25
 ---
-This policy explains what information Deep Thought Digital Marketing ("Deep Thought", "we", "us") collects when you visit deepthought.marketing, fill in one of our forms, or contact us, and what we do with it. It covers this website only. If you become a customer, your service agreement and any separate terms for our campaign platform also apply.
+This policy explains what information Deep Thought Digital Marketing ("Deep Thought", "we", "us") collects when you visit deepthought.marketing, fill in one of our forms, use our Deep Thought connector for Claude, or contact us, and what we do with it. It covers this website and that connector. If you become a customer, your service agreement and any separate terms for our campaign platform also apply.
 
 ## Information you give us
 
@@ -29,9 +29,18 @@ We do not use this information to identify you personally from your browsing alo
 
 The site has an AI chat assistant. When you send it a message, the conversation and the page you are on pass through a relay we run on Cloudflare to Anthropic, whose Claude model writes the reply. You do not need to give a name or email to use it, and please do not share passwords, payment details or other sensitive information in the chat. We save each chat conversation (what you and the assistant wrote, the page you started on, and whether you clicked through to book a call) for 90 days so our team can review the questions people ask and improve the answers, and then it is deleted automatically. We do not save your IP address with the conversation. Our team receives a daily email summary of the previous day's chats, sent through Resend. In Google Analytics we record that a chat was opened and how many messages were sent, but not what was said. AI answers can be wrong; for anything important, talk to our team.
 
+## Deep Thought connector for Claude
+
+If you add our connector to Claude (Anthropic's AI assistant), you sign in with a free Deep Thought account. To create one, we collect your email address (we email a one-time sign-in code to it), your name, your phone number, your business name if you give it, and your agreement that we may call, text or email you about your plan and our services.
+
+When you ask for a media plan, Claude sends us the details you give it, such as your type of business, location, monthly ad budget and goals. Our relay on Cloudflare uses Anthropic's Claude model to write the plan. We email you a copy, send a copy to our team, save each plan for 90 days, and keep your most recent plan for 30 days. If you tell Claude you'd like us to set up your campaign, we send your account details and latest plan to our team so we can follow up, and give you a link to create an account on our campaign platform.
+
+What you type into Claude itself is covered by Anthropic's privacy policy, not this one. The connector never accesses your ad accounts or takes payment.
+
 ## How we use your information
 
 - To reply to your enquiry and set up any demo or call you asked for
+- To create and run your connector account, send your sign-in codes and media plans, and follow up about your plan
 - To provide and support our services if you become a customer
 - To measure and improve our website and our own advertising
 - To keep the site secure and prevent spam or abuse
@@ -46,10 +55,10 @@ We do not sell your personal information, and we do not rent or trade our contac
 We share information only with service providers that help us run the site and the business, and only as much as they need:
 
 - **Web3Forms**, which delivers form submissions to our inbox
-- **Google** (Tag Manager, Analytics and Ads), for site analytics and ad measurement
+- **Google** (Tag Manager, Analytics, Ads and Workspace), for site analytics, ad measurement and keeping our list of enquiries
 - **GitHub**, which hosts the website
-- **Cloudflare** and **Anthropic**, which relay, store and answer chat assistant messages
-- **Resend**, which sends our team the daily chat summary email
+- **Cloudflare** and **Anthropic**, which relay, store and answer chat assistant messages and run the connector for Claude
+- **Resend**, which sends sign-in codes, media plans and our team's notification and daily summary emails
 - Email, phone and business software we use to respond to you and serve customers
 
 We may also disclose information if the law requires it, to protect our rights or the safety of others, or as part of a merger, acquisition or sale of the business.
@@ -67,7 +76,7 @@ Depending on where you live, you may have the right to ask what personal informa
 
 ## How long we keep it
 
-We keep enquiry details for as long as we need them to follow up and for a reasonable period afterwards. We keep customer records for as long as you are a customer and afterwards for as long as legal, tax or accounting rules require. Analytics data is kept according to our Google Analytics retention settings. When we no longer need information, we delete or anonymise it.
+We keep connector accounts until you ask us to delete them. We keep enquiry details for as long as we need them to follow up and for a reasonable period afterwards. We keep customer records for as long as you are a customer and afterwards for as long as legal, tax or accounting rules require. Analytics data is kept according to our Google Analytics retention settings. When we no longer need information, we delete or anonymise it.
 
 ## Security
 
