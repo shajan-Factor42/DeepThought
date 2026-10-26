@@ -25,6 +25,8 @@ PLAN_REPLY_TO = "shajan@deepthought.marketing"
 PLAN_NOTIFY_TO = "shajan@deepthought.marketing"
 # Claude connector (/mcp, 2026-10-25): media plans per day across all users. Each plan is two small Haiku calls.
 MCP_DAILY_LIMIT = "200"
+# Where "yes, set up my campaign" in the Claude connector sends people (2026-10-25). Swap for the exact sign-up page.
+ADOPS_SIGNUP_URL = "https://deepthought.adops.rocks/"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"

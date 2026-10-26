@@ -29,6 +29,7 @@
 
 import { handlePlan, handlePlanChat } from "./plan.js";
 import { handleMcp } from "./mcp.js";
+import { handleAuth, AUTH_PATHS, corsPreflight } from "./auth.js";
 
 const KNOWLEDGE_TTL = 600; // seconds
 const MAX_MESSAGES = 24; // per conversation (12 back-and-forths)
@@ -420,6 +421,11 @@ export default {
     const sid = siteFor(origin);
     const prof = PROFILES[sid];
 
+    // Claude connector sign-in (OAuth, auth.js) and /mcp: open to any origin. 2026-10-25.
+    if (AUTH_PATHS.has(url.pathname) || url.pathname === "/mcp") {
+      if (request.method === "OPTIONS") return corsPreflight();
+      if (url.pathname !== "/mcp") return handleAuth(request, env, ctx);
+    }
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: c.headers });
     if (url.pathname === "/health" && url.searchParams.get("check") !== "1") return text("ok", 200, c.headers);
     if (url.pathname === "/health") {
@@ -448,7 +454,7 @@ export default {
       if (ev && ev.type === "booking") ctx.waitUntil(markBooked(env, ev.conv).catch((e) => console.error("log", e.message)));
       return new Response(null, { status: 204, headers: c.headers });
     }
-    // Deep Thought connector for Claude (MCP), 2026-10-25. Open to any origin; read-only tools. See mcp.js.
+    // Deep Thought connector for Claude (MCP), 2026-10-25. Open to any origin; sign-in required (auth.js). See mcp.js.
     if (url.pathname === "/mcp") return handleMcp(request, env, ctx, apiKey(env));
     // Ad plan recommender for deepthought.marketing/digital-media-plan-builder.html (2026-10-15). See plan.js.
     if (url.pathname === "/plan" && request.method === "POST" && siteFor(origin) === "dt") return handlePlan(request, env, ctx, c, apiKey(env));

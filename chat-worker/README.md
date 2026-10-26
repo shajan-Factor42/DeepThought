@@ -33,11 +33,13 @@ To turn the chat off, empty `chat.endpoint` and push.
 
 ## Claude connector (MCP), `/mcp`
 
-Added 2026-10-25 (`src/mcp.js`). Lets any Claude user get a Deep Thought media plan inside Claude.
+Added 2026-10-25 (`src/mcp.js`, sign-in in `src/auth.js`). Lets Claude users get a Deep Thought media plan inside Claude. It's a lead-gen tool: people sign in with a free Deep Thought account.
 
-- **Add it in Claude:** Settings → Connectors → Add custom connector → URL `https://deepthought-chat.<subdomain>.workers.dev/mcp`. No login.
-- **Tools (all read-only):** `build_media_plan` (same engine as the website's media plan builder: Claude picks channels, `plan.js` enforces minimums, splits the dollars and strips prices), `list_channels` (the 22 channels with minimum budgets), `get_free_second_opinion` (Second Opinion link, booking link, phone).
-- **No contact details** are asked for or stored. Each plan is logged anonymously in `deepthought-chat-log` for 90 days (key `m:<YYYYMMDD>-<random>`), so you can see what people ask for.
-- **Cost guard:** `MCP_DAILY_LIMIT` in `wrangler.toml` (default 200 plans a day across all users; each plan is one or two Haiku calls). Plus a per-IP burst limit.
-- **Never:** touches ad accounts, money or AdOps.rocks. Recommendations only.
-- **Quick test after deploy:** `curl -s -X POST <worker>/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` should list the three tools.
+- **Add it in Claude:** Settings → Connectors → Add custom connector → URL `https://deepthought-chat.shajan.workers.dev/mcp`. Claude then opens our sign-in page.
+- **Sign-in (`auth.js`, OAuth 2.1 with PKCE + dynamic client registration):** email → 6-digit code by email (Resend, from `PLAN_FROM`) → new accounts also give name, phone, business and tick the consent box → back to Claude. Returning users only need the code. Access tokens last 30 days, refresh tokens 180 days. Everything is a signed value (no KV lookups needed to sign in); key = `OAUTH_SECRET` secret if set, else derived from `ANTHROPIC_API_KEY` (changing that key signs everyone out; they just sign in again).
+- **Leads:** each new account goes to the leads sheet (`place` = `claude-connector`). Accounts are kept in `deepthought-chat-log` under `ou:<email>`.
+- **Tools:** `build_media_plan` (same engine as the website's media plan builder; uses the account's business name; emails the plan to the user with a copy to `PLAN_NOTIFY_TO`; ends by asking "Would you like Deep Thought to set up this campaign?"), `list_channels` (the 22 channels with minimum budgets), `request_campaign_setup` (only after they say yes: sends a "WANTS CAMPAIGN SETUP" lead with their latest plan to the sheet (`place` = `claude-setup`) and emails you, then gives them the `ADOPS_SIGNUP_URL` link).
+- **Logs:** each plan in `deepthought-chat-log` for 90 days (`m:` keys); each user's latest plan for 30 days (`ol:<email>`).
+- **Cost guard:** `MCP_DAILY_LIMIT` (default 200 plans a day across all users), plus per-IP limits on plans, codes and sign-in tries.
+- **Never:** touches ad accounts or money. Later: move sign-in to AdOps.rocks logins (Shajan, 2026-10-25).
+- **Quick test after deploy:** `curl -s -i -X POST <worker>/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` should return `401` with a `WWW-Authenticate: Bearer resource_metadata=...` header (sign-in required). Then add it in Claude and sign in.

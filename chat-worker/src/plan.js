@@ -308,7 +308,7 @@ export async function rewritePlan(env, key, input, plan) {
   };
 }
 
-async function resend(env, msg) {
+export async function resend(env, msg) {
   if (!env.RESEND_API_KEY) return;
   const r = await fetch(env.RESEND_URL || "https://api.resend.com/emails", {
     method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" }, body: JSON.stringify(msg),
