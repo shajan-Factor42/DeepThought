@@ -30,3 +30,14 @@ To turn the chat off, empty `chat.endpoint` and push.
 ## Local test
 
 `npx wrangler dev --var ANTHROPIC_URL:http://127.0.0.1:9000 --var SITE:http://127.0.0.1:8080 --var ALLOWED_ORIGINS:http://127.0.0.1:8080` with a mock API on :9000 and the built `_site` served on :8080.
+
+## Claude connector (MCP), `/mcp`
+
+Added 2026-10-25 (`src/mcp.js`). Lets any Claude user get a Deep Thought media plan inside Claude.
+
+- **Add it in Claude:** Settings → Connectors → Add custom connector → URL `https://deepthought-chat.<subdomain>.workers.dev/mcp`. No login.
+- **Tools (all read-only):** `build_media_plan` (same engine as the website's media plan builder: Claude picks channels, `plan.js` enforces minimums, splits the dollars and strips prices), `list_channels` (the 22 channels with minimum budgets), `get_free_second_opinion` (Second Opinion link, booking link, phone).
+- **No contact details** are asked for or stored. Each plan is logged anonymously in `deepthought-chat-log` for 90 days (key `m:<YYYYMMDD>-<random>`), so you can see what people ask for.
+- **Cost guard:** `MCP_DAILY_LIMIT` in `wrangler.toml` (default 200 plans a day across all users; each plan is one or two Haiku calls). Plus a per-IP burst limit.
+- **Never:** touches ad accounts, money or AdOps.rocks. Recommendations only.
+- **Quick test after deploy:** `curl -s -X POST <worker>/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` should list the three tools.

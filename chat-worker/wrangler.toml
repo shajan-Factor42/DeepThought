@@ -23,6 +23,8 @@ LEADS_ENDPOINT = "https://script.google.com/macros/s/AKfycbzi0ujRc26plP0yuO0CxXS
 PLAN_FROM = "Deep Thought Marketing <plans@deepthought.marketing>"
 PLAN_REPLY_TO = "shajan@deepthought.marketing"
 PLAN_NOTIFY_TO = "shajan@deepthought.marketing"
+# Claude connector (/mcp, 2026-10-25): media plans per day across all users. Each plan is two small Haiku calls.
+MCP_DAILY_LIMIT = "200"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"

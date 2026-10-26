@@ -249,7 +249,7 @@ export function planEmailHtml(plan, input, site, forOwner = false) {
   <p style="font-size:12px;color:#94a3b8;margin-top:24px">This plan is a starting suggestion based on what you told us, made with the help of AI. Forecasts are estimates, not guarantees, and this is not a quote or a promise of results.${forOwner ? "" : " Reply to this email with any questions."}</p></div>`;
 }
 
-async function askClaude(env, key, price, input, extra = "") {
+export async function askClaude(env, key, price, input, extra = "") {
   const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: { "x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json" },
@@ -281,7 +281,7 @@ Reply with ONLY a JSON object:
  "note": "one sentence: a caveat or tip specific to them"}`;
 }
 
-async function rewritePlan(env, key, input, plan) {
+export async function rewritePlan(env, key, input, plan) {
   if (!plan.channels.length) return plan;
   const mix = plan.channels.map((c) => `- id "${c.id}": ${c.name}, ${c.share}% of the budget. ${(CHANNELS.find((x) => x.id === c.id) || {}).desc || ""}`).join("\n");
   const r = await fetch(env.ANTHROPIC_URL || "https://api.anthropic.com/v1/messages", {

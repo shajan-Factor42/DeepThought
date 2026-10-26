@@ -28,6 +28,7 @@
  */
 
 import { handlePlan, handlePlanChat } from "./plan.js";
+import { handleMcp } from "./mcp.js";
 
 const KNOWLEDGE_TTL = 600; // seconds
 const MAX_MESSAGES = 24; // per conversation (12 back-and-forths)
@@ -447,6 +448,8 @@ export default {
       if (ev && ev.type === "booking") ctx.waitUntil(markBooked(env, ev.conv).catch((e) => console.error("log", e.message)));
       return new Response(null, { status: 204, headers: c.headers });
     }
+    // Deep Thought connector for Claude (MCP), 2026-10-25. Open to any origin; read-only tools. See mcp.js.
+    if (url.pathname === "/mcp") return handleMcp(request, env, ctx, apiKey(env));
     // Ad plan recommender for deepthought.marketing/digital-media-plan-builder.html (2026-10-15). See plan.js.
     if (url.pathname === "/plan" && request.method === "POST" && siteFor(origin) === "dt") return handlePlan(request, env, ctx, c, apiKey(env));
     if (url.pathname === "/plan-chat" && request.method === "POST" && siteFor(origin) === "dt") return handlePlanChat(request, env, ctx, c, apiKey(env));
