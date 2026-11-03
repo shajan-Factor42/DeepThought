@@ -409,6 +409,17 @@ function clean(messages) {
   return out;
 }
 
+function cardSavedPage(canceled) {
+  const msg = canceled
+    ? ["No card was saved.", "Go back to Claude and ask for the card link again when you're ready."]
+    : ["Card saved. Thank you!", "Go back to Claude and say \"done\". Nothing is charged until the Deep Thought team approves your campaign."];
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${msg[0]} | Deep Thought Marketing</title>
+<style>body{margin:0;background:#f5f9ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}main{max-width:420px;margin:60px auto;background:#fff;border-radius:16px;padding:32px 24px;box-shadow:0 8px 30px rgba(11,95,255,.08);text-align:center}
+h1{font-size:22px;margin:0 0 6px;background:linear-gradient(90deg,#0b5fff,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent}h2{font-size:20px;margin:18px 0 8px}p{line-height:1.5;color:#334155}a{color:#0b5fff}
+@media(max-width:480px){main{margin:16px;padding:24px 16px}}</style></head><body><main><h1>Deep Thought Marketing</h1><h2>${msg[0]}</h2><p>${msg[1]}</p><p style="font-size:13px;color:#64748b">You can close this tab. Questions? Call <a href="tel:7702999583">770-299-9583</a>.</p></main></body></html>`;
+  return new Response(html, { status: 200, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" } });
+}
+
 export default {
   async scheduled(event, env, ctx) {
     ctx.waitUntil(sendDigest(env, new Date(event.scheduledTime)).then((r) => console.log("digest", r), (e) => console.error("digest", e.message)));
@@ -421,6 +432,8 @@ export default {
     const sid = siteFor(origin);
     const prof = PROFILES[sid];
 
+    // Where Stripe sends people after saving a card in the Claude connector (adops.js cardLink). 2026-11-03.
+    if (url.pathname === "/card-saved" && request.method === "GET") return cardSavedPage(url.searchParams.has("canceled"));
     // Claude connector sign-in (OAuth, auth.js) and /mcp: open to any origin. 2026-10-25.
     if (AUTH_PATHS.has(url.pathname) || url.pathname === "/mcp") {
       if (request.method === "OPTIONS") return corsPreflight();

@@ -58,7 +58,7 @@ async function api(env, user, method, path, body, extraHeaders = {}) {
   if (data === null) throw new ApiError(502, `Deep Thought's campaign system sent an answer we couldn't read. Please try again, or call ${PHONE}.`);
   return data;
 }
-const orderId = (o) => o && (o.id ?? o.order_id ?? o.orderId);
+const orderId = (o) => o && (o.id ?? o.order_id ?? o.orderId ?? o.uuid ?? (o.order && (o.order.id ?? o.order.order_id)) ?? (o.data && !Array.isArray(o.data) && (o.data.id ?? o.data.order_id)));
 const listOf = (d, ...keys) => { if (Array.isArray(d)) return d; for (const k of keys) if (Array.isArray(d && d[k])) return d[k]; return []; };
 const statusText = (st) => STATUSES[st] || s(st, 40) || "Unknown";
 async function hash(text) {
@@ -125,7 +125,7 @@ export const ADOPS_TOOLS = [
   {
     name: "add_payment_card",
     title: "Save a payment card",
-    description: "Returns a secure Stripe page where the person can save a card for their Deep Thought campaigns. Saving a card doesn't charge it; the first charge happens only after the team approves an order.",
+    description: "Checks whether the person has a card on file and, if not, gives them a secure Stripe page to save one. It's step 2 after submit_campaign when no card is on file: call it again when the person says they've saved the card, to confirm it went through. Saving a card doesn't charge it; the first charge happens only after the team approves an order.",
     inputSchema: { type: "object", properties: {}, additionalProperties: false },
     annotations: ann("Save a payment card", false),
   },
@@ -138,8 +138,20 @@ const fail = (msg) => ({ content: [{ type: "text", text: msg }], isError: true }
 const needOrder = (a) => { const id = s(a && a.order_id, 60); return /^[\w-]+$/.test(id) ? id : ""; };
 
 async function cardLink(env, user) {
-  const d = await api(env, user, "POST", "billing/setup-session", { return_url: `${env.SITE || "https://deepthought.marketing"}/` });
+  // Stripe sends them back to a "card saved, go back to Claude" page on this Worker (/card-saved in worker.js).
+  const back = env.CARD_RETURN_URL || "https://deepthought-chat.shajan.workers.dev/card-saved";
+  const d = await api(env, user, "POST", "billing/setup-session", { return_url: back, success_url: back, cancel_url: `${back}?canceled=1` });
   return d.url || d.checkout_url || d.session_url || "";
+}
+/** Step 2 of submitting: the card call to action (2026-11-03, Shajan: make saving the card the clear next step). */
+const cardStep = (url) => `**Step 2 of 2: save your card** so the team can launch your campaign once it's approved. Nothing is charged now.\n\n**[Save your card securely with Stripe →](${url})**\n\nWhen you've saved it, come back here and say "done", and I'll check it went through.`;
+async function newestOrderId(env, user) {
+  try {
+    const orders = listOf(await api(env, user, "GET", "orders"), "orders", "data", "items");
+    const recent = orders.filter((o) => (o.source || "claude") === "claude" && Date.now() - Date.parse(o.created_at || o.createdAt || 0) < 5 * 60 * 1000)
+      .sort((x, y) => Date.parse(y.created_at || y.createdAt) - Date.parse(x.created_at || x.createdAt));
+    return recent.length ? orderId(recent[0]) : null;
+  } catch (e) { console.error("newest order", e.message); return null; }
 }
 
 async function submitCampaign(a, env, user) {
@@ -175,21 +187,23 @@ async function submitCampaign(a, env, user) {
   };
   const key = await hash(`${user.uid}|${JSON.stringify(body.channels)}|${start}|${ymd(new Date())}`);
   const order = await api(env, user, "POST", "orders", body, { "Idempotency-Key": key });
-  const id = orderId(order);
+  const id = orderId(order) ?? (await newestOrderId(env, user));
   let card = "";
   const hasCard = me.has_payment_method === true || order.has_payment_method === true;
   if (!hasCard) { try { card = await cardLink(env, user); } catch (e) { console.error("card link", e.message); } }
-  const text = [`Submitted. Your campaign order${id ? ` #${id}` : ""} is with the Deep Thought team for review (usually within ${review(env)}).`,
-    hasCard ? "Your card on file is charged only after the team approves the order." :
-      card ? `One more step: save a card here so the team can launch once it's approved (nothing is charged now): ${card}` :
-        `One more step: you'll need a card on file before launch. Ask me to add a payment card, or call ${PHONE}.`,
-    "I can check on it any time: just ask about your campaigns."].join("\n\n");
-  return out(text, { orderId: id ?? null, status: order.status || "awaiting_review", monthlyBudget: budget, cardLink: card || null, hasPaymentMethod: hasCard });
+  const done = `**Submitted.** Your campaign order${id ? ` #${id}` : ""} is with the Deep Thought team for review (usually within ${review(env)}).`;
+  const text = hasCard
+    ? [done, "Your card on file is charged only after the team approves the order. I can check on it any time: just ask about your campaigns."].join("\n\n")
+    : [`**Step 1 of 2 done.** ${done.replace("**Submitted.** ", "")}`,
+      card ? cardStep(card) : `**Step 2 of 2: save your card.** I couldn't open the card page just now. Ask me to add a payment card in a minute, or call ${PHONE}.`].join("\n\n");
+  return out(text, { orderId: id ?? null, status: order.status || "awaiting_review", monthlyBudget: budget, cardLink: card || null, hasPaymentMethod: hasCard,
+    nextStep: hasCard ? "Done. Offer to check on the campaign later." : "Present saving the card as step 2, with the link as the clear next action. When the person says they've saved it, call add_payment_card to confirm it's on file." });
 }
 
 function orderLine(o) {
   const b = o.monthly_budget ?? o.monthlyBudget;
-  const name = o.business_name || o.name || (o.business_details && o.business_details.business_name) || "Campaign";
+  const name = o.business_name || o.name || (o.business_details && o.business_details.business_name) ||
+    (Array.isArray(o.channels) && o.channels.length ? o.channels.map((c) => CHANNEL_NAME[typeof c === "string" ? c : c.id] || (typeof c === "string" ? c : c.name)).join(" + ") : "Campaign");
   return `- **#${orderId(o)}** ${s(name, 80)}: ${statusText(o.status)}${b ? `, ${money(b)}/mo` : ""}${o.message ? `. Note from the team: ${s(o.message, 300)}` : ""}`;
 }
 
@@ -197,7 +211,8 @@ async function myCampaigns(a, env, user) {
   const id = needOrder(a);
   if (id) {
     const o = await api(env, user, "GET", `orders/${encodeURIComponent(id)}`);
-    const ch = listOf(o, "channels").map((c) => `- ${CHANNEL_NAME[c.id] || s(c.name || c.id, 60)}: ${money(c.monthly_dollars ?? c.dollars)}/mo${c.status ? ` (${statusText(c.status)})` : ""}`);
+    const ch = listOf(o, "channels").map((c) => typeof c === "string" ? `- ${CHANNEL_NAME[c] || s(c, 60)}` :
+      `- ${CHANNEL_NAME[c.id] || s(c.name || c.id, 60)}${(c.monthly_dollars ?? c.dollars) != null ? `: ${money(c.monthly_dollars ?? c.dollars)}/mo` : ""}${c.status ? ` (${statusText(c.status)})` : ""}`);
     const text = [orderLine(o).slice(2), ...ch, o.message || o.team_message ? `\nMessage from the team: ${s(o.message || o.team_message, 600)}` : ""].filter(Boolean).join("\n");
     return out(text, { order: o });
   }
@@ -259,9 +274,15 @@ async function pauseAds(a, env, user) {
 }
 
 async function addPaymentCard(env, user) {
+  const me = await api(env, user, "GET", "me");
+  if (me.has_payment_method === true) {
+    return out("**Your card is saved.** Your campaign is ready for the Deep Thought team to approve. Nothing is charged until they do, and I can check on it any time: just ask about your campaigns.",
+      { hasPaymentMethod: true });
+  }
   const url = await cardLink(env, user);
   if (!url) return fail(`We couldn't open the card page just now. Please try again, or call ${PHONE}.`);
-  return out(`Save your card on this secure Stripe page (nothing is charged now): ${url}\n\nThe first charge happens only after the Deep Thought team approves a campaign.`, { url });
+  return out(`I don't see a saved card yet.\n\n${cardStep(url)}`, { hasPaymentMethod: false, url,
+    nextStep: "Show the link as the clear next action. When the person says they've saved it, call add_payment_card again to confirm." });
 }
 
 /** Run one AdOps tool. `user.uid` must be set (signed in through AdOps.rocks). */

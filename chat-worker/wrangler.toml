@@ -33,6 +33,8 @@ ADOPS_API_BASE = "https://deepthought.adops.rocks/api/connector/"
 ADOPS_CONNECT_URL = "https://deepthought.adops.rocks/connect/claude"
 # What the connector tells people about review time for new campaigns and changes.
 REVIEW_TARGET = "1 business day"
+# Where Stripe returns people after saving a card from Claude (a "card saved, go back to Claude" page on this Worker).
+CARD_RETURN_URL = "https://deepthought-chat.shajan.workers.dev/card-saved"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"
