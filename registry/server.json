@@ -1,0 +1,23 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.shajan-Factor42/deep-thought-marketing",
+  "title": "Deep Thought Marketing",
+  "description": "Done-for-you digital marketing for small businesses: plan, launch and manage ads across 22 channels.",
+  "version": "1.0.0",
+  "websiteUrl": "https://deepthought.marketing/claude-connector.html",
+  "icons": [
+    {
+      "src": "https://deepthought.marketing/favicon-192x192.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "192x192"
+      ]
+    }
+  ],
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://deepthought-chat.shajan.workers.dev/mcp"
+    }
+  ]
+}

@@ -432,6 +432,10 @@ export default {
     const sid = siteFor(origin);
     const prof = PROFILES[sid];
 
+    // ChatGPT plugin domain verification (2026-11-03): OpenAI checks this path on the MCP hostname for the
+    // token shown in its submission portal. Set OPENAI_APPS_CHALLENGE in wrangler.toml to the exact token.
+    if (url.pathname === "/.well-known/openai-apps-challenge" && request.method === "GET")
+      return env.OPENAI_APPS_CHALLENGE ? new Response(String(env.OPENAI_APPS_CHALLENGE).trim(), { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } }) : text("Not found", 404, {});
     // Where Stripe sends people after saving a card in the Claude connector (adops.js cardLink). 2026-11-03.
     if (url.pathname === "/card-saved" && request.method === "GET") return cardSavedPage(url.searchParams.has("canceled"));
     // Claude connector sign-in (OAuth, auth.js) and /mcp: open to any origin. 2026-10-25.
