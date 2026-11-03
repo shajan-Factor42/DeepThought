@@ -2,7 +2,7 @@
 title: "Privacy Policy"
 slug: privacy
 description: "How Deep Thought Digital Marketing collects, uses and protects information when you visit deepthought.marketing, use our connector for Claude, or contact us."
-updated: 2026-10-25
+updated: 2026-11-03
 ---
 This policy explains what information Deep Thought Digital Marketing ("Deep Thought", "we", "us") collects when you visit deepthought.marketing, fill in one of our forms, use our Deep Thought connector for Claude, or contact us, and what we do with it. It covers this website and that connector. If you become a customer, your service agreement and any separate terms for our campaign platform also apply.
 
@@ -31,16 +31,21 @@ The site has an AI chat assistant. When you send it a message, the conversation 
 
 ## Deep Thought connector for Claude
 
-If you add our connector to Claude (Anthropic's AI assistant), you sign in with a free Deep Thought account. To create one, we collect your email address (we email a one-time sign-in code to it), your name, your phone number, your business name if you give it, and your agreement that we may call, text or email you about your plan and our services.
+If you add our connector to Claude (Anthropic's AI assistant), you sign in with your Deep Thought account, which runs on our campaign platform, AdOps.rocks. When you sign in, the platform shares your name, email address, business name and account ID with the connector so it can work on your business's behalf. Connector accounts created before November 2026 used a one-time code sent to your email instead; for those, we collected your email address, name, phone number, business name if you gave it, and your agreement that we may call, text or email you about your plan and our services.
 
-When you ask for a media plan, Claude sends us the details you give it, such as your type of business, location, monthly ad budget and goals. Our relay on Cloudflare uses Anthropic's Claude model to write the plan. We email you a copy, send a copy to our team, save each plan for 90 days, and keep your most recent plan for 30 days. If you tell Claude you'd like us to set up your campaign, we send your account details and latest plan to our team so we can follow up, and give you a link to create an account on our campaign platform.
+**Media plans.** When you ask for a media plan, Claude sends us the details you give it, such as your type of business, location, monthly ad budget and goals. Our relay on Cloudflare uses Anthropic's Claude model to write the plan. We email you a copy, send a copy to our team, save each plan for 90 days, and keep your most recent plan for 30 days.
 
-What you type into Claude itself is covered by Anthropic's privacy policy, not this one. The connector never accesses your ad accounts or takes payment.
+**Campaigns.** Once you're signed in, you can ask Claude to submit a campaign order, list your campaigns and their results, request changes, pause your ads, and save a payment card. Claude shows you a summary and acts only after you say yes. A person on our team reviews every new campaign and every change before it goes live; pausing takes effect right away and stops your ads on the ad platforms. Your orders, change requests and the plan they came from are sent to our campaign platform and kept as part of your customer records.
+
+**Payment cards.** Cards are saved on Stripe's secure page. Neither the connector nor our team sees or stores your full card number. Saving a card doesn't charge it; you're charged only after our team approves a campaign, as set out in your service agreement.
+
+What you type into Claude itself is covered by Anthropic's privacy policy, not this one.
 
 ## How we use your information
 
 - To reply to your enquiry and set up any demo or call you asked for
 - To create and run your connector account, send your sign-in codes and media plans, and follow up about your plan
+- To take campaign orders and change requests made through the connector, pause ads when you ask, and bill you for campaigns our team approves
 - To provide and support our services if you become a customer
 - To measure and improve our website and our own advertising
 - To keep the site secure and prevent spam or abuse
@@ -58,6 +63,8 @@ We share information only with service providers that help us run the site and t
 - **Google** (Tag Manager, Analytics, Ads and Workspace), for site analytics, ad measurement and keeping our list of enquiries
 - **GitHub**, which hosts the website
 - **Cloudflare** and **Anthropic**, which relay, store and answer chat assistant messages and run the connector for Claude
+- **AdOps.rocks**, our campaign platform, which runs Deep Thought accounts, sign-in, campaign orders and billing
+- **Stripe**, which securely stores payment cards and processes payments
 - **Resend**, which sends sign-in codes, media plans and our team's notification and daily summary emails
 - Email, phone and business software we use to respond to you and serve customers
 
