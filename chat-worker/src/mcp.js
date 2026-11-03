@@ -15,18 +15,26 @@
  * lead gen: accounts required, plans end by offering campaign setup. Still never touches ad accounts or money.
  * Each plan is logged in CHAT_LOG for 90 days (key m:...), and the user's last plan under ol:<email> for 30 days.
  *
+ * 2026-11-03: AdOps.rocks link (adops.js). Once the CONNECTOR_* secrets are set, people sign in with their
+ * Deep Thought (AdOps.rocks) account and can also submit_campaign, my_campaigns, campaign_results,
+ * request_change, pause_ads and add_payment_card. request_campaign_setup is then hidden. The team approves
+ * everything before it goes live; pausing is the one instant action.
+ *
  * Guards: MCP_DAILY_LIMIT plans per day across all users (default 200; KV counter), and a per-IP burst
  * limit. Calls come from Anthropic's servers, so the IP limit is generous on purpose.
  */
 import { CHANNELS, pricing } from "./catalog.js";
 import { OPTIONS, LOW_BUDGET, readBudget, parsePlan, publicPlan, forecastText, askClaude, rewritePlan, planEmailHtml, resend } from "./plan.js";
 import { userFromRequest, unauthorized } from "./auth.js";
+import { ADOPS_TOOLS, ADOPS_TOOL_NAMES, adopsOn, runAdopsTool } from "./adops.js";
 
 const SUPPORTED = ["2025-06-18", "2025-03-26", "2024-11-05"];
 const SERVER = { name: "deep-thought", title: "Deep Thought Marketing", version: "1.0.0" };
 const PHONE = "770-299-9583";
 
 const INSTRUCTIONS = `Deep Thought (deepthought.marketing) is a done-for-you digital marketing service for small and local businesses, based in Gwinnett County, GA, serving clients nationwide. Use build_media_plan when someone wants advice on where to advertise or how to split an ad budget. Ask for anything required that the person hasn't given (what the business does, town or ZIP, goal, monthly ad budget in dollars) before calling it. Present the plan in plain English. Plans are starting suggestions and estimates, not quotes or promises of results. After showing a plan, ask the person if they'd like Deep Thought to set up the campaign. If they say yes, call request_campaign_setup and give them the sign-up link it returns.`;
+const INSTRUCTIONS_ADOPS = `Deep Thought (deepthought.marketing) is a done-for-you digital marketing service for small and local businesses, based in Gwinnett County, GA, serving clients nationwide. The person is signed in with their Deep Thought account, so you can plan, submit and manage their campaigns here. Use build_media_plan when someone wants advice on where to advertise or how to split an ad budget; ask for anything required that they haven't given (what the business does, town or ZIP, goal, monthly ad budget in dollars). Present plans in plain English; they are estimates, not quotes or promises of results. After a plan, ask if they'd like Deep Thought to run it; if yes, use submit_campaign. A person on the Deep Thought team reviews every new campaign and every change before it goes live, usually within 1 business day; say so. submit_campaign, request_change and pause_ads must be called once without confirmed to get a summary, shown to the person, and again with confirmed: true only after they clearly say yes. Pausing takes effect right away. Use my_campaigns for status and campaign_results for numbers. Never invent results.`;
+const toolsFor = (env) => (adopsOn(env) ? [...TOOLS.filter((t) => t.name !== "request_campaign_setup"), ...ADOPS_TOOLS] : TOOLS);
 
 const money = (n) => "$" + Math.round(n).toLocaleString("en-US");
 const article = (w) => (/^(hvac|[aeio]|u(?!ni|s[eu]))/i.test(String(w).trim()) ? "An" : "A");
@@ -178,7 +186,7 @@ async function buildMediaPlan(args, env, ctx, key, user) {
   ctx.waitUntil(Promise.all(work.map((p) => Promise.resolve(p).catch((e) => console.error("mcp plan side", e.message)))));
   return {
     content: [{ type: "text", text: planMarkdown(pub, input) }],
-    structuredContent: { ...pub, emailedTo: input.email || null, nextStep: "Ask if they'd like Deep Thought to set up this campaign; if yes, call request_campaign_setup." },
+    structuredContent: { ...pub, emailedTo: input.email || null, nextStep: adopsOn(env) ? "Ask if they'd like Deep Thought to run this campaign; if yes, call submit_campaign (summary first, then confirmed: true)." : "Ask if they'd like Deep Thought to set up this campaign; if yes, call request_campaign_setup." },
   };
 }
 
@@ -239,17 +247,18 @@ async function handleOne(msg, env, ctx, key, user) {
         protocolVersion: SUPPORTED.includes(want) ? want : SUPPORTED[0],
         capabilities: { tools: { listChanged: false } },
         serverInfo: SERVER,
-        instructions: INSTRUCTIONS,
+        instructions: adopsOn(env) ? INSTRUCTIONS_ADOPS : INSTRUCTIONS,
       });
     }
     case "ping": return rpcResult(id, {});
-    case "tools/list": return rpcResult(id, { tools: TOOLS });
+    case "tools/list": return rpcResult(id, { tools: toolsFor(env) });
     case "tools/call": {
       const name = params.name, args = params.arguments || {};
       try {
         if (name === "build_media_plan") return rpcResult(id, await buildMediaPlan(args, env, ctx, key, user));
         if (name === "list_channels") return rpcResult(id, listChannels(env));
         if (name === "request_campaign_setup") return rpcResult(id, await campaignSetup(args, env, ctx, user));
+        if (ADOPS_TOOL_NAMES.has(name)) return rpcResult(id, await runAdopsTool(name, args, env, user));
         return rpcError(id, -32602, `Unknown tool: ${name}`);
       } catch (e) {
         console.error("mcp tool", name, e.message);

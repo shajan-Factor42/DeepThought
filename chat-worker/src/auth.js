@@ -19,8 +19,17 @@
  * everyone out, which is harmless: Claude asks them to sign in again).
  * Accounts are also saved in CHAT_LOG under `ou:<email>` (no expiry) as a record; new sign-ups go to the
  * leads sheet (LEADS_ENDPOINT, place "claude-connector").
+ *
+ * 2026-11-03: AdOps.rocks logins. When the CONNECTOR_SHARED_SECRET and CONNECTOR_API_KEY Worker secrets are set,
+ * step 4 sends people to AdOps.rocks instead of the email-code page:
+ *   GET /authorize -> ADOPS_CONNECT_URL?state=<signed flow>&return_to=<this worker>/oauth/callback
+ *   AdOps login + consent -> GET /oauth/callback?state&code=<HS256 JWT, 5 min, one use>
+ *   -> we check the JWT (CONNECTOR_SHARED_SECRET, aud "deep-thought-connector", brand "deepthought", exp, jti once)
+ *   -> back to Claude with our own auth code. Tokens then carry the AdOps user id (uid) for the API calls in adops.js.
+ * Without those secrets the email-code page below keeps working as before.
  */
 import { usDigits, resend } from "./plan.js";
+import { adopsOn } from "./adops.js";
 
 const ACCESS_TTL = 30 * 24 * 3600;
 const REFRESH_TTL = 180 * 24 * 3600;
@@ -64,7 +73,7 @@ async function sha256b64u(text) { return b64u(await crypto.subtle.digest("SHA-25
 const CORS = { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Headers": "authorization, content-type, mcp-protocol-version", "Access-Control-Allow-Methods": "GET, POST, OPTIONS", "Access-Control-Expose-Headers": "WWW-Authenticate" };
 const json = (o, status = 200, extra = {}) => new Response(JSON.stringify(o), { status, headers: { ...CORS, "Content-Type": "application/json", "Cache-Control": "no-store", ...extra } });
 const oauthError = (error, description, status = 400) => json({ error, error_description: description }, status);
-export const AUTH_PATHS = new Set(["/.well-known/oauth-protected-resource", "/.well-known/oauth-protected-resource/mcp", "/.well-known/oauth-authorization-server", "/register", "/authorize", "/token"]);
+export const AUTH_PATHS = new Set(["/.well-known/oauth-protected-resource", "/.well-known/oauth-protected-resource/mcp", "/.well-known/oauth-authorization-server", "/register", "/authorize", "/token", "/oauth/callback"]);
 export const corsPreflight = () => new Response(null, { status: 204, headers: { ...CORS, "Access-Control-Max-Age": "86400" } });
 
 const bursts = new Map();
@@ -83,7 +92,7 @@ export async function userFromRequest(request, env) {
   const m = /^Bearer\s+(\S+)$/i.exec(request.headers.get("Authorization") || "");
   if (!m) return null;
   const p = await open(env, "at", m[1]);
-  return p ? { email: p.e, name: p.n, phone: p.p, business: p.b } : null;
+  return p ? { email: p.e, name: p.n, phone: p.p, business: p.b, uid: p.u || null, account: p.a || null } : null;
 }
 export function unauthorized(origin) {
   return new Response(JSON.stringify({ jsonrpc: "2.0", id: null, error: { code: -32001, message: "Please sign in to Deep Thought to use this connector." } }), {
@@ -123,6 +132,7 @@ export async function handleAuth(request, env, ctx) {
   }
   if (p === "/authorize") return authorize(request, env, ctx, url, ip);
   if (p === "/token") return token(request, env);
+  if (p === "/oauth/callback") return adopsCallback(request, env, ctx, url);
   return json({ error: "not_found" }, 404);
 }
 
@@ -139,6 +149,14 @@ async function authorize(request, env, ctx, url, ip) {
     const back = (err, desc) => { const u = new URL(uri); u.searchParams.set("error", err); if (desc) u.searchParams.set("error_description", desc); if (q.get("state")) u.searchParams.set("state", q.get("state")); return Response.redirect(u.toString(), 302); };
     if (q.get("response_type") !== "code") return back("unsupported_response_type", "Only code is supported.");
     if (!q.get("code_challenge") || (q.get("code_challenge_method") || "S256") !== "S256") return back("invalid_request", "PKCE with S256 is required.");
+    if (adopsOn(env)) {
+      // AdOps.rocks login: the signed flow travels as AdOps' state and comes back to /oauth/callback.
+      const flow = await seal(env, "fa", { c: await sha256b64u(q.get("client_id")), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) }, FLOW_TTL);
+      const go = new URL(env.ADOPS_CONNECT_URL || "https://deepthought.adops.rocks/connect/claude");
+      go.searchParams.set("state", flow);
+      go.searchParams.set("return_to", `${url.origin}/oauth/callback`);
+      return Response.redirect(go.toString(), 302);
+    }
     const req = { c: q.get("client_id"), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) };
     const flow = await seal(env, "fl", { req }, FLOW_TTL);
     return page(env, { step: "email", flow, client: client.n });
@@ -224,9 +242,9 @@ async function token(request, env) {
     f = ct.includes("application/json") ? await request.json() : Object.fromEntries(await request.formData());
   } catch { return oauthError("invalid_request", "Couldn't read the request."); }
   const issue = async (u, clientHash) => ({
-    access_token: await seal(env, "at", { e: u.e, n: u.n, p: u.p, b: u.b, c: clientHash }, ACCESS_TTL),
+    access_token: await seal(env, "at", { e: u.e, n: u.n, p: u.p, b: u.b, u: u.u, a: u.a, c: clientHash }, ACCESS_TTL),
     token_type: "Bearer", expires_in: ACCESS_TTL, scope: "plans",
-    refresh_token: await seal(env, "rt", { e: u.e, n: u.n, p: u.p, b: u.b, c: clientHash }, REFRESH_TTL),
+    refresh_token: await seal(env, "rt", { e: u.e, n: u.n, p: u.p, b: u.b, u: u.u, a: u.a, c: clientHash }, REFRESH_TTL),
   });
   if (f.grant_type === "authorization_code") {
     const ac = await open(env, "ac", f.code);
@@ -243,6 +261,56 @@ async function token(request, env) {
     return json(await issue(rt, rt.c));
   }
   return oauthError("unsupported_grant_type", "Use authorization_code or refresh_token.");
+}
+
+/* ---------- /oauth/callback: back from the AdOps.rocks login ---------- */
+async function verifyJwt(secret, jwt) {
+  const parts = String(jwt || "").split(".");
+  if (parts.length !== 3) return null;
+  let head, claims;
+  try { head = JSON.parse(unb64uText(parts[0])); claims = JSON.parse(unb64uText(parts[1])); } catch { return null; }
+  if (!head || head.alg !== "HS256") return null;
+  const key = await crypto.subtle.importKey("raw", enc.encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const want = b64u(await crypto.subtle.sign("HMAC", key, enc.encode(parts[0] + "." + parts[1])));
+  if (want.length !== parts[2].length) return null;
+  let diff = 0; for (let i = 0; i < want.length; i++) diff |= want.charCodeAt(i) ^ parts[2].charCodeAt(i);
+  return diff ? null : claims;
+}
+
+async function adopsCallback(request, env, ctx, url) {
+  if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
+  const q = url.searchParams;
+  const fa = await open(env, "fa", q.get("state"));
+  if (!fa) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to Claude and try connecting again." }, 400);
+  const back = (params) => { const u = new URL(fa.r); for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v); if (fa.s) u.searchParams.set("state", fa.s); return Response.redirect(u.toString(), 302); };
+  if (q.get("error") || !q.get("code")) return back({ error: "access_denied", error_description: "Sign-in was cancelled." });
+  if (!adopsOn(env)) return page(env, { error: "Sign-in isn't set up yet. Please call 770-299-9583." }, 500);
+  const c = await verifyJwt(env.CONNECTOR_SHARED_SECRET, q.get("code"));
+  const t = now();
+  const bad = !c ? "bad signature" : c.aud !== "deep-thought-connector" && !(Array.isArray(c.aud) && c.aud.includes("deep-thought-connector")) ? "aud"
+    : c.brand && c.brand !== "deepthought" ? "brand" : !(c.exp > t - 30) ? "expired" : c.iat && c.iat > t + 120 ? "iat" : !c.sub ? "no sub" : !c.jti ? "no jti" : "";
+  if (bad) { console.error("adops callback rejected:", bad); return page(env, { error: "We couldn't confirm your Deep Thought sign-in. Please go back to Claude and try connecting again." }, 400); }
+  if (env.CHAT_LOG) {
+    const k = `jti:${s(c.jti, 200)}`;
+    if (await env.CHAT_LOG.get(k)) { console.error("adops callback: reused jti"); return page(env, { error: "This sign-in link was already used. Please go back to Claude and try connecting again." }, 400); }
+    await env.CHAT_LOG.put(k, "1", { expirationTtl: 3600 });
+  }
+  const email = s(c.email, 120).toLowerCase();
+  const user = { e: email, n: s(c.name, 80), p: "", b: s(c.business_name, 100), u: s(c.sub, 80), a: s(c.account_id, 80) };
+  if (env.CHAT_LOG && email) ctx.waitUntil((async () => {
+    const prev = (await env.CHAT_LOG.get(`ou:${email}`, "json").catch(() => null)) || {};
+    const at = new Date().toISOString();
+    await env.CHAT_LOG.put(`ou:${email}`, JSON.stringify({ ...prev, email, name: user.n || prev.name || "", business: user.b || prev.business || "", adops_user: user.u, adops_account: user.a,
+      updated: at, created: prev.created || at, via: "claude-connector-adops" }));
+    if (!prev.created && env.LEADS_ENDPOINT) {
+      const body = new URLSearchParams({ name: user.n, phone: "", email, business: `${user.b || "(no business name)"} (connected Claude via AdOps.rocks)`.slice(0, 290),
+        page: "/mcp", place: "claude-connector", utm: "{}", referrer: "", source: "Claude connector", first_source: "Claude connector", first_page: "/mcp",
+        first_seen: at, timezone: "", language: "" });
+      const r = await fetch(env.LEADS_ENDPOINT, { method: "POST", body }); console.log("connector signup lead", r.status);
+    }
+  })().catch((e) => console.error("adops callback side", e.message)));
+  const authCode = await seal(env, "ac", { ...user, c: fa.c, r: fa.r, ch: fa.ch }, CODE_TTL);
+  return back({ code: authCode });
 }
 
 /* ---------- the page ---------- */

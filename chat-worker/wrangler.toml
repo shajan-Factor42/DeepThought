@@ -27,6 +27,12 @@ PLAN_NOTIFY_TO = "shajan@deepthought.marketing"
 MCP_DAILY_LIMIT = "200"
 # Where "yes, set up my campaign" in the Claude connector sends people (2026-10-25). Swap for the exact sign-up page.
 ADOPS_SIGNUP_URL = "https://deepthought.adops.rocks/"
+# AdOps.rocks link (2026-11-03, src/adops.js). Turns on when the Worker secrets CONNECTOR_API_KEY and
+# CONNECTOR_SHARED_SECRET are set (Cloudflare → Workers → deepthought-chat → Settings → Variables and Secrets).
+ADOPS_API_BASE = "https://deepthought.adops.rocks/api/connector/"
+ADOPS_CONNECT_URL = "https://deepthought.adops.rocks/connect/claude"
+# What the connector tells people about review time for new campaigns and changes.
+REVIEW_TARGET = "1 business day"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"

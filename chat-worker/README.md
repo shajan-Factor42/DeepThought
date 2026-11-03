@@ -43,3 +43,14 @@ Added 2026-10-25 (`src/mcp.js`, sign-in in `src/auth.js`). Lets Claude users get
 - **Cost guard:** `MCP_DAILY_LIMIT` (default 200 plans a day across all users), plus per-IP limits on plans, codes and sign-in tries.
 - **Never:** touches ad accounts or money. Later: move sign-in to AdOps.rocks logins (Shajan, 2026-10-25).
 - **Quick test after deploy:** `curl -s -i -X POST <worker>/mcp -H 'content-type: application/json' -d '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'` should return `401` with a `WWW-Authenticate: Bearer resource_metadata=...` header (sign-in required). Then add it in Claude and sign in.
+
+## AdOps.rocks link (2026-11-03)
+
+When the Worker secrets `CONNECTOR_API_KEY` and `CONNECTOR_SHARED_SECRET` are set (Cloudflare → Workers → deepthought-chat →
+Settings → Variables and Secrets), the connector signs people in with their Deep Thought account on AdOps.rocks
+(`/authorize` → `deepthought.adops.rocks/connect/claude` → `/oauth/callback`) and adds these tools (src/adops.js):
+`submit_campaign`, `my_campaigns`, `campaign_results`, `request_change`, `pause_ads`, `add_payment_card`.
+The team approves every new campaign and change before it goes live; `pause_ads` is the one instant action.
+Without the secrets, the old email-code sign-in and `request_campaign_setup` keep working.
+Callback address registered with AdOps.rocks: `https://deepthought-chat.shajan.workers.dev/oauth/callback`
+(and `https://mcp.deepthought.marketing/oauth/callback`).
