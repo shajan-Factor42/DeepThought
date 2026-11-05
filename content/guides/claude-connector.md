@@ -45,6 +45,8 @@ The Deep Thought connector lets you run your advertising from a conversation wit
 
 Once Deep Thought is listed in Claude's connector directory, you'll be able to add it from there instead of typing the address.
 
+Using ChatGPT, Gemini or another AI tool? See [Deep Thought for AI assistants](ai-assistants.html).
+
 ## Things to ask Claude
 
 - "Build a media plan for my HVAC company in Lawrenceville, GA. $1,500 a month, I want more phone calls."
