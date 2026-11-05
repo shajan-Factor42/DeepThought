@@ -34,7 +34,7 @@ ADOPS_CONNECT_URL = "https://deepthought.adops.rocks/connect/claude"
 # What the connector tells people about review time for new campaigns and changes.
 REVIEW_TARGET = "1 business day"
 # Where Stripe returns people after saving a card from Claude (a "card saved, go back to Claude" page on this Worker).
-CARD_RETURN_URL = "https://deepthought-chat.shajan.workers.dev/card-saved"
+CARD_RETURN_URL = "https://mcp.deepthought.marketing/card-saved"
 # ChatGPT plugin domain verification token (served at /.well-known/openai-apps-challenge). Paste the exact token
 # from OpenAI's submission portal here and push. Empty = the path answers 404.
 OPENAI_APPS_CHALLENGE = ""

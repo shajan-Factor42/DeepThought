@@ -4,7 +4,7 @@ seoTitle: "Deep Thought Connector for Claude, ChatGPT and Gemini"
 crumb: "Deep Thought for AI assistants"
 slug: ai-assistants
 eyebrow: "Connector"
-updated: 2026-11-04
+updated: 2026-11-05
 published: 2026-11-04
 description: "Connect Deep Thought to Claude, ChatGPT, Gemini or any AI assistant that supports connectors. Build a media plan, submit campaigns, check results and pause ads in plain English."
 dek: "Plan, launch and manage your digital advertising from the AI assistant you already use. One connector works with Claude, ChatGPT, Gemini and other tools that support connectors."
@@ -37,7 +37,7 @@ Deep Thought plans and runs digital advertising for small and local businesses a
 
 The connector address is the same everywhere:
 
-`https://deepthought-chat.shajan.workers.dev/mcp`
+`https://mcp.deepthought.marketing/mcp`
 
 ## Claude
 

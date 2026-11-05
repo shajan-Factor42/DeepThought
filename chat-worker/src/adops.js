@@ -139,7 +139,7 @@ const needOrder = (a) => { const id = s(a && a.order_id, 60); return /^[\w-]+$/.
 
 async function cardLink(env, user) {
   // Stripe sends them back to a "card saved, go back to Claude" page on this Worker (/card-saved in worker.js).
-  const back = env.CARD_RETURN_URL || "https://deepthought-chat.shajan.workers.dev/card-saved";
+  const back = env.CARD_RETURN_URL || "https://mcp.deepthought.marketing/card-saved";
   const d = await api(env, user, "POST", "billing/setup-session", { return_url: back, success_url: back, cancel_url: `${back}?canceled=1` });
   return d.url || d.checkout_url || d.session_url || "";
 }

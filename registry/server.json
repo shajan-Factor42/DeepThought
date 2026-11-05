@@ -3,7 +3,7 @@
   "name": "io.github.shajan-Factor42/deep-thought-marketing",
   "title": "Deep Thought Marketing",
   "description": "Done-for-you digital marketing for small businesses: plan, launch and manage ads across 22 channels.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "websiteUrl": "https://deepthought.marketing/claude-connector.html",
   "icons": [
     {
@@ -17,7 +17,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://deepthought-chat.shajan.workers.dev/mcp"
+      "url": "https://mcp.deepthought.marketing/mcp"
     }
   ]
 }

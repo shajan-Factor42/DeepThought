@@ -4,7 +4,7 @@ seoTitle: "Deep Thought Connector for Claude: Setup and Help"
 crumb: "Deep Thought for Claude"
 slug: claude-connector
 eyebrow: "Connector"
-updated: 2026-11-03
+updated: 2026-11-05
 published: 2026-11-03
 description: "How to add the Deep Thought connector to Claude, what it can do, how campaign review and payment work, and how to fix common sign-in problems."
 dek: "Ask Claude for a media plan, turn it into a campaign, and check on your ads, all in plain English. Here's how to set it up and what each part does."
@@ -38,7 +38,7 @@ The Deep Thought connector lets you run your advertising from a conversation wit
 ## How to add it to Claude
 
 1. In Claude, open **Settings**, then **Connectors**.
-2. Choose **Add custom connector**. Name it **Deep Thought** and enter this address: `https://deepthought-chat.shajan.workers.dev/mcp`
+2. Choose **Add custom connector**. Name it **Deep Thought** and enter this address: `https://mcp.deepthought.marketing/mcp`
 3. Leave any OAuth client ID and secret fields blank, then select **Add** and **Connect**.
 4. Sign in with your **Deep Thought business account** and allow access.
 5. Start a new conversation and ask for a plan.
@@ -76,6 +76,7 @@ When you sign in, your Deep Thought account shares your name, email address, bus
 - **"You are signed in with a Deep Thought team account."** The connector works with business accounts. Sign out of Deep Thought, or use a private browser window, and sign in with your business account.
 - **"Your Deep Thought account isn't connected anymore."** In **Settings, Connectors**, disconnect Deep Thought and connect it again.
 - **No card saved after Stripe.** Ask Claude to "add a payment card" for a fresh secure link, then say "done" when you've saved it so Claude can check.
+- **Added Deep Thought before November 5, 2026?** The old address (`https://deepthought-chat.shajan.workers.dev/mcp`) still works. You don't need to change anything.
 
 ## Help and contact
 
