@@ -228,7 +228,10 @@ function applyFooter(tpl) {
     // HVAC landing page (2026-10-02, SEO chat): first trade page, linked sitewide like the pillar.
     + '\n      <a href="hvac-marketing-atlanta.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">HVAC marketing</a>'
     // Digital media plan builder (2026-10-15).
-    + '\n      <a href="digital-media-plan-builder.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Media plan builder</a>');
+    + '\n      <a href="digital-media-plan-builder.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Media plan builder</a>'
+    // Connector hub page for Claude, ChatGPT, Gemini (2026-11-04, growth chat).
+    + '\n      <a href="ai-assistants.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Use with Claude, ChatGPT &amp; Gemini</a>'
+    + '\n      <a href="claude-connector.html" style="font-size:14px; color:var(--text-muted); text-decoration:none">Deep Thought for Claude</a>');
 
   const copy = "© 2026 DeepThought Marketing. All rights reserved.";
   if (!html.includes(copy)) throw new Error("SiteFooter: copyright line not found — site.zip changed");

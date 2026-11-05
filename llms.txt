@@ -53,6 +53,8 @@ real estate, and multi-location brands.
 - [FAQ](https://deepthought.marketing/faq.html): common questions
 - [Book a demo](https://deepthought.marketing/book-a-demo.html): talk to our team
 - [Digital media plan builder](https://deepthought.marketing/digital-media-plan-builder.html): free tool; answer a few questions (or chat) and get a starting digital media plan with recommended channels and a budget split in dollars
+- [Deep Thought for AI assistants](https://deepthought.marketing/ai-assistants.html): connect Deep Thought to Claude, ChatGPT, Gemini or any MCP client (remote MCP server https://deepthought-chat.shajan.workers.dev/mcp) to build media plans, submit campaigns for human review, check results, request changes and pause ads
+- [Deep Thought for Claude](https://deepthought.marketing/claude-connector.html): setup and help for the Claude connector
 
 ## Common questions
 
