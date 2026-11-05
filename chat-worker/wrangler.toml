@@ -38,6 +38,8 @@ CARD_RETURN_URL = "https://deepthought-chat.shajan.workers.dev/card-saved"
 # ChatGPT plugin domain verification token (served at /.well-known/openai-apps-challenge). Paste the exact token
 # from OpenAI's submission portal here and push. Empty = the path answers 404.
 OPENAI_APPS_CHALLENGE = ""
+# Glama directory ownership claim token (served at /.well-known/glama.json). Keep it published to stay verified.
+GLAMA_CLAIM = "glama_claim_Zj8sE36DdZG1GIivLRDkeWolJPE2fiza"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified
 # in Resend (resend.com → Domains). Comma-separate several recipients.
 DIGEST_TO = "shajan@deepthought.marketing"
