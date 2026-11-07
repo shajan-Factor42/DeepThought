@@ -30,7 +30,7 @@ Deep Thought plans and runs digital advertising for small and local businesses a
 
 - **Build a media plan** with a channel-by-channel dollar split, first-month steps and the numbers to watch. A copy is emailed to you.
 - **Submit it as a campaign.** You see a summary first, and it's sent to our team only after you say yes.
-- **Save a payment card** on Stripe's secure page. Nothing is charged until a campaign is approved.
+- **Save a payment card** on Stripe's secure page. Nothing is charged until a campaign is approved; then it's billed monthly, month to month.
 - **Check your campaigns and results**: spend, impressions, clicks, and calls or leads where tracking is set up.
 - **Request changes** to budgets, channels or ads, or restart a paused campaign.
 - **Pause ads** right away if you need to stop spending.
@@ -83,7 +83,7 @@ Any AI tool that can add a remote connector (MCP server) by web address can use 
 |---|---|
 | A media plan | Built right away and emailed to you. Nothing is ordered. |
 | Submit a campaign | You see a summary. After you say yes, it goes to our team for review, usually within 1 business day. |
-| Save a card | You save it on Stripe's secure page. It's charged only after the team approves a campaign. |
+| Save a card | You save it on Stripe's secure page. It's charged only after the team approves a campaign, then monthly until you cancel. Month to month, no contract. |
 | A change | You see a summary. After you say yes, our team reviews it before anything changes. |
 | Pause ads | You confirm, and the ads stop right away. Restarting goes through review. |
 

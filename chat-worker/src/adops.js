@@ -75,7 +75,7 @@ export const ADOPS_TOOLS = [
   {
     name: "submit_campaign",
     title: "Submit a campaign to Deep Thought",
-    description: "Turns the person's media plan into a campaign order for the Deep Thought team. Uses their latest plan from build_media_plan unless channels are given. Call first without confirmed to get a summary, show it, and call again with confirmed: true only after they say yes. A person on the Deep Thought team reviews every order before anything goes live (usually within 1 business day); nothing is charged or launched by this tool. If no card is on file, it returns a secure Stripe link to save one.",
+    description: "Turns the person's media plan into a campaign order for the Deep Thought team. Uses their latest plan from build_media_plan unless channels are given. Call first without confirmed to get a summary, show it, and call again with confirmed: true only after they say yes. A person on the Deep Thought team reviews every order before anything goes live (usually within 1 business day); nothing is charged or launched by this tool. Approved campaigns are billed monthly (month to month, cancel anytime); say so. If no card is on file, it returns a secure Stripe link to save one.",
     inputSchema: {
       type: "object",
       properties: {
@@ -144,7 +144,7 @@ async function cardLink(env, user) {
   return d.url || d.checkout_url || d.session_url || "";
 }
 /** Step 2 of submitting: the card call to action (2026-11-03, Shajan: make saving the card the clear next step). */
-const cardStep = (url) => `**Step 2 of 2: save your card** so the team can launch your campaign once it's approved. Nothing is charged now.\n\n**[Save your card securely with Stripe →](${url})**\n\nWhen you've saved it, come back here and say "done", and I'll check it went through.`;
+const cardStep = (url) => `**Step 2 of 2: save your card** so the team can launch your campaign once it's approved. Nothing is charged now. Once approved, it's billed monthly; cancel anytime.\n\n**[Save your card securely with Stripe →](${url})**\n\nWhen you've saved it, come back here and say "done", and I'll check it went through.`;
 async function newestOrderId(env, user) {
   try {
     const orders = listOf(await api(env, user, "GET", "orders"), "orders", "data", "items");
@@ -169,10 +169,10 @@ async function submitCampaign(a, env, user) {
   const start = s(a.start_preference, 80) || "As soon as possible";
   const lines = channels.map((c) => `- ${c.name}: ${money(c.monthly_dollars)}/mo`);
   const summary = [`**Campaign for ${input.business || user.business || "your business"}**${input.location ? ` (${input.location})` : ""}`, ...lines,
-    `**Total: ${money(budget)} a month** (ad spend and management included)`, `Start: ${start}`, a.notes ? `Notes: ${s(a.notes, 400)}` : ""].filter(Boolean).join("\n");
+    `**Total: ${money(budget)} a month** (ad spend and management included)`, `Billing: monthly, starting when the team approves it. Month to month, cancel anytime.`, `Start: ${start}`, a.notes ? `Notes: ${s(a.notes, 400)}` : ""].filter(Boolean).join("\n");
 
   if (a.confirmed !== true) {
-    return out(`${summary}\n\nIf this looks right, I'll send it to the Deep Thought team. A person reviews it before anything goes live (usually within ${review(env)}), and nothing is charged until they approve it. Shall I submit it?`,
+    return out(`${summary}\n\nIf this looks right, I'll send it to the Deep Thought team. A person reviews it before anything goes live (usually within ${review(env)}), and nothing is charged until they approve it. After that, it's billed every month until you cancel. Shall I submit it?`,
       { preview: true, channels, monthlyBudget: budget, nextStep: "Show this summary. Only after the person says yes, call submit_campaign again with the same inputs and confirmed: true." });
   }
 
@@ -193,7 +193,7 @@ async function submitCampaign(a, env, user) {
   if (!hasCard) { try { card = await cardLink(env, user); } catch (e) { console.error("card link", e.message); } }
   const done = `**Submitted.** Your campaign order${id ? ` #${id}` : ""} is with the Deep Thought team for review (usually within ${review(env)}).`;
   const text = hasCard
-    ? [done, "Your card on file is charged only after the team approves the order. I can check on it any time: just ask about your campaigns."].join("\n\n")
+    ? [done, `Your card on file is charged ${money(budget)} when the team approves the order, then monthly until you cancel. I can check on it any time: just ask about your campaigns.`].join("\n\n")
     : [`**Step 1 of 2 done.** ${done.replace("**Submitted.** ", "")}`,
       card ? cardStep(card) : `**Step 2 of 2: save your card.** I couldn't open the card page just now. Ask me to add a payment card in a minute, or call ${PHONE}.`].join("\n\n");
   return out(text, { orderId: id ?? null, status: order.status || "awaiting_review", monthlyBudget: budget, cardLink: card || null, hasPaymentMethod: hasCard,
@@ -276,7 +276,7 @@ async function pauseAds(a, env, user) {
 async function addPaymentCard(env, user) {
   const me = await api(env, user, "GET", "me");
   if (me.has_payment_method === true) {
-    return out("**Your card is saved.** Your campaign is ready for the Deep Thought team to approve. Nothing is charged until they do, and I can check on it any time: just ask about your campaigns.",
+    return out("**Your card is saved.** Your campaign is ready for the Deep Thought team to approve. Nothing is charged until they do; after that it's billed monthly until you cancel. I can check on it any time: just ask about your campaigns.",
       { hasPaymentMethod: true });
   }
   const url = await cardLink(env, user);

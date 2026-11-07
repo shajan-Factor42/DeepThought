@@ -30,7 +30,7 @@ The Deep Thought connector lets you run your advertising from a conversation wit
 
 - **Build a media plan.** Tell Claude what your business does, where you serve customers, your goal and your monthly budget. You get a channel-by-channel plan across the 22 channels we run, with a dollar split, first-month steps and the numbers to watch. A copy is emailed to you.
 - **Submit it as a campaign.** Claude shows you a summary first and sends it to our team only after you say yes.
-- **Save a payment card** on Stripe's secure page. Nothing is charged until a campaign is approved.
+- **Save a payment card** on Stripe's secure page. Nothing is charged until a campaign is approved; then it's billed monthly, month to month.
 - **Check your campaigns** and their status, plus results by channel: spend, impressions, clicks, and calls or leads where tracking is set up.
 - **Request changes**, such as a new budget, different channels, new ads or restarting a paused campaign.
 - **Pause ads** right away if you need to stop spending.
@@ -62,7 +62,7 @@ Using ChatGPT, Gemini or another AI tool? See [Deep Thought for AI assistants](a
 |---|---|
 | A media plan | Claude builds it right away and emails you a copy. Nothing is ordered. |
 | Submit a campaign | Claude shows a summary. After you say yes, it goes to our team for review, usually within 1 business day. |
-| Save a card | You save it on Stripe's secure page. It's charged only after the team approves a campaign. |
+| Save a card | You save it on Stripe's secure page. It's charged only after the team approves a campaign, then monthly until you cancel. Month to month, no contract. |
 | A change | Claude shows a summary. After you say yes, our team reviews it before anything changes. |
 | Pause ads | Claude asks you to confirm. Once you do, the ads stop right away. Restarting goes through review. |
 
