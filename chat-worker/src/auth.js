@@ -151,7 +151,7 @@ async function authorize(request, env, ctx, url, ip) {
     if (!q.get("code_challenge") || (q.get("code_challenge_method") || "S256") !== "S256") return back("invalid_request", "PKCE with S256 is required.");
     if (adopsOn(env)) {
       // AdOps.rocks login: the signed flow travels as AdOps' state and comes back to /oauth/callback.
-      const fa = { c: await sha256b64u(q.get("client_id")), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) };
+      const fa = { c: await sha256b64u(q.get("client_id")), r: uri, s: s(q.get("state"), 4000), ch: s(q.get("code_challenge"), 128) };
       // 2026-11-06: keep AdOps' state short. ChatGPT's long state made the sealed flow ~630 chars and AdOps
       // rejected it ("This link is not valid"). The flow now waits in KV under a short random id.
       let flow;
@@ -165,7 +165,7 @@ async function authorize(request, env, ctx, url, ip) {
       go.searchParams.set("return_to", `${url.origin}/oauth/callback`);
       return Response.redirect(go.toString(), 302);
     }
-    const req = { c: q.get("client_id"), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) };
+    const req = { c: q.get("client_id"), r: uri, s: s(q.get("state"), 4000), ch: s(q.get("code_challenge"), 128) };
     const flow = await seal(env, "fl", { req }, FLOW_TTL);
     return page(env, { step: "email", flow, client: client.n });
   }
