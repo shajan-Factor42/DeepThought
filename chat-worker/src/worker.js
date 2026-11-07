@@ -411,8 +411,8 @@ function clean(messages) {
 
 function cardSavedPage(canceled) {
   const msg = canceled
-    ? ["No card was saved.", "Go back to Claude and ask for the card link again when you're ready."]
-    : ["Card saved. Thank you!", "Go back to Claude and say \"done\". Nothing is charged until the Deep Thought team approves your campaign."];
+    ? ["No card was saved.", "Go back to your AI assistant (ChatGPT, Claude or another) and ask for the card link again when you're ready."]
+    : ["Card saved. Thank you!", "Go back to your AI assistant (ChatGPT, Claude or another) and say \"done\". Nothing is charged until the Deep Thought team approves your campaign."];
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>${msg[0]} | Deep Thought Marketing</title>
 <style>body{margin:0;background:#f5f9ff;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:#0f172a}main{max-width:420px;margin:60px auto;background:#fff;border-radius:16px;padding:32px 24px;box-shadow:0 8px 30px rgba(11,95,255,.08);text-align:center}
 h1{font-size:22px;margin:0 0 6px;background:linear-gradient(90deg,#0b5fff,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent}h2{font-size:20px;margin:18px 0 8px}p{line-height:1.5;color:#334155}a{color:#0b5fff}

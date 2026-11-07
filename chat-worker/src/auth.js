@@ -143,7 +143,7 @@ async function authorize(request, env, ctx, url, ip) {
     const client = await open(env, "ci", q.get("client_id"));
     const redirect = q.get("redirect_uri") || "";
     // Bad client or redirect: show an error, never redirect to an unchecked address.
-    if (!client) return page(env, { error: "This sign-in link isn't valid. Please remove the Deep Thought connector in Claude and add it again." }, 400);
+    if (!client) return page(env, { error: "This sign-in link isn't valid. Please remove the Deep Thought connector in your AI assistant and add it again." }, 400);
     const uri = redirect || (client.r.length === 1 ? client.r[0] : "");
     if (!client.r.includes(uri)) return page(env, { error: "This sign-in link isn't valid (unknown return address). Please add the connector again." }, 400);
     const back = (err, desc) => { const u = new URL(uri); u.searchParams.set("error", err); if (desc) u.searchParams.set("error_description", desc); if (q.get("state")) u.searchParams.set("state", q.get("state")); return Response.redirect(u.toString(), 302); };
@@ -171,11 +171,11 @@ async function authorize(request, env, ctx, url, ip) {
   }
   if (request.method !== "POST") return new Response(null, { status: 405, headers: { Allow: "GET, POST" } });
 
-  let f; try { f = Object.fromEntries(await request.formData()); } catch { return page(env, { error: "Something went wrong. Please start again from Claude." }, 400); }
+  let f; try { f = Object.fromEntries(await request.formData()); } catch { return page(env, { error: "Something went wrong. Please start again from your AI assistant." }, 400); }
   // Step 1: email -> send a code.
   if (f.step === "email") {
     const fl = await open(env, "fl", f.flow);
-    if (!fl) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to Claude and try connecting again." }, 400);
+    if (!fl) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to your AI assistant (ChatGPT, Claude or another) and try connecting again." }, 400);
     const email = s(f.email, 120).toLowerCase();
     if (!EMAIL_RE.test(email)) return page(env, { step: "email", flow: f.flow, email, error: "Please enter a valid email address." });
     if (burst("code:" + ip, 10, 60 * 60 * 1000) || burst("code:" + email, 5, 60 * 60 * 1000))
@@ -192,9 +192,9 @@ async function authorize(request, env, ctx, url, ip) {
   // Step 2: code (+ details for new accounts) -> account -> back to Claude.
   if (f.step === "code") {
     const vf = await open(env, "vf", f.flow);
-    if (!vf) return page(env, { error: "This sign-in took too long. Please go back to Claude and try connecting again." }, 400);
+    if (!vf) return page(env, { error: "This sign-in took too long. Please go back to your AI assistant (ChatGPT, Claude or another) and try connecting again." }, 400);
     const keep = { step: "code", flow: f.flow, email: vf.e, known: vf.known, name: f.name, phone: f.phone, business: f.business };
-    if (burst("try:" + vf.e, 8, FLOW_TTL * 1000)) return page(env, { error: "Too many tries. Please go back to Claude and start again." }, 429);
+    if (burst("try:" + vf.e, 8, FLOW_TTL * 1000)) return page(env, { error: "Too many tries. Please go back to your AI assistant and start again." }, 429);
     const code = s(f.code, 12).replace(/\D/g, "");
     if (code.length !== 6 || (await mac(env, "code:" + vf.e + ":" + code)) !== vf.h) return page(env, { ...keep, error: "That code doesn't match. Check the email we sent and try again." });
     const name = s(f.name, 80) || vf.name, business = s(f.business, 100) || vf.business;
@@ -223,7 +223,7 @@ async function authorize(request, env, ctx, url, ip) {
     if (vf.req.s) u.searchParams.set("state", vf.req.s);
     return Response.redirect(u.toString(), 302);
   }
-  return page(env, { error: "Something went wrong. Please start again from Claude." }, 400);
+  return page(env, { error: "Something went wrong. Please start again from your AI assistant." }, 400);
 }
 
 async function sendCode(env, email, code) {
@@ -233,7 +233,7 @@ async function sendCode(env, email, code) {
     const r = await fetch(env.RESEND_URL || "https://api.resend.com/emails", {
       method: "POST", headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
       body: JSON.stringify({ from, to: [email], subject: `Your Deep Thought sign-in code: ${code}`,
-        html: `<div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#0f172a"><h2 style="color:#0b5fff">Deep Thought Marketing</h2><p>Your sign-in code for the Deep Thought connector in Claude is:</p><p style="font-size:32px;font-weight:bold;letter-spacing:6px">${code}</p><p style="color:#64748b;font-size:13px">It works for 15 minutes. If you didn't ask for this, you can ignore this email.</p></div>`,
+        html: `<div style="font-family:Arial,sans-serif;max-width:480px;margin:auto;color:#0f172a"><h2 style="color:#0b5fff">Deep Thought Marketing</h2><p>Your sign-in code for the Deep Thought connector in your AI assistant is:</p><p style="font-size:32px;font-weight:bold;letter-spacing:6px">${code}</p><p style="color:#64748b;font-size:13px">It works for 15 minutes. If you didn't ask for this, you can ignore this email.</p></div>`,
         text: `Your Deep Thought sign-in code is ${code}. It works for 15 minutes.` }),
     });
     if (!r.ok) { console.error("sign-in code email", r.status, (await r.text()).slice(0, 200)); return false; }
@@ -294,7 +294,7 @@ async function adopsCallback(request, env, ctx, url) {
     // Not deleted on use: it expires in 15 minutes, and the one-time jti below stops replays (same as the sealed form).
     fa = await env.CHAT_LOG.get(`fa:${st.slice(2)}`, "json").catch(() => null);
   } else fa = await open(env, "fa", st);
-  if (!fa) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to Claude and try connecting again." }, 400);
+  if (!fa) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to your AI assistant (ChatGPT, Claude or another) and try connecting again." }, 400);
   const back = (params) => { const u = new URL(fa.r); for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v); if (fa.s) u.searchParams.set("state", fa.s); return Response.redirect(u.toString(), 302); };
   if (q.get("error") || !q.get("code")) return back({ error: "access_denied", error_description: "Sign-in was cancelled." });
   if (!adopsOn(env)) return page(env, { error: "Sign-in isn't set up yet. Please call 770-299-9583." }, 500);
@@ -302,10 +302,10 @@ async function adopsCallback(request, env, ctx, url) {
   const t = now();
   const bad = !c ? "bad signature" : c.aud !== "deep-thought-connector" && !(Array.isArray(c.aud) && c.aud.includes("deep-thought-connector")) ? "aud"
     : c.brand && c.brand !== "deepthought" ? "brand" : !(c.exp > t - 30) ? "expired" : c.iat && c.iat > t + 120 ? "iat" : !c.sub ? "no sub" : !c.jti ? "no jti" : "";
-  if (bad) { console.error("adops callback rejected:", bad); return page(env, { error: "We couldn't confirm your Deep Thought sign-in. Please go back to Claude and try connecting again." }, 400); }
+  if (bad) { console.error("adops callback rejected:", bad); return page(env, { error: "We couldn't confirm your Deep Thought sign-in. Please go back to your AI assistant (ChatGPT, Claude or another) and try connecting again." }, 400); }
   if (env.CHAT_LOG) {
     const k = `jti:${s(c.jti, 200)}`;
-    if (await env.CHAT_LOG.get(k)) { console.error("adops callback: reused jti"); return page(env, { error: "This sign-in link was already used. Please go back to Claude and try connecting again." }, 400); }
+    if (await env.CHAT_LOG.get(k)) { console.error("adops callback: reused jti"); return page(env, { error: "This sign-in link was already used. Please go back to your AI assistant (ChatGPT, Claude or another) and try connecting again." }, 400); }
     await env.CHAT_LOG.put(k, "1", { expirationTtl: 3600 });
   }
   const email = s(c.email, 120).toLowerCase();
@@ -333,7 +333,7 @@ function page(env, o, status = 200) {
   let body;
   if (!o.step) body = `<p class="err">${esc(o.error)}</p><p>Questions? Call <a href="tel:7702999583">770-299-9583</a>.</p>`;
   else if (o.step === "email") body = `
-    <p>Sign in or create a free account to get your digital media plan in Claude.</p>
+    <p>Sign in or create a free account to get your digital media plan in your AI assistant.</p>
     ${o.error ? `<p class="err">${esc(o.error)}</p>` : ""}
     <form method="post"><input type="hidden" name="flow" value="${esc(o.flow)}"><input type="hidden" name="step" value="email">
       ${field("email", "Email", "email", o.email, 'required autocomplete="email" autofocus')}
@@ -362,6 +362,6 @@ input[type=email],input[type=text],input[type=tel]{display:block;width:100%;box-
 button{width:100%;margin-top:10px;padding:14px;border:0;border-radius:10px;background:#0b5fff;color:#fff;font-size:16px;font-weight:700;cursor:pointer}
 .err{color:#b91c1c;background:#fef2f2;padding:10px 12px;border-radius:8px}.small{font-size:13px;color:#64748b}a{color:#0b5fff}
 @media(max-width:480px){main{margin:16px;padding:22px 16px}}</style></head>
-<body><main><h1>Deep Thought Marketing</h1><p class="sub">Free digital media plans in Claude</p>${body}</main></body></html>`;
+<body><main><h1>Deep Thought Marketing</h1><p class="sub">Free digital media plans in your AI assistant</p>${body}</main></body></html>`;
   return new Response(html, { status, headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store", "X-Frame-Options": "DENY", "Referrer-Policy": "no-referrer" } });
 }
