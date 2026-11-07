@@ -151,7 +151,15 @@ async function authorize(request, env, ctx, url, ip) {
     if (!q.get("code_challenge") || (q.get("code_challenge_method") || "S256") !== "S256") return back("invalid_request", "PKCE with S256 is required.");
     if (adopsOn(env)) {
       // AdOps.rocks login: the signed flow travels as AdOps' state and comes back to /oauth/callback.
-      const flow = await seal(env, "fa", { c: await sha256b64u(q.get("client_id")), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) }, FLOW_TTL);
+      const fa = { c: await sha256b64u(q.get("client_id")), r: uri, s: s(q.get("state"), 500), ch: s(q.get("code_challenge"), 128) };
+      // 2026-11-06: keep AdOps' state short. ChatGPT's long state made the sealed flow ~630 chars and AdOps
+      // rejected it ("This link is not valid"). The flow now waits in KV under a short random id.
+      let flow;
+      if (env.CHAT_LOG) {
+        const id = b64u(crypto.getRandomValues(new Uint8Array(18)));
+        await env.CHAT_LOG.put(`fa:${id}`, JSON.stringify(fa), { expirationTtl: Math.max(FLOW_TTL, 60) });
+        flow = `k.${id}`;
+      } else flow = await seal(env, "fa", fa, FLOW_TTL);
       const go = new URL(env.ADOPS_CONNECT_URL || "https://deepthought.adops.rocks/connect/claude");
       go.searchParams.set("state", flow);
       go.searchParams.set("return_to", `${url.origin}/oauth/callback`);
@@ -280,7 +288,12 @@ async function verifyJwt(secret, jwt) {
 async function adopsCallback(request, env, ctx, url) {
   if (request.method !== "GET") return new Response(null, { status: 405, headers: { Allow: "GET" } });
   const q = url.searchParams;
-  const fa = await open(env, "fa", q.get("state"));
+  const st = q.get("state") || "";
+  let fa = null;
+  if (/^k\.[\w-]{10,40}$/.test(st) && env.CHAT_LOG) {
+    // Not deleted on use: it expires in 15 minutes, and the one-time jti below stops replays (same as the sealed form).
+    fa = await env.CHAT_LOG.get(`fa:${st.slice(2)}`, "json").catch(() => null);
+  } else fa = await open(env, "fa", st);
   if (!fa) return page(env, { error: "This sign-in took too long or the link isn't valid. Please go back to Claude and try connecting again." }, 400);
   const back = (params) => { const u = new URL(fa.r); for (const [k, v] of Object.entries(params)) u.searchParams.set(k, v); if (fa.s) u.searchParams.set("state", fa.s); return Response.redirect(u.toString(), 302); };
   if (q.get("error") || !q.get("code")) return back({ error: "access_denied", error_description: "Sign-in was cancelled." });
