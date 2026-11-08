@@ -66,7 +66,7 @@ There’s a second floor underneath the contractual one, and it’s statistical.
 
 ## At what monthly spend does each option make sense?
 
-Under about $2,000 a month all in, the fee structure decides whether you get to advertise at all. From $2,000 to $10,000, a platform almost always puts more money in front of customers. Above $10,000 the gap widens rather than closes: a percentage fee keeps growing with your budget while a flat price stays where it is.
+Under about $2,000 a month all in, the fee structure decides whether you get to advertise at all. From $2,000 to $10,000, a platform almost always puts more money in front of customers. Above $10,000 the gap widens rather than closes: a percentage fee keeps growing with your budget while a flat price stays where it is. To write your budget and split down in one place, use our free [one-page marketing plan template](blog-marketing-plan-template.html).
 
 Under $1,500: one channel, self-run or platform-run — a retainer here eats the whole budget. From $1,500 to $3,000: all-inclusive platform pricing, because a retainer plus media rarely clears the optimization floor at this level. From $3,000 to $10,000: compare on working media rather than on the fee, because a percentage deal is already taking 30% to 40% at this level. Above $10,000: a percentage fee scales with your budget while an all-inclusive price doesn’t, and the gap widens as you grow.
 

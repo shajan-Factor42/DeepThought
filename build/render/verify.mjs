@@ -93,7 +93,10 @@ for (const f of files) {
   for (const h of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) {
     const t = h[1].split("#")[0].split("?")[0];
     if (!t || /^(https?:|mailto:|tel:)/.test(t)) continue;
-    if (!pages.has(t)) { brokenLinks++; note(t); }
+    if (pages.has(t)) continue;
+    // A link to a downloadable file (e.g. downloads/*.pdf) passes if the file ships (2026-11-08).
+    if (!t.endsWith(".html") && !t.endsWith("/")) { try { await stat(join(DIR, t)); continue; } catch {} }
+    brokenLinks++; note(t);
   }
   for (const a of html.matchAll(/<(?:link|script)\b[^>]*(?:href|src)="([^"]+)"/g)) {
     if (/^(https?:|data:)/.test(a[1])) continue;
