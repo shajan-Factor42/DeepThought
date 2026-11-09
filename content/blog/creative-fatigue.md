@@ -52,7 +52,7 @@ Ad fatigue has a clear signature. Look at these four numbers over the last four 
 
 That last line matters most. If people who do click still call or fill in the form at the usual rate, your website and offer are fine. The problem is that fewer people are clicking in the first place.
 
-On Facebook and Instagram, Ads Manager shows frequency in the reporting columns, and it can flag an ad in the Delivery column when its performance is dropping because people have seen it too often. In Google's responsive search ads, each headline and description gets a rating of Low, Good or Best. A row of Low ratings is a sign your copy has gone stale.
+On Facebook and Instagram, Ads Manager shows frequency in the reporting columns, and it can flag an ad in the Delivery column when its performance is dropping because people have seen it too often. In Google's responsive search ads, each headline and description gets a rating of Low, Good or Best. A row of Low ratings is a sign your copy has gone stale. New to running them? Start with our guide to [Facebook ads for small business](blog-facebook-ads-for-small-business.html).
 
 ## Why it gets blamed on the platform
 
