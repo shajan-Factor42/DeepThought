@@ -83,13 +83,20 @@ function letterIndex(list, prefix) {
 }
 
 await mkdir(OUT, { recursive: true });
-let written = 0, holes = 0;
+let written = 0, holes = 0, indexedStates = 0;
 const rendered = [];
+
+// 2026-11-11 (SEO, approved by Shajan): every state page and state county directory is
+// noindex,follow. They are templated like the county pages and were holding back indexing of the
+// site. They stay live for visitors and keep passing links; render.mjs leaves them out of sitemap.xml.
+// Georgia stays indexed as the home state (approved by Shajan 11 Nov): its state page and its county directory.
+const STATES_INDEXED = new Set(["digital-marketing-georgia.html", "georgia-counties.html"]);
 
 async function emit(file, { title, description, body, jsonld }) {
   if (body.includes("{{")) holes++;
+  if (STATES_INDEXED.has(file)) indexedStates++;
   await writeFile(join(OUT, file),
-    page({ title, description, canonical: `${SITE}/${file}`, jsonld, body, helmet }), "utf8");
+    page({ title, description, canonical: `${SITE}/${file}`, jsonld, body, helmet, noindex: !STATES_INDEXED.has(file) }), "utf8");
   rendered.push(file); written++;
 }
 
@@ -234,5 +241,6 @@ for (const st of states.STATES) {
 
 console.log(`render-states: ${written} pages (${states.STATES.length} states, ${states.STATES.length} directories, 1 index)`);
 if (holes) { console.error(`FAIL: ${holes} page(s) still contain {{ }} holes`); process.exit(1); }
+if (indexedStates !== STATES_INDEXED.size) { console.error(`FAIL: an indexed state page in STATES_INDEXED was not rendered`); process.exit(1); }
 
 export { rendered };
