@@ -194,6 +194,19 @@ function readingBlock(slug, place) {
   return `<section style="max-width:1200px; margin:0 auto; padding:40px 40px 8px"><h2 style="font-size:24px; margin:0 0 16px">Local guides for ${place}</h2><ul style="list-style:none; padding:0; margin:0">${li}</ul></section>`;
 }
 
+// 2026-11-11 (SEO, approved by Shajan): only metro Atlanta county pages stay in Google's index.
+// The other ~3,100 county pages are near-identical templates (96% the same text), which made up 92%
+// of the sitemap and held back indexing of the whole site. They stay live for visitors but carry
+// noindex,follow, which also drops them from sitemap.xml (render.mjs skips noindex pages).
+// Kept: the Atlanta Regional Commission's 11 core counties plus Barrow, Hall and Walton, which
+// border Gwinnett. To index another county, add its slug here.
+const INDEXED_COUNTIES = new Set([
+  "gwinnett-county-ga", "fulton-county-ga", "dekalb-county-ga", "cobb-county-ga", "clayton-county-ga",
+  "cherokee-county-ga", "forsyth-county-ga", "henry-county-ga", "douglas-county-ga", "fayette-county-ga",
+  "rockdale-county-ga", "barrow-county-ga", "hall-county-ga", "walton-county-ga",
+]);
+let indexedCount = 0;
+
 for (const slug of slugs) {
   const county = buildCounty(slug);
   if (!county) { skipped.push(slug); continue; }
@@ -275,11 +288,14 @@ for (const slug of slugs) {
     });
   }
 
-  await writeFile(join(OUT, file), page({ title, description, canonical, jsonld, body, helmet }), "utf8");
+  const noindex = !INDEXED_COUNTIES.has(slug);
+  if (!noindex) indexedCount++;
+  await writeFile(join(OUT, file), page({ title, description, canonical, jsonld, body, helmet, noindex }), "utf8");
   written++;
 }
 
-console.log(`render-counties: ${written} pages written`);
+console.log(`render-counties: ${written} pages written (${indexedCount} indexed, ${written - indexedCount} noindex)`);
+if (!LIMIT && indexedCount !== INDEXED_COUNTIES.size) console.error(`FAIL: ${INDEXED_COUNTIES.size - indexedCount} indexed county slug(s) matched no page`);
 if (holes) console.error(`FAIL: ${holes} page(s) still contain {{ }} holes`);
 if (skipped.length) console.error(`FAIL: ${skipped.length} slug(s) produced no county: ${skipped.slice(0, 5).join(", ")}`);
-if (holes || skipped.length) process.exit(1);
+if (holes || skipped.length || (!LIMIT && indexedCount !== INDEXED_COUNTIES.size)) process.exit(1);
