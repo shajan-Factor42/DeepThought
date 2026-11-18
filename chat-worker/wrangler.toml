@@ -38,6 +38,9 @@ CARD_RETURN_URL = "https://mcp.deepthought.marketing/card-saved"
 # ChatGPT plugin domain verification token (served at /.well-known/openai-apps-challenge). Paste the exact token
 # from OpenAI's submission portal here and push. Empty = the path answers 404.
 OPENAI_APPS_CHALLENGE = "16pij1k1Fc2a-zzz8cVh5WaRf8W6Qo8gxKeHXo7fSnw"
+# Claude connector directory server verification (served at /.well-known/muse-challenge/<token>).
+# Token from claude.ai/directory/manage; this one expires 2026-11-25. Keep it until the submission is verified.
+MUSE_CHALLENGE = "ac7c4b9e699c2a879504fc5fb8b8c1b17f65a5cdba97e46589c104ad78f152c1"
 # Glama directory ownership claim token (served at /.well-known/glama.json). Keep it published to stay verified.
 GLAMA_CLAIM = "glama_claim_Zj8sE36DdZG1GIivLRDkeWolJPE2fiza"
 # Daily chat digest: who it goes to, and who it's from. The "from" domain must be verified

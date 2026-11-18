@@ -436,6 +436,15 @@ export default {
     // token shown in its submission portal. Set OPENAI_APPS_CHALLENGE in wrangler.toml to the exact token.
     if (url.pathname === "/.well-known/openai-apps-challenge" && request.method === "GET")
       return env.OPENAI_APPS_CHALLENGE ? new Response(String(env.OPENAI_APPS_CHALLENGE).trim(), { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } }) : text("Not found", 404, {});
+    // Anthropic (Claude) connector-directory server verification (2026-11-18): the portal fetches
+    // /.well-known/muse-challenge/<token> on the MCP hostname and expects plain text "muse-challenge=<token>",
+    // HTTP 200, no sign-in or redirect. Set MUSE_CHALLENGE in wrangler.toml to the token from the portal.
+    if (url.pathname.startsWith("/.well-known/muse-challenge/") && request.method === "GET") {
+      const tok = String(env.MUSE_CHALLENGE || "").trim();
+      return tok && url.pathname === `/.well-known/muse-challenge/${tok}`
+        ? new Response(`muse-challenge=${tok}`, { status: 200, headers: { "Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store" } })
+        : text("Not found", 404, {});
+    }
     // Glama connector-directory ownership claim (2026-11-04): Glama checks this file on the connector's hostname.
     if (url.pathname === "/.well-known/glama.json" && request.method === "GET")
       return env.GLAMA_CLAIM ? new Response(JSON.stringify({ $schema: "https://glama.ai/mcp/schemas/connector.json", claim: String(env.GLAMA_CLAIM).trim() }, null, 2), { status: 200, headers: { "Content-Type": "application/json; charset=utf-8", "Access-Control-Allow-Origin": "*", "Cache-Control": "no-store" } }) : text("Not found", 404, {});
